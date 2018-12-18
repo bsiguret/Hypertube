@@ -8,6 +8,7 @@
     "@ffmpeg-installer/ffmpeg": "^1.0.16",
     "axios": "^0.18.0",
     "body-parser": "^1.18.3",
+    "dotenv": "^6.2.0",
     "ejs": "^2.6.1",
     "express": "^4.16.4",
     "fluent-ffmpeg": "^2.1.2",

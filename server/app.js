@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 
+require('dotenv').config()
 app.set('views', 'public/views');
 app.set('view engine', 'ejs');
 app.use(bodyParser.json());
@@ -14,5 +15,5 @@ app.use('/play', require('./router/play'));
 app.use('/tmp', express.static('tmp'))
 
 app.listen(3000, function () {
-    console.log('Listening on port 3000');
+	console.log('Listening on port 3000');
 })
