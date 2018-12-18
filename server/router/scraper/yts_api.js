@@ -2,6 +2,9 @@ const axios = require('axios');
 const fs = require('fs');
 var throttledQueue = require('throttled-queue');
 var throttle = throttledQueue(20, 10000);
+const express = require('express');
+const router = express.Router();
+const filename = __dirname + "/yts_movies.json";
 
 // Recupere tous les films en recursive
 async function get_all_movies(page, total_page) {
@@ -62,12 +65,12 @@ async function get_all_movies(page, total_page) {
 						
 						// Petit indice pour dire que c'est bientot fini
 						if (page == total_page)
-							console.log("Soon finished!")
+							console.log("Soon finished! " + i);
 
 						// Apres chaque données des films on ajoute un ',' pour les séparés
 						// A la fin du fichier il faut changer le ',' en ']' pour qu'on puisse lire correctement les données
 						// On peut changer manuellement mais on verifie quand meme avec le code
-						fs.appendFileSync("yts_movies.json", JSON.stringify(data) + ",", 'utf8');
+						fs.appendFileSync(filename, JSON.stringify(data) + ",", 'utf8');
 					} catch(err) {
 						console.log("Error page:" + page);
 						return ;
@@ -82,21 +85,20 @@ async function get_all_movies(page, total_page) {
 	}
 }
 
-// Recupere tous les films de yts
-const yts_api = async function get_yts_movies() {
+router.get('/', async function get_yts_movies() {
 	try {
 		// Recupere les données pour compter le nombre total des pages
-		const res = await axios.get('https://yts.am/api/v2/list_movies.json?limit=1&sort_by=rating');
+        const res = await axios.get('https://yts.am/api/v2/list_movies.json?limit=1&sort_by=rating');
 		const number_page = parseInt(res.data.data.movie_count / 50) + 1
 		
 		// On ecrit au debut du fichier un '[' pour lire correctement les données en json
-		fs.writeFileSync("yts_movies.json", "[");
+		fs.writeFileSync(filename, "[");
 
 		// Recupere tous les films en recursive
-		get_all_movies(1, number_page);
+		get_all_movies(1, 1);
 	} catch(err) {
 		console.log(err);
-	}
-}
+    }
+});
 
-yts_api();
+module.exports = router;

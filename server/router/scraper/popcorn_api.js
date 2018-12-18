@@ -2,6 +2,9 @@ const axios = require('axios');
 const fs = require('fs');
 var throttledQueue = require('throttled-queue');
 var throttle = throttledQueue(20, 10000);
+const express = require('express');
+const router = express.Router();
+const filename = __dirname + "/popcorn_movies.json";
 
 // Recupere tous les films en recursive
 async function get_all_movies(page, total_page) {
@@ -74,12 +77,12 @@ async function get_all_movies(page, total_page) {
 
 						// Petit indice pour dire que c'est bientot fini
 						if (page == total_page)
-							console.log("Soon finished!")
+							console.log("Soon finished! " + i);
 
 						// Apres chaque données des films on ajoute un ',' pour les séparés
 						// A la fin du fichier il faut changer le ',' en ']' pour qu'on puisse lire correctement les données
 						// On peut changer manuellement mais on verifie quand meme avec le code
-						fs.appendFileSync("popcorn_movies.json", JSON.stringify(data) + ",", 'utf8');
+						fs.appendFileSync(filename, JSON.stringify(data) + ",", 'utf8');
 					} catch(err) {
 						console.log("Error page:" + page);
 						return ;
@@ -93,20 +96,20 @@ async function get_all_movies(page, total_page) {
 	}
 }
 
-const popcorn_api = async function get_popcorn_movies() {
+router.get('/', async function get_popcorn_movies() {
 	try {
 		// On recupere le nombre totals des pages
 		const res = await axios.get('https://tv-v2.api-fetch.website/movies/');
 		const number_page = res.data.length;
 
 		// On ecrit au debut du fichier un '[' pour lire correctement les données en json
-		fs.writeFileSync("popcorn_movies.json", "[");
+		fs.writeFileSync(filename, "[");
 		
 		// Recupere tous les films en recursive
-		get_all_movies(1, number_page);
+		get_all_movies(1, 1);
 	} catch(err) {
 		console.log(err);
 	}
-}
+});
 
-popcorn_api();
+module.exports = router;
