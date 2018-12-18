@@ -4,6 +4,15 @@
   "main": "app.js",
   "author": "qchantel xzu wzaim lezhang",
   "license": "MIT",
+  "scripts": {
+    "start": "nodemon app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "nodemonConfig": {
+    "ignore": [
+      "front-end/*"
+    ]
+  },
   "dependencies": {
     "@ffmpeg-installer/ffmpeg": "^1.0.16",
     "axios": "^0.18.0",
