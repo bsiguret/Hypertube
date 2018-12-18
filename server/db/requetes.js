@@ -2,6 +2,18 @@ const create_database = "CREATE DATABASE IF NOT EXISTS hypertube";
 
 const drop_database = "DROP DATABASE IF EXISTS hypertube";
 
+const create_table_users = `CREATE TABLE IF NOT EXISTS users
+	(
+		id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+		nom VARCHAR(255) NOT NULL,
+		prenom VARCHAR (255) NOT NULL,
+		login VARCHAR(255) NOT NULL,
+		password VARCHAR(255) NOT NULL,
+		email VARCHAR(255) NOT NULL,
+		language VARCHAR(255) NOT NULL DEFAULT 'en',
+		profil TEXT NOT NULL
+	)`;
+
 const create_table_movies = `CREATE TABLE IF NOT EXISTS movies
 	(
 		id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
@@ -17,6 +29,13 @@ const create_table_movies = `CREATE TABLE IF NOT EXISTS movies
 		actors TEXT,
 		description TEXT,
 		img TEXT
+	)`;
+
+const create_table_movies_viewed = `CREATE TABLE IF NOT EXISTS viewed
+	(
+		id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+		uid INT NOT NULL,
+		movie_id VARCHAR(50) NOT NULL
 	)`;
 
 const create_table_movies_genre = `CREATE TABLE IF NOT EXISTS genre
@@ -71,7 +90,9 @@ const get_all_genre = "SELECT genre FROM genre GROUP BY genre HAVING COUNT(genre
 module.exports = {
 	create_database: create_database,
 	drop_database: drop_database,
+	create_table_users: create_table_users,
 	create_table_movies: create_table_movies,
+	create_table_movies_viewed: create_table_movies_viewed,
 	create_table_movies_genre: create_table_movies_genre,
 	create_table_movies_torrent: create_table_movies_torrent,
 	create_table_movies_file: create_table_movies_file,

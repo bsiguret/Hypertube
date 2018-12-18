@@ -10,8 +10,6 @@ if (content.slice(-1) == ",")
 var movies = JSON.parse(content);
 // console.log(movies.length);
 
-db.connection_db.connect();
-
 // Sauvegarder les films dans la base
 for (let i = 0; i < movies.length; i++) {
 	try {
@@ -30,7 +28,6 @@ for (let i = 0; i < movies.length; i++) {
 						console.log(err);
 					if (i == movies.length - 1) {
 						console.log("Finish");
-						db.connection_db.end();
 					}
 				});
 			}
@@ -39,4 +36,3 @@ for (let i = 0; i < movies.length; i++) {
 		console.log(err);
 	}
 }
-
