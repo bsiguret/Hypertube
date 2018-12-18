@@ -1,12 +1,19 @@
 import React, { Component } from 'react';
+import { Router, Switch, Route } from "react-router-dom";
+
+import IndexPage from './views/indexPage';
+import { history } from './assets/helpers/history'
 
 class App extends Component {
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-        </header>
-      </div>
+      <Router history={history}>
+        <div>
+          <Switch>
+            <Route exact path='/' component={IndexPage}/>
+          </Switch>
+        </div>
+      </Router>
     );
   }
 }
