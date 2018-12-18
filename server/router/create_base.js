@@ -12,9 +12,9 @@ router.get('/', (req, res) => {
         console.log("CREATE DATABASE SUCCESS!");
         db.connection_db.query(sql.create_table_users, function(err, res) {
             if (err)
-                console.log("CREATE TABLE MOVIES USERS ERROR: ", err.message);
+                console.log("CREATE TABLE USERS ERROR: ", err.message);
             else
-                console.log("CREATE TABLE MOVIES USERS SUCCESS!");
+                console.log("CREATE TABLE USERS SUCCESS!");
         });
         db.connection_db.query(sql.create_table_movies, function(err, res) {
             if (err)

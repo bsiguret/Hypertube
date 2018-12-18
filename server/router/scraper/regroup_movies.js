@@ -1,7 +1,9 @@
 const axios = require('axios');
 const fs = require('fs');
+const express = require('express');
+const router = express.Router();
 
-async function regroup_movies() {
+router.get('/', async function regroup_movies() {
 	// Lire les fichiers json et regrouper tous les films dans une variable
 	var popcorn_file = __dirname + "/popcorn_movies.json";
 	var yts_file = __dirname + "/yts_movies.json";
@@ -27,12 +29,13 @@ async function regroup_movies() {
 			content[i].movie[11] && content[i].movie[11] !== "N/A" && content[i].movie[11].substr(0, 4) === "http") {
 				await axios.get(content[i].movie[11]);
 				fs.appendFileSync(movies_file, JSON.stringify(content[i]) + ",", 'utf8');
-				movies.push(content[i].movie[0]);
+                movies.push(content[i].movie[0]);
+                console.log(i);
 			}
 		} catch (err) {
 
 		};
 	}
-}
+});
 
-regroup_movies();
+module.exports = router;
