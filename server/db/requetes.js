@@ -7,9 +7,9 @@ const create_table_users = `CREATE TABLE IF NOT EXISTS users
 		id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
 		nom VARCHAR(255) NOT NULL,
 		prenom VARCHAR (255) NOT NULL,
-		login VARCHAR(255) NOT NULL,
+		username VARCHAR(255) NOT NULL,
 		password VARCHAR(255) NOT NULL,
-		email VARCHAR(255) NOT NULL,
+		email VARCHAR(255) NOT NULL UNIQUE,
 		language VARCHAR(255) NOT NULL DEFAULT 'en',
 		profil TEXT NOT NULL
 	)`;
@@ -18,7 +18,7 @@ const create_table_movies = `CREATE TABLE IF NOT EXISTS movies
 	(
 		id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
 		movie_id VARCHAR(50) NOT NULL,
-		title VARCHAR(255),
+		title VARCHAR(255) UNIQUE,
 		year INT,
 		language VARCHAR(255),
 		type VARCHAR(255),
@@ -42,7 +42,12 @@ const create_table_movies_genre = `CREATE TABLE IF NOT EXISTS genre
 	(
 		id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
 		movie_id VARCHAR(50) NOT NULL,
-		genre VARCHAR(255) NOT NULL
+		genre ENUM('Action', 'Adventure', 'Animation', 'Biography', 'Comedy',
+			'Crime', 'Documentary', 'Drama', 'Family', 'Fantasy', 'Film-Noir',
+			'History', 'Horror', 'Music', 'Musical', 'Mystery', 'News', 'Reality-TV',
+			'Romance', 'Sci-Fi', 'science-fiction', 'short', 'Sport', 'Talk-Show', 'Thriller',
+			'tv-movie', 'War', Western
+		)
 	)`;
 
 const create_table_movies_torrent = `CREATE TABLE IF NOT EXISTS torrent
