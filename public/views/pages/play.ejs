@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <% include ../partials/head %>
+</head>
+<body>
+  <input id='btn_engine' type='button' value='engine'>
+  <input id='btn_slicing' type='button' value='slicing'>
+  <input id='btn_resume' type='button' value='resume'>
+    <% for (var i = 0; i < movies.length; i++) { %>
+      <%= JSON.stringify(movies[i]); %>
+    <% } %>
+  <video id='video' width="100%" height="600" controls style='border:1px solid black'>
+  </video>
+
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+<script>
+
+// console.log(location.search.substr(1).split('=')[1]);
+var id = location.search.substr(1).split('=')[1];
+var video = document.getElementById('video');
+var oBtn_engine = document.getElementById('btn_engine');
+var oBtn_slicing = document.getElementById('btn_slicing');
+var oBtn_resume = document.getElementById('btn_resume');
+
+oBtn_resume.onclick = function()
+{
+  console.log('onclick oBtn_resume');
+  let url = '/play';
+  let data = 'action=resume';
+  ft_ajax(url, data, 'post', function(response)
+  {
+    if (response != 'NO')
+    {
+      console.log(response);
+      // window.location.href = 'http://localhost:3000';
+    }
+  });
+}
+
+oBtn_slicing.onclick = function()
+{
+  console.log('onclick oBtn_slicing');
+  let url = '/play';
+  let data = 'action=slicing';
+  ft_ajax(url, data, 'post', function(response)
+  {
+    if (response != 'NO')
+    {
+      console.log(response);
+      // window.location.href = 'http://localhost:3000';
+    }
+  });
+}
+
+oBtn_engine.onclick = function()
+{
+  console.log('onclick oBtn_engine');
+  let url = '/play';
+  let data = 'action=engine';
+  ft_ajax(url, data, 'post', function(response)
+  {
+    if (response != 'NO')
+    {
+      console.log(response);
+      // window.location.href = 'http://localhost:3000';
+    }
+  });
+}
+
+
+function ft_get_subtitle()
+{
+  let url = '/play';
+  let data = 'action=get_subtitle&id=' + id;
+  ft_ajax(url, data, 'post', function(response)
+  {
+    if (response != 'NO')
+    {
+      console.log(response);
+      var json = JSON.parse(response);
+      if (json.length != 0)
+      {
+        var i = 0;
+        while (i < json.length)
+        {
+          var cTrack = document.createElement('track');
+          cTrack.kind = 'subtitles';
+          cTrack.src = json[i].path;
+          cTrack.srclang = json[i].language;
+          video.appendChild(cTrack);
+          i++;
+        }
+      }
+    }
+  });
+}
+
+var get_movie = window.setInterval(function()
+{
+  let url = '/play';
+  let data = 'action=get_movie&id=' + id;
+  ft_ajax(url, data, 'post', function(response)
+  {
+    if (response != 'NO')
+    {
+      if (Hls.isSupported())
+      {
+        var hls = new Hls();
+        hls.loadSource('http://localhost:3000/tmp/' + id + '/out.m3u8');
+        hls.attachMedia(video);
+        hls.on(Hls.Events.MANIFEST_PARSED,function()
+        {
+          video.play();
+        });
+      }
+      else if (video.canPlayType('application/vnd.apple.mpegurl'))
+      {
+        video.src = 'http://localhost:3000/tmp/' + id + '/out.m3u8';
+        video.addEventListener('loadedmetadata',function()
+        {
+          video.play();
+        });
+      }
+      ft_get_subtitle();
+      window.clearInterval(get_movie);
+    }
+  });
+}, 1000);
+</script>
+</body>
+</html>
