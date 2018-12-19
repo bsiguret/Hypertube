@@ -14,7 +14,7 @@ class IndexPage extends Component {
 		}
 	}
 
-	handleChange = () => this.setState({login: !this.state.login,})
+	handleChange = () => this.setState({ login: !this.state.login })
 
   render() {
 		const { login } = this.state
@@ -31,6 +31,7 @@ class IndexPage extends Component {
 					{login &&
 					<Col span={8}>
 						<LoginForm />
+						<a href='/help' style={{position: 'relative', top: '-25px'}}>Need help?</a>
 						<div style={{display: 'flex', justifyContent: 'space-between'}}>
 							<Button shape="circle" type="primary" icon="google" style={{backgroundColor: 'red', borderColor: 'red'}}/>
 							<Button shape="circle" type="primary">
