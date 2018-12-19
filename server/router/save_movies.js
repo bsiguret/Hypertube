@@ -11,7 +11,7 @@ router.get('/', (req, response) => {
     if (content.slice(-1) == ",")
         content = content.substr(0, content.length - 1) + "]";
     var movies = JSON.parse(content);
-    console.log(movies.length);
+    // console.log(movies.length);
 
     // Sauvegarder les films dans la base
     for (let i = 0; i < movies.length; i++) {
@@ -31,6 +31,7 @@ router.get('/', (req, response) => {
                             console.log(err);
                         if (i == movies.length - 1) {
                             console.log("Finish");
+                            response.json("SAVE_MOVIES FINISHED")
                         }
                     });
                 }
@@ -39,7 +40,6 @@ router.get('/', (req, response) => {
             console.log(err);
         }
     }
-    response.json("SAVE_MOVIES FINISHED")
 });
 
 module.exports = router;
