@@ -18,6 +18,8 @@ app.use('/api/scraper/regroup', require('./router/scraper/regroup_movies'));
 app.use('/tools', express.static('./public/tools'));
 
 app.use('/api/signup', require('./router/signup'))
+// app.use('/api/resetpassword', require('./router/resetpassword'))
+// app.use('/api/emailverification', require('./router/emailverification'))
 
 app.use('/', require('./router/movies'));
 app.use('/play', require('./router/play'));
