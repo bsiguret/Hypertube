@@ -4,7 +4,7 @@ const db = require('../db/db');
 const express = require('express');
 const router = express.Router();
 
-router.get('/', (req, res) => {
+router.get('/', (req, response) => {
     // Sauvegarder les films sous format json dans une variable
     var filename = __dirname + "/scraper/movies.json";
     var content = fs.readFileSync(filename, 'utf-8');
@@ -39,6 +39,7 @@ router.get('/', (req, res) => {
             console.log(err);
         }
     }
+    response.json("SAVE_MOVIES FINISHED")
 });
 
 module.exports = router;
