@@ -11,16 +11,17 @@ const create_table_users = `CREATE TABLE IF NOT EXISTS users
 		password VARCHAR(100) NOT NULL,
 		email VARCHAR(100) NOT NULL UNIQUE,
 		language VARCHAR(2) NOT NULL DEFAULT 'en',
-		profile TEXT NOT NULL
+		profile TEXT NOT NULL,
+		token VARCHAR(100)
 	)`;
 
 const create_table_movies = `CREATE TABLE IF NOT EXISTS movies
 	(
 		id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
 		movie_id VARCHAR(50) NOT NULL,
-		title VARCHAR(100) UNIQUE,
+		title VARCHAR(100),
 		year INT,
-		language VARCHAR(2),
+		language VARCHAR(200),
 		type VARCHAR(30),
 		rating FLOAT DEFAULT 0,
 		runtime INT NOT NULL,
@@ -73,7 +74,7 @@ const create_table_movies_subtitle = `CREATE TABLE IF NOT EXISTS subtitle
 	(
 		id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
 		movie_id VARCHAR(50) NOT NULL,
-		language VARCHAR(2) NOT NULL,
+		language VARCHAR(255) NOT NULL,
 		path TEXT NOT NULL
 	)`;
 
@@ -90,9 +91,10 @@ const add_movie_file = "INSERT INTO file (movie_id, quality, path) VALUES ?";
 const add_movie_subtitle = "INSERT INTO subtitle (movie_id, language, path) VALUES ?";
 const get_movie_file = "SELECT path FROM file WHERE movie_id=? AND quality=?";
 const get_movie_subtitle = "SELECT * FROM subtitle WHERE movie_id=?";
-const get_all_genre = "SELECT genre FROM genre GROUP BY genre HAVING COUNT(genre) > 10";
+const get_all_genre = "SELECT genre FROM genre GROUP BY genre";
 
-const insert_user = "INSERT INTO users (lastname,firstname,username,password,email,language,profile) VALUES(?)";
+const insert_user = "INSERT INTO users (lastname,firstname,username,password,email,profile) VALUES(?)";
+const get_user = "SELECT * FROM users WHERE id=? || username=? || email=?";
 
 module.exports = {
 	create_database: create_database,
@@ -118,5 +120,6 @@ module.exports = {
 	get_movie_file: get_movie_file,
 	get_movie_subtitle: get_movie_subtitle,
 	get_all_genre: get_all_genre,
-	insert_user: insert_user
+	insert_user: insert_user,
+	get_user: get_user,
 };
