@@ -11,4 +11,12 @@ router.get('/all_genre', (req, res) => {
     });
 });
 
+router.get('/all_movies', (req, res) => {
+    db.connection_db.query(sql.get_all_movies_by_rating, (err, rows) => {
+        if (err)
+            res.status(403).json({msg: "Error get all genre"});
+        res.json({movies: rows});
+    });
+});
+
 module.exports = router;
