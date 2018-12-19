@@ -10,9 +10,7 @@ router.post('/', (req, res) => {
         if (err) {
             return res.status(401).json({msg: err.code + ': ' + err.sqlMessage})
         }
-        let password = await bcrypt.hash(req.body.password, 10);
-        console.log(password);
-        if (success.length && success[0].password == password)
+        if (success.length && bcrypt.compareSync(req.body.password, success[0].password))
             res.json({msg: "OK"});
         else
             res.status(401).json({msg: "L'email ou password incorrect"});
