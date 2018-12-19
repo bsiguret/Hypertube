@@ -12,7 +12,8 @@ const create_table_users = `CREATE TABLE IF NOT EXISTS users
 		email VARCHAR(100) NOT NULL UNIQUE,
 		language VARCHAR(2) NOT NULL DEFAULT 'en',
 		profile TEXT NOT NULL,
-		token VARCHAR(100)
+		token VARCHAR(100),
+		isVerified INT DEFAULT 0
 	)`;
 
 const create_table_movies = `CREATE TABLE IF NOT EXISTS movies
