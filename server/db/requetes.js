@@ -91,7 +91,7 @@ const add_movie_file = "INSERT INTO file (movie_id, quality, path) VALUES ?";
 const add_movie_subtitle = "INSERT INTO subtitle (movie_id, language, path) VALUES ?";
 const get_movie_file = "SELECT path FROM file WHERE movie_id=? AND quality=?";
 const get_movie_subtitle = "SELECT * FROM subtitle WHERE movie_id=?";
-const get_all_genre = "SELECT genre FROM genre GROUP BY genre HAVING COUNT(genre) > 10";
+const get_all_genre = "SELECT genre FROM genre GROUP BY genre";
 
 const insert_user = "INSERT INTO users (lastname,firstname,username,password,email,profile) VALUES(?)";
 const get_user = "SELECT * FROM users WHERE id=? || username=? || email=?";

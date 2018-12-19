@@ -1,8 +1,8 @@
 const uuidv1 = require('uuid/v1')           // Version 1(timestamp)
 const nodemailer = require('nodemailer')    // Send email from Node.js
 
-const db = require('../../db/db').connection_db
-const sql = require('../../db/requetes')
+const db = require('../db/db').connection_db
+const sql = require('../db/requetes')
 
 const sendMailTo = (username, email, action) => {
     username = encodeURIComponent(username)
