@@ -18,9 +18,9 @@ const create_table_movies = `CREATE TABLE IF NOT EXISTS movies
 	(
 		id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
 		movie_id VARCHAR(50) NOT NULL,
-		title VARCHAR(100) UNIQUE,
+		title VARCHAR(100),
 		year INT,
-		language VARCHAR(2),
+		language VARCHAR(200),
 		type VARCHAR(30),
 		rating FLOAT DEFAULT 0,
 		runtime INT NOT NULL,
@@ -73,7 +73,7 @@ const create_table_movies_subtitle = `CREATE TABLE IF NOT EXISTS subtitle
 	(
 		id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
 		movie_id VARCHAR(50) NOT NULL,
-		language VARCHAR(2) NOT NULL,
+		language VARCHAR(255) NOT NULL,
 		path TEXT NOT NULL
 	)`;
 
