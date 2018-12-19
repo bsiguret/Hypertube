@@ -4,7 +4,7 @@ const bcrypt = require('bcryptjs')
 const db = require('../db/db').connection_db
 const sql = require('../db/requetes')
 
-const {purifyString, isValidString, isValidEmail, isValidPassword} = require('../public/tools/utils')
+const {purifyString, isValidString, isValidEmail, isValidPassword} = require('../tools/utils')
 
 const signupFilter = (req, res, next) => {
     db.query(sql.get_user, [null, req.body.username, null], (_err, usernameExist) => {

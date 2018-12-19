@@ -6,7 +6,7 @@ const router = express.Router();
 let db = require('../db/db').connection_db
 let sql = require('../db/requetes')
 let signupFilter = require('../middlewares/signupFilter')
-let {sendMailTo} = require('../public/tools/sendMailTo')
+let {sendMailTo} = require('../tools/sendMailTo')
 
 router.post('/', signupFilter, (req, res) => {
     db.query(sql.insert_user, [Object.values(req.body)], (err, success) => {
