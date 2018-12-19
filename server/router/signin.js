@@ -5,7 +5,7 @@ let db = require('../db/db').connection_db;
 let sql = require('../db/requetes');
 
 router.post('/', (req, res) => {
-    db.query(sql.get_user_pass, [[req.body.email]], (err, success) => {
+    db.query(sql.get_user, [[req.body.email]], (err, success) => {
         if (err) {
             return res.status(401).json({msg: err.code + ': ' + err.sqlMessage})
         }
