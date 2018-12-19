@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Upload, Icon, message, Modal } from 'antd';
+import { userActions } from '../redux/actions/user';
 
 function beforeUpload(file) {
   const isJPG = file.type === 'image/jpeg';
@@ -41,16 +42,18 @@ class PhotoUploader extends Component {
       }, 100);
     };
 
-  handleChange = (info) => {
-		console.log(info)
+  handleChange = async (info) => {
 		if (info.file.status === 'uploading')
 			this.setState({ fileList: info.fileList })
 		else if (info.file.status === 'done') {
-			getBase64(info.file.originFileObj, imageUrl => this.setState({
-				imageUrl,
-				fileList: info.fileList,
-        loading: false,
-      }));
+			await getBase64(info.file.originFileObj, async imageUrl => {
+        await this.setState({
+          imageUrl,
+          fileList: info.fileList,
+          loading: false,
+        })
+        this.props.dispatch(userActions.signupPhoto(this.state.imageUrl))
+      });
 		}
 		else if (info.file.status === 'removed')
 			this.setState({ fileList: info.fileList })

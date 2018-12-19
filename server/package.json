@@ -5,12 +5,14 @@
   "author": "qchantel xzu wzaim lezhang",
   "license": "MIT",
   "scripts": {
+    "start-prod": "npm run build-client && node app",
+    "build-client": "cd .. && cd client && npm run build && cd .. && cd server",
     "start": "nodemon app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "nodemonConfig": {
     "ignore": [
-      "front-end/*"
+      "client/*"
     ]
   },
   "dependencies": {

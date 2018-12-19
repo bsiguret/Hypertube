@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
+const path = require('path')
 
 require('dotenv').config();
 app.set('views', 'public/views');
@@ -8,6 +9,12 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
+if (process.env.NODE_ENV === 'prod') {
+	app.use(express.static(path.join(__dirname, "../client/build")));
+	app.get('/', (req, res)=>{
+		res.sendFile(path.join(__dirname, "../client/build", "index.html"));
+	})
+}
 app.use('/api/create_base', require('./router/create_base'));
 app.use('/api/drop_base', require('./router/drop_base'));
 app.use('/api/save_movies', require('./router/save_movies'));
