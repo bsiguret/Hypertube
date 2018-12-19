@@ -32,9 +32,9 @@ const sendMailTo = (username, email, action) => {
                 if (action === 1) { resolve("User " + username + " has been created, check your email and confirm your account") }
                 if (action === 2) { resolve("Email confirmation re-sent") }
                 if (action === 3) { resolve("The resetting\'s password link has been sent by email") }
-            })
-        })
-    })
+            });
+        });
+    });
 }
 
 module.exports = {

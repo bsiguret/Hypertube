@@ -7,7 +7,6 @@ const sql = require('../db/requetes')
 const {purifyString, isValidString, isValidEmail, isValidPassword} = require('../tools/utils')
 
 const signupFilter = (req, res, next) => {
-    console.log(req.body.user)
     db.query(sql.get_user, [null, req.body.user.username, null], (_err, usernameExist) => {
         db.query(sql.get_user, [null, null, req.body.user.email], async (err_, emailExist) => {
             if (_err || err_) {
