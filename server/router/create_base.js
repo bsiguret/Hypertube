@@ -1,3 +1,5 @@
+'use strict'
+
 var db = require('../db/db');
 var sql = require('../db/requetes');
 const express = require('express');

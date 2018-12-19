@@ -5,23 +5,23 @@ const drop_database = "DROP DATABASE IF EXISTS hypertube";
 const create_table_users = `CREATE TABLE IF NOT EXISTS users
 	(
 		id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
-		nom VARCHAR(255) NOT NULL,
-		prenom VARCHAR (255) NOT NULL,
-		username VARCHAR(255) NOT NULL,
-		password VARCHAR(255) NOT NULL,
-		email VARCHAR(255) NOT NULL UNIQUE,
-		language VARCHAR(255) NOT NULL DEFAULT 'en',
-		profil TEXT NOT NULL
+		lastname VARCHAR(30) NOT NULL,
+		firstname VARCHAR (30) NOT NULL,
+		username VARCHAR(30) NOT NULL UNIQUE,
+		password VARCHAR(100) NOT NULL,
+		email VARCHAR(100) NOT NULL UNIQUE,
+		language VARCHAR(2) NOT NULL DEFAULT 'en',
+		profile TEXT NOT NULL
 	)`;
 
 const create_table_movies = `CREATE TABLE IF NOT EXISTS movies
 	(
 		id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
 		movie_id VARCHAR(50) NOT NULL,
-		title VARCHAR(255) UNIQUE,
+		title VARCHAR(100) UNIQUE,
 		year INT,
-		language VARCHAR(255),
-		type VARCHAR(255),
+		language VARCHAR(2),
+		type VARCHAR(30),
 		rating FLOAT DEFAULT 0,
 		runtime INT NOT NULL,
 		director TEXT,
@@ -46,7 +46,7 @@ const create_table_movies_genre = `CREATE TABLE IF NOT EXISTS genre
 			'Crime', 'Documentary', 'Drama', 'Family', 'Fantasy', 'Film-Noir',
 			'History', 'Horror', 'Music', 'Musical', 'Mystery', 'News', 'Reality-TV',
 			'Romance', 'Sci-Fi', 'science-fiction', 'short', 'Sport', 'Talk-Show', 'Thriller',
-			'tv-movie', 'War', Western
+			'tv-movie', 'War', 'Western'
 		)
 	)`;
 
@@ -73,7 +73,7 @@ const create_table_movies_subtitle = `CREATE TABLE IF NOT EXISTS subtitle
 	(
 		id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
 		movie_id VARCHAR(50) NOT NULL,
-		language VARCHAR(50) NOT NULL,
+		language VARCHAR(2) NOT NULL,
 		path TEXT NOT NULL
 	)`;
 
@@ -91,6 +91,8 @@ const add_movie_subtitle = "INSERT INTO subtitle (movie_id, language, path) VALU
 const get_movie_file = "SELECT path FROM file WHERE movie_id=? AND quality=?";
 const get_movie_subtitle = "SELECT * FROM subtitle WHERE movie_id=?";
 const get_all_genre = "SELECT genre FROM genre GROUP BY genre HAVING COUNT(genre) > 10";
+
+const insert_user = "INSERT INTO users (lastname,firstname,username,password,email,language,profile) VALUES(?)";
 
 module.exports = {
 	create_database: create_database,
@@ -115,5 +117,6 @@ module.exports = {
 	add_movie_subtitle: add_movie_subtitle,
 	get_movie_file: get_movie_file,
 	get_movie_subtitle: get_movie_subtitle,
-	get_all_genre: get_all_genre
+	get_all_genre: get_all_genre,
+	insert_user: insert_user
 };

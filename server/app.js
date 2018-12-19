@@ -17,6 +17,8 @@ app.use('/api/scraper/regroup', require('./router/scraper/regroup_movies'));
 
 app.use('/tools', express.static('./public/tools'));
 
+app.use('/api/signup', require('./router/signup'))
+
 app.use('/', require('./router/movies'));
 app.use('/play', require('./router/play'));
 app.use('/tmp', express.static('tmp'))
