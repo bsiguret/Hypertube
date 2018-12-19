@@ -1,8 +1,7 @@
-const uuidv1 = require('uuid/v1')           // Version 1(timestamp)
-const nodemailer = require('nodemailer')    // Send email from Node.js
+const uuidv1 = require('uuid/v1');           // Version 1(timestamp)
+const nodemailer = require('nodemailer');
 
-const db = require('../db/db').connection_db
-const sql = require('../db/requetes')
+const db = require('../db/db').connection_db;
 
 const sendMailTo = (username, email, action) => {
     username = encodeURIComponent(username)
@@ -32,9 +31,9 @@ const sendMailTo = (username, email, action) => {
                 if (action === 1) { resolve("User " + username + " has been created, check your email and confirm your account") }
                 if (action === 2) { resolve("Email confirmation re-sent") }
                 if (action === 3) { resolve("The resetting\'s password link has been sent by email") }
-            })
-        })
-    })
+            });
+        });
+    });
 }
 
 module.exports = {

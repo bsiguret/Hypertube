@@ -25,8 +25,8 @@ app.use('/api/auth', require('./router/auth'));
 app.use('/api/get_data', require('./router/get_data'));
 app.use('/api/signin', require('./router/signin'));
 app.use('/api/signup', require('./router/signup'));
-// app.use('/api/resetpassword', require('./router/resetpassword'))
-// app.use('/api/emailverification', require('./router/emailverification'))
+app.use('/api/resetpassword', require('./router/resetpassword'));
+app.use('/api/emailvalidation', require('./router/emailvalidation'));
 
 app.use('/tools', express.static('./public/tools'));
 app.use('/', require('./router/movies'));
