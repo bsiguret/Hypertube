@@ -8,18 +8,17 @@ const passport = require('../tools/passport');
 router.get('/42', passport.authenticate('42'));
 router.get('/42/callback',
     passport.authenticate('42', {
-        failureRedirect: '/api/auth/42/success',
-        successRedirect: '/api/auth/42/fail'
-    })
+        failureRedirect: 'http://localhost:3001',
+        // failureMessage: "Fail",
+        // successRedirect: 'http://localhost:3001/home',
+        // successFlash: "OK",
+    }),
+    function(req, res) {
+        console.log(req.user);
+        res.redirect('http://localhost:3001/home');
+    }
 );
-router.get('/42/success', (req, res) => {
-    console.log(req);
-    res.json({msg: "Connection OK!"});
-});
-router.get('/42/fail', (req, res) => {
-    console.log(req);
-    res.status(403).json({msg: "Connection fail!"});
-});
+
 
 
 module.exports = router;
