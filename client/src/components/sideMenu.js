@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Icon, Input, Menu, Layout } from 'antd';
+import { connect } from 'react-redux';
 
 class SideMenu extends Component {
 	constructor(props) {
@@ -15,6 +16,7 @@ class SideMenu extends Component {
 	}
 
   render() {
+		console.log(this.props.genres)
     return (
 			<Layout.Sider
 				collapsible
@@ -31,21 +33,8 @@ class SideMenu extends Component {
 						key="sub1"
 						title={<span><Icon type="desktop" /><span>Movies</span></span>}
 					>
-						<Menu.Item key="1">Action</Menu.Item>
-						<Menu.Item key="2">Thriller</Menu.Item>
-						<Menu.Item key="3">Horror</Menu.Item>
-						<Menu.Item key="4">Romance</Menu.Item>
-						<Menu.Item key="5">Romance</Menu.Item>
-						<Menu.Item key="6">Romance</Menu.Item>
-						<Menu.Item key="7">Romance</Menu.Item>
-						<Menu.Item key="8">Romance</Menu.Item>
-						<Menu.Item key="9">Romance</Menu.Item>
-						<Menu.Item key="10">Romance</Menu.Item>
-						<Menu.Item key="11">Romance</Menu.Item>
-						<Menu.Item key="12">Romance</Menu.Item>
-						<Menu.Item key="13">Romance</Menu.Item>
-						<Menu.Item key="14">Romance</Menu.Item>
-						<Menu.Item key="15">Romance</Menu.Item>
+						{this.props.genres &&
+						this.props.genres.map(function(genre, i){return(<Menu.Item key={i}><span>{genre.genre}</span></Menu.Item>)})}
 					</Menu.SubMenu>
 					<Menu.SubMenu
 						key="sub2"
@@ -66,4 +55,8 @@ class SideMenu extends Component {
   }
 }
 
-export default SideMenu;
+const mapStateToProps = state => ({
+  genres: state.movieReducer.genres
+});
+
+export default  connect(mapStateToProps)(SideMenu);
