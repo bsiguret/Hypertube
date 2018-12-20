@@ -8,12 +8,15 @@ const create_table_users = `CREATE TABLE IF NOT EXISTS users
 		lastname VARCHAR(30) NOT NULL,
 		firstname VARCHAR (30) NOT NULL,
 		username VARCHAR(30) NOT NULL UNIQUE,
-		password VARCHAR(100) NOT NULL,
+		password VARCHAR(100),
 		email VARCHAR(100) NOT NULL UNIQUE,
 		language VARCHAR(2) NOT NULL DEFAULT 'en',
 		profile TEXT NOT NULL,
 		token VARCHAR(100) DEFAULT NULL,
-		isVerified INT DEFAULT 0
+		isVerified INT DEFAULT 0,
+		id42 INT DEFAULT NULL UNIQUE',
+		facebookid INT DEFAULT NULL UNIQUE',
+		googleid INT DEFAULT NULL UNIQUE'
 	)`;
 
 const create_table_movies = `CREATE TABLE IF NOT EXISTS movies
@@ -79,6 +82,21 @@ const create_table_movies_subtitle = `CREATE TABLE IF NOT EXISTS subtitle
 		path TEXT NOT NULL
 	)`;
 
+const create_table_comments = `CREATE TABLE IF NOT EXISTS comments
+	(
+		id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+		comment VARCHAR(1000) NOT NULL,
+		date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+	)`;
+
+const create_table_comments_movies_users = `CREATE TABLE IF NOT EXISTS comments_movies_users
+	(
+		id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+		movie_id INT DEFAULT NULL,
+		comment_id INT DEFAULT NULL,
+		user_id INT DEFAULT NULL,
+	)`;
+
 const add_movie = "INSERT INTO movies (movie_id, title, year, language, type, rating, runtime, director, writer, actors, description, img) VALUES ?";
 const get_all_movies = "SELECT * FROM movies";
 const get_all_movies_by_rating = "SELECT * FROM movies ORDER BY rating DESC LIMIT 20";
@@ -107,6 +125,8 @@ module.exports = {
 	create_table_movies_torrent: create_table_movies_torrent,
 	create_table_movies_file: create_table_movies_file,
 	create_table_movies_subtitle: create_table_movies_subtitle,
+	create_table_comments: create_table_comments,
+	create_table_comments_movies_users: create_table_comments_movies_users,
 	add_movie: add_movie,
 	get_all_movies: get_all_movies,
 	get_all_movies_by_rating: get_all_movies_by_rating,
