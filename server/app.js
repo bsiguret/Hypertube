@@ -33,6 +33,6 @@ app.use('/', require('./router/movies'));
 app.use('/play', require('./router/play'));
 app.use('/tmp', express.static('tmp'))
 
-app.listen(3000, function () {
+app.listen(3000, () => {
 	console.log('Listening on port 3000');
 })
