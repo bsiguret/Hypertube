@@ -54,6 +54,18 @@ router.get('/', (req, response) => {
             else
                 console.log("CREATE TABLE MOVIES SUBTITLE SUCCESS!");
         });
+        await db.connection_db.query(sql.create_table_comments, (err, res) => {
+            if (err)
+                console.log("CREATE TABLE COMMENTS ERROR: ", err.message);
+            else
+                console.log("CREATE TABLE COMMENTS SUCCESS!");
+        });
+        await db.connection_db.query(sql.create_table_comments_movies_users, (err, res) => {
+            if (err)
+                console.log("CREATE TABLE COMMENTS_MOVIES_USERS ERROR: ", err.message);
+            else
+                console.log("CREATE TABLE COMMENTS_MOVIES_USERS SUCCESS!");
+        });
 
         response.json("CREATE_BASE FINISHED")
     });

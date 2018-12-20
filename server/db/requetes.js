@@ -14,9 +14,9 @@ const create_table_users = `CREATE TABLE IF NOT EXISTS users
 		profile TEXT NOT NULL,
 		token VARCHAR(100) DEFAULT NULL,
 		isVerified INT DEFAULT 0,
-		id42 INT DEFAULT NULL UNIQUE',
-		facebookid INT DEFAULT NULL UNIQUE',
-		googleid INT DEFAULT NULL UNIQUE'
+		id42 INT DEFAULT NULL UNIQUE,
+		facebookid INT DEFAULT NULL UNIQUE,
+		googleid INT DEFAULT NULL UNIQUE
 	)`;
 
 const create_table_movies = `CREATE TABLE IF NOT EXISTS movies
@@ -86,7 +86,7 @@ const create_table_comments = `CREATE TABLE IF NOT EXISTS comments
 	(
 		id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
 		comment VARCHAR(1000) NOT NULL,
-		date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+		date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 	)`;
 
 const create_table_comments_movies_users = `CREATE TABLE IF NOT EXISTS comments_movies_users
@@ -94,7 +94,7 @@ const create_table_comments_movies_users = `CREATE TABLE IF NOT EXISTS comments_
 		id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
 		movie_id INT DEFAULT NULL,
 		comment_id INT DEFAULT NULL,
-		user_id INT DEFAULT NULL,
+		user_id INT DEFAULT NULL
 	)`;
 
 const add_movie = "INSERT INTO movies (movie_id, title, year, language, type, rating, runtime, director, writer, actors, description, img) VALUES ?";
