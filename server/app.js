@@ -1,13 +1,16 @@
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
-const path = require('path')
+const path = require('path');
+const passport = require('passport');
 
 require('dotenv').config();
 app.set('views', 'public/views');
 app.set('view engine', 'ejs');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+
+app.use(passport.initialize());
 
 if (process.env.NODE_ENV === 'prod') {
 	app.use(express.static(path.join(__dirname, "../client/build")));
