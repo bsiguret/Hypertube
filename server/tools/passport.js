@@ -6,6 +6,14 @@ let sql = require('../db/requetes');
 
 require('dotenv').config();
 
+passport.serializeUser(function(user, cb) {
+    cb(null, user);
+});
+  
+passport.deserializeUser(function(obj, cb) {
+    cb(null, obj);
+});
+
 passport.use(new FortyTwoStrategy({
     clientID: process.env.PASSPORT_42_CLIENT_ID,
     clientSecret: process.env.PASSPORT_42_CLIENT_SECRET,
@@ -24,7 +32,7 @@ passport.use(new FortyTwoStrategy({
         console.log("lastname: " + lastname + " firstname: " + firstname);
         console.log("email: " + email);
         console.log("photo de profile: " + photo);
-        return cb("OK");
+        return cb(null, profile);
     }
 ));
 
