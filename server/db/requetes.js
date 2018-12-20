@@ -98,8 +98,7 @@ const create_table_comments_movies_users = `CREATE TABLE IF NOT EXISTS comments_
 	)`;
 
 const add_movie = "INSERT INTO movies (movie_id, title, year, language, type, rating, runtime, director, writer, actors, description, img) VALUES ?";
-const get_all_movies = "SELECT * FROM movies";
-const get_all_movies_by_rating = "SELECT * FROM movies ORDER BY rating DESC LIMIT 20";
+const get_all_movies_by_rating = "SELECT * FROM movies ORDER BY rating DESC LIMIT 20 OFFSET 0";
 const add_movie_genre = "INSERT INTO genre (movie_id, genre) VALUES ?";
 const add_movie_torrent = "INSERT INTO torrent (movie_id, url, quality, seeds, peers, size_bytes) VALUES ?";
 const check_movie_exists = "SELECT * FROM movies WHERE movie_id=?";
@@ -128,7 +127,6 @@ module.exports = {
 	create_table_comments: create_table_comments,
 	create_table_comments_movies_users: create_table_comments_movies_users,
 	add_movie: add_movie,
-	get_all_movies: get_all_movies,
 	get_all_movies_by_rating: get_all_movies_by_rating,
 	get_movie: get_movie,
 	get_movie_genre: get_movie_genre,
