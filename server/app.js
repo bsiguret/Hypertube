@@ -28,8 +28,7 @@ app.use('/api/signup', require('./router/signup'));
 app.use('/api/resetpassword', require('./router/resetpassword'));
 app.use('/api/emailvalidation', require('./router/emailvalidation'));
 
-app.use('/tools', express.static('./public/tools'));
-app.use('/', require('./router/movies'));
+app.use('/tools', express.static('./tools'));
 app.use('/play', require('./router/play'));
 app.use('/tmp', express.static('tmp'))
 
