@@ -8,7 +8,7 @@ const findOne = (userObj) => {
 	const facebookid = userObj.facebookid ? userObj.facebookid : null
 	const googleid = userObj.googleid ? userObj.googleid : null
 
-	const sql = 'SELECT * FROM User WHERE id = ? OR username = ? OR email = ? OR id42 = ? OR facebookid = ? OR googleid = ?'
+	const sql = 'SELECT * FROM users WHERE id = ? OR username = ? OR email = ? OR id42 = ? OR facebookid = ? OR googleid = ?'
 
 	return new Promise((resolve, reject) => {
 		connection.query(sql, [id, username, email, id42, facebookid, googleid], async (err, user) => {
@@ -18,7 +18,6 @@ const findOne = (userObj) => {
 			if (!user[0]) {
 				resolve(null)                    
 			} else {
-
 				resolve(user[0])
 			}
 		})    
@@ -51,7 +50,29 @@ const findOrCreate = async (userObj) => {
 	}
 }
 
+const createOne = async (userObj) => {
+	const sql = 'INSERT INTO users (lastname, firstname, username, email, password, profile, isVerified, id42, googleid, facebookid) VALUES(?)';
+	const userData = [
+		userObj.lastname,
+		userObj.firstname, 
+		userObj.username,
+		userObj.email,
+		null,
+		userObj.profile,
+		1,
+		userObj.id42 ? userObj.id42 : null,
+		userObj.googleid ? userObj.googleid : null,
+		userObj.facebookid ? userObj.facebookid : null
+	];
+	return new Promise((resolve, reject) => {
+		return connection.query(sql, [userData], (err, user) => {
+			(err) ? reject(err) : resolve(user);
+		});
+	});
+}
+
 module.exports = {
 	findOne,
-	findOrCreate
+	findOrCreate,
+	createOne
 }
