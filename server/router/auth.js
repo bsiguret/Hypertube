@@ -1,25 +1,25 @@
-var db = require('../db/db');
-var sql = require('../db/requetes');
 const express = require('express');
 const router = express.Router();
 const passport = require('../tools/passport');
+const jwt = require('jsonwebtoken');
 
 // Router pour passport 42
 router.get('/42', passport.authenticate('42'));
 router.get('/42/callback',
     passport.authenticate('42', {
-        failureRedirect: '/api/auth/42/success',
-        successRedirect: '/api/auth/42/fail'
-    })
+        failureRedirect: 'http://localhost:3001'
+    }),
+    function(req, res) {
+        const user = req.session.passport.user;
+        if (user.err) {
+            res.redirect('http://localhost:3001');
+        }
+        else {
+            const payload = {id: user.id, username: user.username, emai: user.email};
+            const token = jwt.sign(payload, process.env.JWT_KEY, {expiresIn: 86400});
+            res.redirect('http://localhost:3001/home');
+        }
+    }
 );
-router.get('/42/success', (req, res) => {
-    console.log(req);
-    res.json({msg: "Connection OK!"});
-});
-router.get('/42/fail', (req, res) => {
-    console.log(req);
-    res.status(403).json({msg: "Connection fail!"});
-});
-
 
 module.exports = router;
