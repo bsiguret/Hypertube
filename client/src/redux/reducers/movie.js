@@ -11,6 +11,25 @@ export function movieReducer(state={}, action) {
 		return Object.assign({}, state, {
 			...action.genres
 		});
+		case userConstants.INIT_MOVIES_REQUEST:
+		return Object.assign({}, state, {
+			...state,
+			movies: []
+		})
+		case userConstants.INIT_MOVIES_SUCCESS:
+		return Object.assign({}, state, {
+			...state,
+			...action.movies
+		})
+		case userConstants.MOVIES_REQUEST:
+		return Object.assign({}, state, {
+			...state,
+		})
+		case userConstants.MOVIES_SUCCESS:
+		return Object.assign({}, state, {
+			...state,
+			movies: state.movies.concat(action.movies)
+		})
 		case userConstants.LOGOUT:
 			return {user: {}};
 		default:
