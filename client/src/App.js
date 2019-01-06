@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 
 import IndexPage from './views/indexPage';
 import HomePage from './views/homePage';
+import Page404 from './views/page404';
 
 import { PrivateRoute } from './assets/helpers/privateRoute';
 
@@ -20,8 +21,15 @@ class App extends Component {
     return;
   }
 
+  initMovies = async () => {
+    let res = await this.props.dispatch(movieActions.initMovies())
+    console.log(res)
+    return;
+  }
+
   componentDidMount = async () => {
     this.getAllGenre();
+    this.initMovies();
     // await this.getUserData();
   }
 
@@ -49,6 +57,7 @@ class App extends Component {
           <Switch>
             <Route exact path='/' component={IndexPage}/>
             <PrivateRoute path='/home' component={HomePage}/>
+            <Route component={Page404} />
           </Switch>
         </div>
       </Router>
