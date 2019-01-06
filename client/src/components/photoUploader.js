@@ -3,7 +3,6 @@ import { Upload, Icon, message, Modal } from 'antd';
 import { userActions } from '../redux/actions/user';
 
 function beforeUpload(file) {
-  const isJPG = file.type === 'image/jpeg';
   if (file.type !== 'image/jpeg' && file.type !== 'image/png') {
     message.error('You can only upload JPG/JPEG/PNG file!');
     return false
