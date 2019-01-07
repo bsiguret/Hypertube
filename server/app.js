@@ -18,6 +18,9 @@ if (process.env.NODE_ENV === 'prod') {
 		res.sendFile(path.join(__dirname, "../client/build", "index.html"));
 	})
 }
+
+app.use('/api/photo', express.static('./public'));
+
 app.use('/api/create_base', require('./router/create_base'));
 app.use('/api/drop_base', require('./router/drop_base'));
 app.use('/api/save_movies', require('./router/save_movies'));

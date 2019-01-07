@@ -28,9 +28,10 @@ const initMovies = async () => {
 	return res;
 }
 
-const getMovies = async (min_rating, max_rating, min_year, max_year, genres, order, nb) => {
-	console.log(min_rating, max_rating, min_year, max_year, genres, order, nb)
+const getMovies = async (name, min_rating, max_rating, min_year, max_year, genres, order, nb) => {
+	console.log(name, min_rating, max_rating, min_year, max_year, genres, order, nb)
 	let res = await axios.post(`/api/get_data/all_movies/${nb}`, {
+		name,
 		min_rating,
 		max_rating,
 		min_year,
@@ -39,6 +40,7 @@ const getMovies = async (min_rating, max_rating, min_year, max_year, genres, ord
 		order
 	})
 	.then ((response) => {
+		console.log(response)
 		return (response)
 	})
 	.catch((error) => {

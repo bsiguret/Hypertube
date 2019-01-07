@@ -7,7 +7,7 @@ const initialState = {
 		max_rating: 10,
 		min_year: 0,
 		max_year: 9999,
-		genres: '',
+		genres: "",
 		order: "rating",
 	}
 };

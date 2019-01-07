@@ -4,7 +4,7 @@ const bcrypt = require('bcryptjs')
 const db = require('../db/db').connection_db
 const sql = require('../db/requetes')
 
-const {purifyString, isValidString, isValidEmail, isValidPassword} = require('../tools/utils')
+const {purifyString, isValidString, isValidEmail, isValidPassword, isValidPhoto} = require('../tools/utils')
 
 const signupFilter = (req, res, next) => {
     db.query(sql.get_user, [null, req.body.user.username, null], (_err, usernameExist) => {
@@ -13,6 +13,17 @@ const signupFilter = (req, res, next) => {
                 res.status(403).json("ERR_MIDDLW_SIGNUP")
             } else {
                 req.body.user.error = {}
+
+                if (!isValidPhoto(req.body.user.photo)) {
+                    req.body.user.error.photo = "Image must be jpg/jpeg/png format"
+                } else {
+                    let content = req.body.user.photo.split(/^data:image\/(?:jpeg|jpg|png)(?:;charset=utf-8)?;base64,/)
+                    if (!content) {
+                        req.body.user.error.photo = "Image invalid"
+                    } else {
+                        req.body.user.photo = content[1]
+                    }
+                }
 
                 if (!isValidString(req.body.user.lastname)) {
                     req.body.user.error.lastname = "Lastname must contains only letters, 2-20 characters"

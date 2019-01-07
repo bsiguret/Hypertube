@@ -15,7 +15,8 @@ router.post('/', (req, res) => {
                 else {
                     const payload = {id: user.id, username: user.username, emai: user.email};
                     const token = jwt.sign(payload, process.env.JWT_KEY, {expiresIn: 86400});
-                    res.json({msg: "OK", token: token});
+                    delete user.password;
+                    res.json({msg: "OK", user: user, token: token});
                 }
             }
         })

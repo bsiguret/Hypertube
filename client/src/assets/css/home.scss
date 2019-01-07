@@ -47,6 +47,15 @@
 // SIDE MENU CSS
 .side-menu {
 	overflow: auto;
+	.filter-loading-container {
+		top: 50%;
+		left: 50%;
+	}
+	.sort-button {
+		margin-top: 10px;
+		margin-bottom: 10px;
+		width: 100% !important;
+	}
 }
 #style-1::-webkit-scrollbar-track
 {
