@@ -3,15 +3,16 @@ import { Upload, Icon, message, Modal } from 'antd';
 import { userActions } from '../redux/actions/user';
 
 function beforeUpload(file) {
-  const isJPG = file.type === 'image/jpeg';
-  if (!isJPG) {
-    message.error('You can only upload JPG file!');
+  if (file.type !== 'image/jpeg' && file.type !== 'image/png') {
+    message.error('You can only upload JPG/JPEG/PNG file!');
+    return false
   }
   const isLt2M = file.size / 1024 / 1024 < 2;
   if (!isLt2M) {
     message.error('Image must smaller than 2MB!');
+    return false
   }
-  return isJPG && isLt2M;
+  return true;
 }
 
 function getBase64(img, callback) {
@@ -71,6 +72,7 @@ class PhotoUploader extends Component {
     return (
       <div className="clearfix">
         <Upload
+          accept=".jpg,.jpeg,.png"
 					customRequest={this.customRequest}
 					beforeUpload={beforeUpload}
           listType="picture-card"

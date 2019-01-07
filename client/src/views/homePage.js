@@ -1,34 +1,57 @@
 import React, { Component } from 'react';
-import { Row, Col} from 'antd';
+import { connect } from 'react-redux';
+import InfiniteScroll from 'react-infinite-scroller';
+import { Spin } from 'antd';
+
+import { movieActions } from '../redux/actions/movie';
+import Movies from '../components/movies'
 
 import '../assets/css/home.scss'
 
 class HomePage extends Component {
-	constructor(props) {
+	constructor(props){
 		super(props)
-
 		this.state = {
-			collapsed: false,
-		};
+			loading: false,
+			page: 1,
+		}
 	}
-
-	onCollapse = (collapsed) => {
-		this.setState({ collapsed });
-	}
-
-	handleClick = (e) => {
+	
+	handleInfiniteOnLoad = async () => {
     this.setState({
-      current: e.key,
+      loading: true,
     });
+		let resp = await this.props.dispatch(movieActions.getMovies(0, 10, 0, 9999, [''], 'rating', this.state.page))
+		this.setState({
+			loading: false,
+			page: this.state.page + 1
+    });
+		console.log(resp)
 	}
 	
   render() {
     return (
-			<Row type="flex" justify="space-around" align="middle" style={{height: '100vh'}}>
-
-			</Row>
+			<InfiniteScroll
+				initialLoad={false}
+				loadMore={this.handleInfiniteOnLoad}
+				hasMore={!this.state.loading}
+				useWindow={false}
+			>
+				<div className='home-movies-container'>
+					{this.props.movies &&
+					<Movies movies={this.props.movies}/>}
+					{this.state.loading && 
+					<div className="loading-container">
+						<Spin />
+					</div>}
+				</div>
+			</InfiniteScroll>
 		)
   }
 }
 
-export default HomePage;
+const mapStateToProps = state => ({
+  movies: state.movieReducer.movies
+});
+
+export default connect(mapStateToProps)(HomePage);
