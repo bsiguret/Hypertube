@@ -57,7 +57,7 @@ passport.use(new FortyTwoStrategy({
                             username += Math.floor(Math.random() * 1001);
                         }
                         userQuery.createOne({lastname: lastname, firstname: firstname, username: username, email: email, profile: photo, id42: id42}).then(data => {
-                            userQuery.findOne({id42: data.id42}).then(userInfo => {
+                            userQuery.findOne({id42: id42}).then(userInfo => {
                                 return cb(null, userInfo);
                             });
                         });

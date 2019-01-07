@@ -1,15 +1,9 @@
 import axios from 'axios';
 
 const signup = async (user) => {
-	let formData = new FormData();
-	formData.append('user', user)
-
 	let res = await axios.post(
 		'/api/signup',
-		formData,
-		{ headers: {
-			"Content-Type": "multipart/form-data"
-		}}
+		user
 	)
 	.then ((response) => {
 		return (response)
