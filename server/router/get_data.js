@@ -27,9 +27,8 @@ router.post('/all_movies/:nb', (req, res) => {
     console.log(req.body.genres)
     var where = "ifNULL(movies.rating, 0) >= " + req.body.min_rating + " AND ifNULL(movies.rating, 0) <= " + req.body.max_rating;
     where += " AND movies.year >= " + req.body.min_year + " AND movies.year <= " + req.body.max_year;
-    for (let i = 0; i < req.body.genres.length; i++) {
-        where += " AND b.genres LIKE '%" + req.body.genres[i] + "%'";
-    }
+    if (req.body.genres)
+        where += " AND b.genres LIKE '%" + req.body.genres + "%'";
     var get_all_movies_by_filtre = "SELECT movies.*, b.genres FROM movies INNER JOIN (SELECT movie_id, group_concat(genre) AS genres FROM genre GROUP BY movie_id) b ON movies.movie_id = b.movie_id WHERE " + where + " ORDER BY " + req.body.order + " DESC LIMIT 20 OFFSET " + req.params.nb * 20;
     db.connection_db.query(get_all_movies_by_filtre, (err, rows) => {
         if (err)
