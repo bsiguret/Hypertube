@@ -24,6 +24,12 @@ router.get('/', (req, response) => {
             else
                 console.log("CREATE TABLE MOVIES SUCCESS!");
         });
+        await db.connection_db.query(sql.create_table_movies_status, (err, res) => {
+            if (err)
+                console.log("CREATE TABLE MOVIES STATUS ERROR: ", err.message);
+            else
+                console.log("CREATE TABLE MOVIES STATUS SUCCESS!");
+        });
         await db.connection_db.query(sql.create_table_movies_viewed, (err, res) => {
             if (err)
                 console.log("CREATE TABLE MOVIES VIEWED ERROR: ", err.message);
