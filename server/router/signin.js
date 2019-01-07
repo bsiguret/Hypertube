@@ -13,7 +13,7 @@ router.post('/', (req, res) => {
                 if (!user.isVerified)
                     res.status(401).json({msg: "Account not verified"});
                 else {
-                    let data = {id: user.id, username: user.username, emai: user.email};
+                    let data = {id: user.id, username: user.username, email: user.email};
                     const payload = data;
                     const token = jwt.sign(payload, process.env.JWT_KEY, {expiresIn: 86400});
                     data = Object.assign(data, {lastname: user.lastname, firstname: user.firstname, language: user.language, profile: user.profile});
