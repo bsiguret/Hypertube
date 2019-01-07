@@ -36,6 +36,14 @@ const create_table_movies = `CREATE TABLE IF NOT EXISTS movies
 		img TEXT
 	)`;
 
+const create_table_movies_status = `CREATE TABLE IF NOT EXISTS status
+	(
+		id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+		movie_id VARCHAR(50) NOT NULL,
+		is_start ENUM('Y', 'N') DEFAULT 'N',
+		is_finish ENUM('Y', 'N') DEFAULT 'N'
+	)`;
+
 const create_table_movies_viewed = `CREATE TABLE IF NOT EXISTS viewed
 	(
 		id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
@@ -103,13 +111,14 @@ const add_movie_genre = "INSERT INTO genre (movie_id, genre) VALUES ?";
 const add_movie_torrent = "INSERT INTO torrent (movie_id, url, quality, seeds, peers, size_bytes) VALUES ?";
 const check_movie_exists = "SELECT * FROM movies WHERE movie_id=?";
 const get_movie = "SELECT * FROM movies WHERE movie_id=?";
-const get_movie_genre = "SELECT * FROM genre WHERE movie_id=?";
+const get_movie_genre = "SELECT genre FROM genre WHERE movie_id=?";
 const get_movie_torrent = "SELECT * FROM torrent WHERE movie_id=?";
 const add_movie_file = "INSERT INTO file (movie_id, quality, path) VALUES ?";
 const add_movie_subtitle = "INSERT INTO subtitle (movie_id, language, path) VALUES ?";
 const get_movie_file = "SELECT path FROM file WHERE movie_id=? AND quality=?";
 const get_movie_subtitle = "SELECT * FROM subtitle WHERE movie_id=?";
 const get_all_genre = "SELECT genre FROM genre GROUP BY genre";
+const get_movie_status = "SELECT * FROM status WHERE movie_id=?";
 
 const insert_user = "INSERT INTO users (lastname,firstname,username,password,email,profile) VALUES(?)";
 const get_user = "SELECT * FROM users WHERE id=? || username=? || email=?";
@@ -119,6 +128,7 @@ module.exports = {
 	drop_database: drop_database,
 	create_table_users: create_table_users,
 	create_table_movies: create_table_movies,
+	create_table_movies_status: create_table_movies_status,
 	create_table_movies_viewed: create_table_movies_viewed,
 	create_table_movies_genre: create_table_movies_genre,
 	create_table_movies_torrent: create_table_movies_torrent,
@@ -139,6 +149,7 @@ module.exports = {
 	get_movie_file: get_movie_file,
 	get_movie_subtitle: get_movie_subtitle,
 	get_all_genre: get_all_genre,
+	get_movie_status: get_movie_status,
 	insert_user: insert_user,
 	get_user: get_user,
 };
