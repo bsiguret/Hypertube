@@ -21,7 +21,18 @@ class HomePage extends Component {
     this.setState({
       loading: true,
     });
-		let resp = await this.props.dispatch(movieActions.getMoreMovies(0, 10, 0, 9999, [''], 'rating', this.state.page))
+		let resp = await this.props.dispatch(
+			movieActions.getMoreMovies(
+				this.props.filter.name,
+				this.props.filter.min_rating,
+				this.props.filter.max_rating,
+				this.props.filter.min_year,
+				this.props.filter.max_year,
+				this.props.filter.genres,
+				this.props.filter.order,
+				this.state.page
+			)
+		)
 		this.setState({
 			loading: false,
 			page: this.state.page + 1
@@ -52,7 +63,8 @@ class HomePage extends Component {
 }
 
 const mapStateToProps = state => ({
-  movies: state.movieReducer.movies
+	movies: state.movieReducer.movies,
+	filter: state.movieReducer.filter
 });
 
 export default connect(mapStateToProps)(HomePage);
