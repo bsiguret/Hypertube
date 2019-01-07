@@ -42,12 +42,12 @@ const initMovies = () => async dispatch => {
 }
 
 //min_rating, max_rating, min_year, max_year, genres, order, nb
-const getMovies = (min_rating, max_rating, min_year, max_year, genres, order, nb) => async dispatch => {
+const getMovies = (name, min_rating, max_rating, min_year, max_year, genres, order, nb) => async dispatch => {
 	function request() { return { type: userConstants.MOVIES_REQUEST} };
 	function success(movies) { return { type: userConstants.MOVIES_SUCCESS, movies} };
-
+	console.log(name, min_rating, max_rating, min_year, max_year, genres, order, nb)
 	dispatch(request());
-	let res = await m.getMovies(min_rating, max_rating, min_year, max_year, genres, order, nb)
+	let res = await m.getMovies(name, min_rating, max_rating, min_year, max_year, genres, order, nb)
 		.then(
 			res => {
 				if (res.status !== 200) {
@@ -63,12 +63,12 @@ const getMovies = (min_rating, max_rating, min_year, max_year, genres, order, nb
 }
 
 //min_rating, max_rating, min_year, max_year, genres, order, nb
-const getMoreMovies = (min_rating, max_rating, min_year, max_year, genres, order, nb) => async dispatch => {
+const getMoreMovies = (name, min_rating, max_rating, min_year, max_year, genres, order, nb) => async dispatch => {
 	function request() { return { type: userConstants.MOVIES_MORE_REQUEST} };
 	function success(movies) { return { type: userConstants.MOVIES_MORE_SUCCESS, movies} };
 
 	dispatch(request());
-	let res = await m.getMovies(min_rating, max_rating, min_year, max_year, genres, order, nb)
+	let res = await m.getMovies(name, min_rating, max_rating, min_year, max_year, genres, order, nb)
 		.then(
 			res => {
 				if (res.status !== 200) {
