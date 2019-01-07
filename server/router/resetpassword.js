@@ -10,6 +10,7 @@ let {RPFilterEmail, RPFilterPass} = require('../middlewares/resetpasswordFilter'
 
 /**
  * When user type his email to send a resetting password email
+ * @email
  */
 router.post('/', RPFilterEmail, (req,res) => {
     sendMailTo(req.body.username, req.body.email, 3).then(success => {
@@ -39,6 +40,8 @@ router.get('/:username/:token', (req,res) => {
 
 /**
  * When user type his new password
+ * @param npassword
+ * @param cpassword
  */
 router.post('/:username/:token', RPFilterPass, (req,res) => {
     db.query("UPDATE users SET ? WHERE ?", [{password: req.body.npassword, token: null}, {username: req.body.username}], (err, success) => {
