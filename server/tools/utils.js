@@ -20,9 +20,14 @@ const isValidEmail = (email) => {
     return (email.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/) ? true : false)
 }
 
+const isValidPhoto = (photo) => {
+    return (photo.match(/^data:image\/(?:jpeg|jpg|png)/) ? true : false)
+}
+
 module.exports = {
     purifyString,
     isValidString,
     isValidPassword,
-    isValidEmail
+    isValidEmail,
+    isValidPhoto
 }
