@@ -47,9 +47,9 @@ passport.use(new FortyTwoStrategy({
         userQuery.findOne({id42: id42}).then(userId => {
             if (!userId) {
                 userQuery.findOne({email: email}).then(async userEmail => {
-                    if (userEmail)
+                    if (userEmail) {
                         cb(null, {err: "Email already exists"});
-                    else {
+                    } else {
                         while (1) {
                             let response = await userQuery.findOne({username: username});
                             if (!response)
