@@ -10,13 +10,17 @@ let signupFilter = require('../middlewares/signupFilter')
 let {sendMailTo} = require('../tools/sendMailTo')
 
 router.post('/', signupFilter, (req, res) => {
-    const userStorage = __dirname + '/' + encodeURIComponent(req.body.user.username) + '/'
+    const dir = __dirname + '/../public/'
+    const userStorage =  encodeURIComponent(req.body.user.username) + '/'
     const filename = userStorage + 'profile.png'
-    
-    if (!fs.existsSync(userStorage)) {
-        fs.mkdirSync(userStorage)
+    if (!fs.existsSync(dir)) {
+        fs.mkdirSync(dir)
     }
-    fs.writeFile(filename, req.body.user.photo, {encoding: 'base64'}, function(err) {
+    if (!fs.existsSync(dir + userStorage)) {
+        fs.mkdirSync(dir + userStorage)
+    }
+    console.log(dir + filename);
+    fs.writeFile(dir + filename, req.body.user.photo, {encoding: 'base64'}, function(err) {
 
     });
 
@@ -26,7 +30,7 @@ router.post('/', signupFilter, (req, res) => {
         req.body.user.username,
         req.body.user.password,
         req.body.user.email,
-        filename
+        "http://localhost:" + process.env.PORT_BACK + "/api/photo/" + filename
     ]
     
     db.query(sql.insert_user, [data], (err, success) => {
