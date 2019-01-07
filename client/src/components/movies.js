@@ -27,12 +27,17 @@ class Movies extends Component {
 		})
 	}
 
+	ft_onclick()
+	{
+		alert('test');
+	}
+	
 	render() {
 		const { isHover } = this.state
 		const Movies = ({movies}) => (
 			<>
 				{movies.map((movie, key) => (
-					<div key={key} className='movie-poster' >
+					<div key={key} className='movie-poster' onClick={this.ft_onclick.bind(this)}>
 						<div onMouseEnter={() => this.handleEnter(key)} onMouseLeave={() => this.handleLeave()}>
 							<img alt={movie.title} src={movie.img} style={{width: '100%'}} />
 						</div>
