@@ -1,7 +1,18 @@
 import { userConstants } from '../constants';
 
+const initialState = {
+	filter: {
+		name: "",
+		min_rating: 0,
+		max_rating: 10,
+		min_year: 0,
+		max_year: 9999,
+		genres: '',
+		order: "rating",
+	}
+};
 
-export function movieReducer(state={}, action) {
+export function movieReducer(state = initialState, action) {
 	switch(action.type) {
 		case userConstants.GENRE_REQUEST:
 		return Object.assign({}, state, {
@@ -21,6 +32,15 @@ export function movieReducer(state={}, action) {
 			...state,
 			...action.movies
 		})
+		case userConstants.MOVIES_MORE_REQUEST:
+		return Object.assign({}, state, {
+			...state,
+		})
+		case userConstants.MOVIES_MORE_SUCCESS:
+		return Object.assign({}, state, {
+			...state,
+			movies: state.movies.concat(action.movies)
+		})
 		case userConstants.MOVIES_REQUEST:
 		return Object.assign({}, state, {
 			...state,
@@ -28,7 +48,16 @@ export function movieReducer(state={}, action) {
 		case userConstants.MOVIES_SUCCESS:
 		return Object.assign({}, state, {
 			...state,
-			movies: state.movies.concat(action.movies)
+			movies: [...action.movies]
+		})
+		case userConstants.MOVIES_FILTER_SUCCESS:
+		console.log(action)
+		return Object.assign({}, state, {
+			...state,
+			filter: {
+				...state.filter,
+				...action.filter.filter
+			}
 		})
 		case userConstants.LOGOUT:
 			return {user: {}};

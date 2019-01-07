@@ -62,8 +62,38 @@ const getMovies = (min_rating, max_rating, min_year, max_year, genres, order, nb
 	return res;
 }
 
+//min_rating, max_rating, min_year, max_year, genres, order, nb
+const getMoreMovies = (min_rating, max_rating, min_year, max_year, genres, order, nb) => async dispatch => {
+	function request() { return { type: userConstants.MOVIES_MORE_REQUEST} };
+	function success(movies) { return { type: userConstants.MOVIES_MORE_SUCCESS, movies} };
+
+	dispatch(request());
+	let res = await m.getMovies(min_rating, max_rating, min_year, max_year, genres, order, nb)
+		.then(
+			res => {
+				if (res.status !== 200) {
+					return res.data;
+				}
+				else {
+					dispatch(success(res.data.movies));
+					return res;
+				}
+			}
+		);
+	return res;
+}
+
+//name, min_rating, max_rating, min_year, max_year, genres, order
+const addFilter = (name, min_rating, max_rating, min_year, max_year, genres, order) => async dispatch => {
+	function success(filter) { return { type: userConstants.MOVIES_FILTER_SUCCESS, filter} };
+
+	dispatch(success({filter: {name, min_rating, max_rating, min_year, max_year, genres, order}}));
+}
+
 export const movieActions = {
 	getAllGenre,
 	initMovies,
-	getMovies
+	getMovies,
+	getMoreMovies,
+	addFilter
 };

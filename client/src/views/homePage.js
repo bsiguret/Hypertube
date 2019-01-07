@@ -21,7 +21,7 @@ class HomePage extends Component {
     this.setState({
       loading: true,
     });
-		let resp = await this.props.dispatch(movieActions.getMovies(0, 10, 0, 9999, [''], 'rating', this.state.page))
+		let resp = await this.props.dispatch(movieActions.getMoreMovies(0, 10, 0, 9999, [''], 'rating', this.state.page))
 		this.setState({
 			loading: false,
 			page: this.state.page + 1
@@ -36,6 +36,7 @@ class HomePage extends Component {
 				loadMore={this.handleInfiniteOnLoad}
 				hasMore={!this.state.loading}
 				useWindow={false}
+				style={{height: '100%'}}
 			>
 				<div className='home-movies-container'>
 					{this.props.movies &&
