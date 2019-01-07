@@ -15,7 +15,7 @@ router.get('/42/callback',
             res.redirect('http://localhost:3001');
         }
         else {
-            const payload = {id: user.id, username: user.username, emai: user.email};
+            const payload = {id: user.id, username: user.username, email: user.email};
             const token = jwt.sign(payload, process.env.JWT_KEY, {expiresIn: 86400});
             res.redirect('http://localhost:3001/home');
         }
