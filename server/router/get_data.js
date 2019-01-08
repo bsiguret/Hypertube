@@ -47,12 +47,16 @@ router.get('/movie/:movie_id', (req, res) => {
     db.connection_db.query(sql.get_movie, [req.params.movie_id], (err, rows) => {
         if (err)
             res.status(403).json({msg: "Error get info"});
-        else {
+        else if (rows.length < 1) {
+            res.status(403).json({msg: "Error no film"});
+        } else {
             db.connection_db.query(sql.get_movie_genre, [req.params.movie_id], (err1, rows1) => {
                 if (err1)
                     res.status(403).json({msg: "Error get info"});
-                else
-                    res.json({info: rows, genres: rows1});
+                else {
+                    let genres = rows1.length ? rows1 : ["Unspecified"];
+                    res.json({info: rows, genres: genres});
+                }
             })
         }
     })
