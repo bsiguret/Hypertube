@@ -47,9 +47,9 @@ passport.use(new FortyTwoStrategy({
         userQuery.findOne({id42: id42}).then(userId => {
             if (!userId) {
                 userQuery.findOne({email: email}).then(async userEmail => {
-                    if (userEmail)
+                    if (userEmail) {
                         cb(null, {err: "Email already exists"});
-                    else {
+                    } else {
                         while (1) {
                             let response = await userQuery.findOne({username: username});
                             if (!response)
@@ -57,7 +57,7 @@ passport.use(new FortyTwoStrategy({
                             username += Math.floor(Math.random() * 1001);
                         }
                         userQuery.createOne({lastname: lastname, firstname: firstname, username: username, email: email, profile: photo, id42: id42}).then(data => {
-                            userQuery.findOne({id42: data.id42}).then(userInfo => {
+                            userQuery.findOne({id42: id42}).then(userInfo => {
                                 return cb(null, userInfo);
                             });
                         });
