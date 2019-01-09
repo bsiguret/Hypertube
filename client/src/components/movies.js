@@ -29,7 +29,7 @@ class Movies extends Component {
 
 	ft_onclick()
 	{
-		alert('test');
+		window.location.href = 'http://localhost:3001/play';
 	}
 	
 	render() {

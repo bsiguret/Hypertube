@@ -35,7 +35,7 @@ const ft_slicing = (path, to, id) =>
   {
     console.log('progress: ', path);
   })
-  .on('end', () => 
+  .on('end', () =>
   {
     console.log('slicing completed ---------------')
   });

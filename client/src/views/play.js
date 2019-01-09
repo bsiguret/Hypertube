@@ -7,7 +7,10 @@ class Play extends Component
 
   render() {
     return (
-      <div>test play</div>
+      <div>test play
+        <video id='video' width="100%" height="600" controls>
+        </video>
+      </div>
     )
   }
 }
