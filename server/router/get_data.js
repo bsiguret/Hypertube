@@ -2,8 +2,9 @@ var db = require('../db/db');
 var sql = require('../db/requetes');
 const express = require('express');
 const router = express.Router();
+const passport = require('../tools/passport');
 
-router.get('/all_genre', (req, res) => {
+router.get('/all_genre', passport.authenticate('jwt', {session: false}), (req, res) => {
     db.connection_db.query(sql.get_all_genre, (err, rows) => {
         if (err)
             res.status(403).json({msg: "Error get all genre"});
@@ -23,6 +24,7 @@ router.get('/all_movies', (req, res) => {
 requete need:
 min_rating, max_rating, min_year, max_year, genres, order, nb
 */
+
 router.post('/all_movies/:nb', (req, res) => {
     console.log(req.body)
     var where = "ifNULL(movies.rating, 0) >= " + req.body.min_rating + " AND ifNULL(movies.rating, 0) <= " + req.body.max_rating;

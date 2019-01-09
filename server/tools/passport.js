@@ -15,11 +15,19 @@ passport.deserializeUser(function(obj, cb) {
     cb(null, obj);
 });
 
+var cookieExtractor = function(req) {
+    var token = null;
+    if (req && req.cookies) {
+        token = req.cookies.token;
+    }
+    return token;
+};
+
 var jwtOptions = {};
-jwtOptions.jwtFromRequest = ExtractJWT.fromAuthHeaderAsBearerToken();
+jwtOptions.jwtFromRequest = cookieExtractor;
 jwtOptions.secretOrKey = process.env.JWT_KEY;
 passport.use(new JWTStrategy(jwtOptions, (jwt_payload, done) => {
-    userQuery.findOne({id: jwt_payload.id}).then(user => {
+    userQuery.findOne({id: jwt_payload.id}).then((user) => {
         if (user) {
             var info = {
                 id: user.id,
