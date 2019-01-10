@@ -2,8 +2,6 @@ const axios = require('axios');
 const fs = require('fs');
 var throttledQueue = require('throttled-queue');
 var throttle = throttledQueue(20, 10000);
-const express = require('express');
-const router = express.Router();
 const filename = __dirname + "/popcorn_movies.json";
 
 // Recupere tous les films en recursive
@@ -25,7 +23,7 @@ async function get_all_movies(page, total_page) {
 				throttle(async function() {
 					try {
 						// Recupere les détails du films
-						const omdb = await axios.get('http://www.omdbapi.com/?apikey=' + process.env.OMDB_KEY + '&plot=full&i=' + movie.imdb_id);
+						const omdb = await axios.get('http://www.omdbapi.com/?apikey=' + '2a86d74e' + '&plot=full&i=' + movie.imdb_id);
 
 						// Sauvegarder les données dans des variables
 						data['movie'] = [
@@ -96,11 +94,11 @@ async function get_all_movies(page, total_page) {
 	}
 }
 
-router.get('/', async function get_popcorn_movies() {
+ var get_popcorn_movies = async function () {
 	try {
 		// On recupere le nombre totals des pages
-		const res = await axios.get('https://tv-v2.api-fetch.website/movies/');
-		const number_page = res.data.length;
+		// const res = await axios.get('https://tv-v2.api-fetch.website/movies/');
+		// const number_page = res.data.length;
 
 		// On ecrit au debut du fichier un '[' pour lire correctement les données en json
 		fs.writeFileSync(filename, "[");
@@ -110,6 +108,6 @@ router.get('/', async function get_popcorn_movies() {
 	} catch(err) {
 		console.log(err);
 	}
-});
+};
 
-module.exports = router;
+get_popcorn_movies();
