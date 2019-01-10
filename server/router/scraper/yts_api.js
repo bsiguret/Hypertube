@@ -2,17 +2,16 @@ const axios = require('axios');
 const fs = require('fs');
 var throttledQueue = require('throttled-queue');
 var throttle = throttledQueue(20, 10000);
-const express = require('express');
-const router = express.Router();
 const filename = __dirname + "/yts_movies.json";
 
 // Recupere tous les films en recursive
 async function get_all_movies(page, total_page) {
+
 	if (page > total_page)
 		return ;
 	try {
 		// Recupere tous les films de cette page
-		const res = await axios.get('https://yts.am/api/v2/list_movies.json?limit=50&sort_by=rating&page=' + page);
+		const res = await axios.get('https://yts.am/api/v2/list_movies.json?limit=50&sort_by=date&page=' + page);
 		
 		// Parcourir tous les films
 		for (let i = 0; i < res.data.data.movies.length; i++) {
@@ -25,7 +24,7 @@ async function get_all_movies(page, total_page) {
 				throttle(async function() {
 					try {
 						// Recupere les détails du films
-						const omdb = await axios.get('http://www.omdbapi.com/?apikey=' + process.env.OMDB_KEY + '&plot=full&i=' + movie.imdb_code);
+						const omdb = await axios.get('http://www.omdbapi.com/?apikey=' + '2a86d74e' + '&plot=full&i=' + movie.imdb_code);
 
 						// Sauvegarder les données dans des variables
 						data['movie'] = [
@@ -85,20 +84,20 @@ async function get_all_movies(page, total_page) {
 	}
 }
 
-router.get('/', async function get_yts_movies() {
+var get_yts_movies = async function () {
 	try {
 		// Recupere les données pour compter le nombre total des pages
-        const res = await axios.get('https://yts.am/api/v2/list_movies.json?limit=1&sort_by=rating');
-		const number_page = parseInt(res.data.data.movie_count / 50) + 1
+        // const res = await axios.get('https://yts.am/api/v2/list_movies.json?limit=1&sort_by=rating');
+		// const number_page = parseInt(res.data.data.movie_count / 50) + 1
 		
 		// On ecrit au debut du fichier un '[' pour lire correctement les données en json
-		fs.writeFileSync(filename, "[");
+		// fs.writeFileSync(filename, "[");
 
 		// Recupere tous les films en recursive
-		get_all_movies(1, 1);
+		get_all_movies(1, 10);
 	} catch(err) {
 		console.log(err);
     }
-});
+};
 
-module.exports = router;
+get_yts_movies();

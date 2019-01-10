@@ -3,6 +3,7 @@ const app = express();
 const bodyParser = require('body-parser');
 const path = require('path');
 const passport = require('passport');
+const cookieParser = require('cookie-parser');
 
 require('dotenv').config();
 app.set('views', 'public/views');
@@ -18,19 +19,18 @@ if (process.env.NODE_ENV === 'prod') {
 		res.sendFile(path.join(__dirname, "../client/build", "index.html"));
 	})
 }
-
+app.use(cookieParser());
 app.use('/api/photo', express.static('./public'));
 
 app.use('/api/create_base', require('./router/create_base'));
 app.use('/api/drop_base', require('./router/drop_base'));
 app.use('/api/save_movies', require('./router/save_movies'));
-app.use('/api/scraper/yts', require('./router/scraper/yts_api'));
-app.use('/api/scraper/popcorn', require('./router/scraper/popcorn_api'));
-app.use('/api/scraper/regroup', require('./router/scraper/regroup_movies'));
 app.use('/api/auth', require('./router/auth'));
 app.use('/api/get_data', require('./router/get_data'));
 app.use('/api/signin', require('./router/signin'));
 app.use('/api/signup', require('./router/signup'));
+app.use('/api/logout', require('./router/logout'));
+app.use('/api/checklog', require('./router/checklog'));
 app.use('/api/resetpassword', require('./router/resetpassword'));
 app.use('/api/emailvalidation', require('./router/emailvalidation'));
 

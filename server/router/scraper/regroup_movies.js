@@ -1,9 +1,7 @@
 const axios = require('axios');
 const fs = require('fs');
-const express = require('express');
-const router = express.Router();
 
-router.get('/', async function regroup_movies() {
+var regroup_movies = async function () {
 	// Lire les fichiers json et regrouper tous les films dans une variable
 	var popcorn_file = __dirname + "/popcorn_movies.json";
 	var yts_file = __dirname + "/yts_movies.json";
@@ -36,6 +34,6 @@ router.get('/', async function regroup_movies() {
 
 		};
 	}
-});
+};
 
-module.exports = router;
+regroup_movies();

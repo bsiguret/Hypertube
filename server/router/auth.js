@@ -17,6 +17,7 @@ router.get('/42/callback',
         else {
             const payload = {id: user.id, username: user.username, email: user.email};
             const token = jwt.sign(payload, process.env.JWT_KEY, {expiresIn: 86400});
+            res.cookie('token', token, { maxAge: 86400, httpOnly: true });
             res.redirect('http://localhost:3001/home');
         }
     }

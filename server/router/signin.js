@@ -16,8 +16,9 @@ router.post('/', (req, res) => {
                     let data = {id: user.id, username: user.username, email: user.email};
                     const payload = data;
                     const token = jwt.sign(payload, process.env.JWT_KEY, {expiresIn: 86400});
+                    res.cookie('token', token, { maxAge: 86400, httpOnly: true });
                     data = Object.assign(data, {lastname: user.lastname, firstname: user.firstname, language: user.language, profile: user.profile});
-                    res.json({user: data, token: token});
+                    res.json({user: data});
                 }
             }
         })
