@@ -1,8 +1,9 @@
 const passport = require('passport');
 var FortyTwoStrategy = require('passport-42').Strategy;
+var FacebookStrategy = require('passport-facebook').Strategy;
+var GoogleStrategy = require('passport-google-oauth20').Strategy;
 const passportJWT = require('passport-jwt');
 const JWTStrategy   = passportJWT.Strategy;
-const ExtractJWT = passportJWT.ExtractJwt;
 const userQuery = require('../models/userModel');
 
 require('dotenv').config();
@@ -76,6 +77,29 @@ passport.use(new FortyTwoStrategy({
                 return cb(null, userId);
             }
         });
+    }
+));
+
+passport.use(new FacebookStrategy({
+    clientID: process.env.PASSPORT_FACEBOOK_APP_ID,
+    clientSecret: process.env.PASSPORT_FACEBOOK_APP_SECRET,
+    callbackURL: "http://localhost:3000/api/auth/facebook/callback",
+    profileFields: ['id', 'displayName', 'photos', 'email']
+    },
+    function(accessToken, refreshToken, profile, cb) {
+        console.log(profile._json);
+        return cb(null, profile);
+    }
+));
+
+passport.use(new GoogleStrategy({
+    clientID: process.env.PASSPORT_GOOGLE_CLIENT_ID,
+    clientSecret: process.env.PASSPORT_GOOGLE_CLIENT_SECRET,
+    callbackURL: "http://localhost:3000/api/auth/google/callback"
+    },
+    function(accessToken, refreshToken, profile, cb) {
+        console.log(profile._json);
+        return cb(null, profile);
     }
 ));
 
