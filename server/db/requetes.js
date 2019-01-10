@@ -15,8 +15,8 @@ const create_table_users = `CREATE TABLE IF NOT EXISTS users
 		token VARCHAR(100) DEFAULT NULL,
 		isVerified INT DEFAULT 0,
 		id42 INT DEFAULT NULL UNIQUE,
-		facebookid INT DEFAULT NULL UNIQUE,
-		googleid INT DEFAULT NULL UNIQUE
+		facebookid BIGINT DEFAULT NULL UNIQUE,
+		googleid BIGINT DEFAULT NULL UNIQUE
 	)`;
 
 const create_table_movies = `CREATE TABLE IF NOT EXISTS movies
