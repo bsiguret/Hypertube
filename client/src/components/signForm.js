@@ -6,7 +6,12 @@ import PhotoUploader from './photoUploader';
 import { userActions } from '../redux/actions/user';
 
 class SignForm extends Component {
-
+	constructor(props){
+		super(props)
+		this.state = {
+			err: {}
+		}
+	}
 	handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFields(async (err, values) => {
@@ -15,6 +20,11 @@ class SignForm extends Component {
 				let res = await this.props.dispatch(userActions.signup({user: {photo: this.props.photo, ...values}}))
 				if (res.status !== 200) {
 					console.log(res)
+					if (res.status === 403) {
+						console.log(res.data)
+						this.setState({ err: res.data })
+						console.log(this.state.err)
+					}
 				}
 			} else if (!err && !this.props.photo)
 					message.error('Please upload a photo')
@@ -22,14 +32,21 @@ class SignForm extends Component {
 	}
 
   render() {
+		const { err } = this.state;
 		const { getFieldDecorator } = this.props.form;
     return (
 			<div className='indexSignupFormWrapper'>
 				<Form onSubmit={this.handleSubmit} className="indexSignupForm">
-					<Form.Item>
+				<Form.Item
+						validateStatus={err.photo ? 'error' : 'success'}
+						help={err.photo}
+					>
 						<PhotoUploader dispatch={this.props.dispatch}/>
 					</Form.Item>
-					<Form.Item>
+					<Form.Item
+						validateStatus={err.username ? 'error' : 'success'}
+						help={err.username}
+					>
 						{getFieldDecorator('username', {
 							rules: [{ 
 								type: 'string', message: 'The input is not valid',
@@ -42,7 +59,10 @@ class SignForm extends Component {
 							<Input prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="Username" />
 						)}
 					</Form.Item>
-					<Form.Item>
+					<Form.Item
+						validateStatus={err.email ? 'error' : 'success'}
+						help={err.email}
+					>
 						{getFieldDecorator('email', {
 							rules: [{
 								type: 'email', message: 'The input is not valid',
@@ -55,7 +75,10 @@ class SignForm extends Component {
 							<Input prefix={<Icon type="mail" style={{ color: 'rgba(0,0,0,.25)' }} />} type="email" placeholder="Email" />
 						)}
 					</Form.Item>
-					<Form.Item>
+					<Form.Item
+						validateStatus={err.firstname ? 'error' : 'success'}
+						help={err.firstname}
+					>
 						{getFieldDecorator('firstname', {
 							rules: [{ 
 								type: 'string', message: 'The input is not valid',
@@ -68,7 +91,10 @@ class SignForm extends Component {
 							<Input prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="Firstname" />
 						)}
 					</Form.Item>
-					<Form.Item>
+					<Form.Item
+						validateStatus={err.lastname ? 'error' : 'success'}
+						help={err.lastname}
+					>
 						{getFieldDecorator('lastname', {
 							rules: [{ 
 								type: 'string', message: 'The input is not valid',
@@ -81,7 +107,10 @@ class SignForm extends Component {
 							<Input prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="Lastname" />
 						)}
 					</Form.Item>
-					<Form.Item>
+					<Form.Item
+						validateStatus={err.password ? 'error' : 'success'}
+						help={err.password}
+					>
 						{getFieldDecorator('password', {
 							rules: [{ 
 								type: 'string', message: 'The input is not valid',
@@ -94,7 +123,10 @@ class SignForm extends Component {
 								<Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} type="password" placeholder="Password" />
 						)}
 					</Form.Item>
-					<Form.Item>
+					<Form.Item
+						validateStatus={err.cpassword ? 'error' : 'success'}
+						help={err.cpassword}
+					>
 						{getFieldDecorator('cpassword', {
 							rules: [{ 
 								type: 'string', message: 'The input is not valid',

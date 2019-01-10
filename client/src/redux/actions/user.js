@@ -30,7 +30,7 @@ const signup = (user) => async dispatch => {
 		.then(
 			res => {
 				if (res.status !== 200) {
-					return res.data;
+					return res;
 				}
 				else {
 					dispatch(success(res.data));
