@@ -82,7 +82,6 @@ const getMoreMovies = (name, min_rating, max_rating, min_year, max_year, genres,
 		);
 	return res;
 }
-
 const getMovieInfo = (id) => async dispatch => {
 	function request() { return { type: userConstants.MOVIE_INFO_REQUEST} };
 	function success(movie) { return { type: userConstants.MOVIE_INFO_SUCCESS, movie} };

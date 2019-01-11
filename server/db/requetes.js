@@ -6,7 +6,7 @@ const create_table_users = `CREATE TABLE IF NOT EXISTS users
 	(
 		id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
 		lastname VARCHAR(30) NOT NULL,
-		firstname VARCHAR (30) NOT NULL,
+		firstname VARCHAR(30) NOT NULL,
 		username VARCHAR(30) NOT NULL UNIQUE,
 		password VARCHAR(100),
 		email VARCHAR(100) NOT NULL UNIQUE,
@@ -15,8 +15,8 @@ const create_table_users = `CREATE TABLE IF NOT EXISTS users
 		token VARCHAR(100) DEFAULT NULL,
 		isVerified INT DEFAULT 0,
 		id42 INT DEFAULT NULL UNIQUE,
-		facebookid INT DEFAULT NULL UNIQUE,
-		googleid INT DEFAULT NULL UNIQUE
+		facebookid BIGINT DEFAULT NULL UNIQUE,
+		googleid VARCHAR(30) DEFAULT NULL UNIQUE
 	)`;
 
 const create_table_movies = `CREATE TABLE IF NOT EXISTS movies

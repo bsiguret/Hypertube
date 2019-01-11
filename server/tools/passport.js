@@ -1,8 +1,9 @@
 const passport = require('passport');
 var FortyTwoStrategy = require('passport-42').Strategy;
+var FacebookStrategy = require('passport-facebook').Strategy;
+var GoogleStrategy = require('passport-google-oauth20').Strategy;
 const passportJWT = require('passport-jwt');
 const JWTStrategy   = passportJWT.Strategy;
-const ExtractJWT = passportJWT.ExtractJwt;
 const userQuery = require('../models/userModel');
 
 require('dotenv').config();
@@ -66,6 +67,85 @@ passport.use(new FortyTwoStrategy({
                         }
                         userQuery.createOne({lastname: lastname, firstname: firstname, username: username, email: email, profile: photo, id42: id42}).then(data => {
                             userQuery.findOne({id42: id42}).then(userInfo => {
+                                return cb(null, userInfo);
+                            });
+                        });
+                    }
+                })
+            }
+            else {
+                return cb(null, userId);
+            }
+        });
+    }
+));
+
+passport.use(new FacebookStrategy({
+    clientID: process.env.PASSPORT_FACEBOOK_APP_ID,
+    clientSecret: process.env.PASSPORT_FACEBOOK_APP_SECRET,
+    callbackURL: "http://localhost:3000/api/auth/facebook/callback",
+    profileFields: ['id', 'first_name', 'last_name', 'picture.type(large)', 'email']
+    },
+    function(accessToken, refreshToken, profile, cb) {
+        let facebookid = profile._json.id;
+        let lastname = profile._json.last_name;
+        let firstname = profile._json.first_name;
+        let username = lastname.toLowerCase();
+        let email = profile._json.email;
+        let photo = profile._json.picture.data.url;
+        userQuery.findOne({facebookid: facebookid}).then(userId => {
+            if (!userId) {
+                userQuery.findOne({email: email}).then(async userEmail => {
+                    if (userEmail) {
+                        cb(null, {err: "Email already exists"});
+                    } else {
+                        while (1) {
+                            let response = await userQuery.findOne({username: username});
+                            if (!response)
+                                break ;
+                            username += Math.floor(Math.random() * 1001);
+                        }
+                        userQuery.createOne({lastname: lastname, firstname: firstname, username: username, email: email, profile: photo, facebookid: facebookid}).then(data => {
+                            userQuery.findOne({facebookid: facebookid}).then(userInfo => {
+                                return cb(null, userInfo);
+                            });
+                        });
+                    }
+                })
+            }
+            else {
+                return cb(null, userId);
+            }
+        });
+    }
+));
+
+passport.use(new GoogleStrategy({
+    clientID: process.env.PASSPORT_GOOGLE_CLIENT_ID,
+    clientSecret: process.env.PASSPORT_GOOGLE_CLIENT_SECRET,
+    callbackURL: "http://localhost:3000/api/auth/google/callback"
+    },
+    function(accessToken, refreshToken, profile, cb) {
+        let googleid = profile._json.id;
+        let lastname = profile._json.name.familyName;
+        let firstname = profile._json.name.givenName;
+        let username = lastname.toLowerCase();
+        let email = profile._json.emails[0].value;
+        let photo = profile._json.image.url.slice(0, -2) + "200";
+        userQuery.findOne({googleid: googleid}).then(userId => {
+            if (!userId) {
+                userQuery.findOne({email: email}).then(async userEmail => {
+                    if (userEmail) {
+                        cb(null, {err: "Email already exists"});
+                    } else {
+                        while (1) {
+                            let response = await userQuery.findOne({username: username});
+                            if (!response)
+                                break ;
+                            username += Math.floor(Math.random() * 1001);
+                        }
+                        userQuery.createOne({lastname: lastname, firstname: firstname, username: username, email: email, profile: photo, googleid: googleid}).then(data => {
+                            userQuery.findOne({googleid: googleid}).then(userInfo => {
                                 return cb(null, userInfo);
                             });
                         });
