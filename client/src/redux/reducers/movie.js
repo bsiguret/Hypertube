@@ -32,16 +32,6 @@ export function movieReducer(state = initialState, action) {
 			...state,
 			...action.movies
 		})
-		case userConstants.MOVIE_INFO_REQUEST:
-		return Object.assign({}, state, {
-			...state,
-			movie: {}
-		})
-		case userConstants.MOVIE_INFO_SUCCESS:
-		return Object.assign({}, state, {
-			...state,
-			movie: {...action.movie}
-		})
 		case userConstants.MOVIES_MORE_REQUEST:
 		return Object.assign({}, state, {
 			...state,
