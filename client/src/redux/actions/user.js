@@ -34,7 +34,7 @@ const signup = (user) => async dispatch => {
 				}
 				else {
 					dispatch(success(res.data));
-					return;
+					return res;
 				}
 			}
 		);

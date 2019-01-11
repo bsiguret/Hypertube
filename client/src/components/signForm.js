@@ -26,6 +26,10 @@ class SignForm extends Component {
 						console.log(this.state.err)
 					}
 				}
+				else if (res.status === 200) {
+					message.success(res.data)
+					this.props.form.resetFields();
+				}
 			} else if (!err && !this.props.photo)
 					message.error('Please upload a photo')
     });
