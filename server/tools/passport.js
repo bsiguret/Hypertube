@@ -84,11 +84,39 @@ passport.use(new FacebookStrategy({
     clientID: process.env.PASSPORT_FACEBOOK_APP_ID,
     clientSecret: process.env.PASSPORT_FACEBOOK_APP_SECRET,
     callbackURL: "http://localhost:3000/api/auth/facebook/callback",
-    profileFields: ['id', 'displayName', 'photos', 'email']
+    profileFields: ['id', 'first_name', 'last_name', 'picture.type(large)', 'email']
     },
     function(accessToken, refreshToken, profile, cb) {
-        console.log(profile._json);
-        return cb(null, profile);
+        let facebookid = profile._json.id;
+        let lastname = profile._json.last_name;
+        let firstname = profile._json.first_name;
+        let username = lastname.toLowerCase();
+        let email = profile._json.email;
+        let photo = profile._json.picture.data.url;
+        userQuery.findOne({facebookid: facebookid}).then(userId => {
+            if (!userId) {
+                userQuery.findOne({email: email}).then(async userEmail => {
+                    if (userEmail) {
+                        cb(null, {err: "Email already exists"});
+                    } else {
+                        while (1) {
+                            let response = await userQuery.findOne({username: username});
+                            if (!response)
+                                break ;
+                            username += Math.floor(Math.random() * 1001);
+                        }
+                        userQuery.createOne({lastname: lastname, firstname: firstname, username: username, email: email, profile: photo, facebookid: facebookid}).then(data => {
+                            userQuery.findOne({facebookid: facebookid}).then(userInfo => {
+                                return cb(null, userInfo);
+                            });
+                        });
+                    }
+                })
+            }
+            else {
+                return cb(null, userId);
+            }
+        });
     }
 ));
 
@@ -98,8 +126,36 @@ passport.use(new GoogleStrategy({
     callbackURL: "http://localhost:3000/api/auth/google/callback"
     },
     function(accessToken, refreshToken, profile, cb) {
-        console.log(profile._json);
-        return cb(null, profile);
+        let googleid = profile._json.id;
+        let lastname = profile._json.name.familyName;
+        let firstname = profile._json.name.givenName;
+        let username = lastname.toLowerCase();
+        let email = profile._json.emails[0].value;
+        let photo = profile._json.image.url.slice(0, -2) + "200";
+        userQuery.findOne({googleid: googleid}).then(userId => {
+            if (!userId) {
+                userQuery.findOne({email: email}).then(async userEmail => {
+                    if (userEmail) {
+                        cb(null, {err: "Email already exists"});
+                    } else {
+                        while (1) {
+                            let response = await userQuery.findOne({username: username});
+                            if (!response)
+                                break ;
+                            username += Math.floor(Math.random() * 1001);
+                        }
+                        userQuery.createOne({lastname: lastname, firstname: firstname, username: username, email: email, profile: photo, googleid: googleid}).then(data => {
+                            userQuery.findOne({googleid: googleid}).then(userInfo => {
+                                return cb(null, userInfo);
+                            });
+                        });
+                    }
+                })
+            }
+            else {
+                return cb(null, userId);
+            }
+        });
     }
 ));
 
