@@ -50,6 +50,15 @@ export function movieReducer(state = initialState, action) {
 			...state,
 			movies: [...action.movies]
 		})
+		case userConstants.MOVIE_INFO_REQUEST:
+		return Object.assign({}, state, {
+			...state,
+		})
+		case userConstants.MOVIE_INFO_SUCCESS:
+		return Object.assign({}, state, {
+			...state,
+			movie: action.movie
+		})
 		case userConstants.MOVIES_FILTER_SUCCESS:
 		console.log(action)
 		return Object.assign({}, state, {

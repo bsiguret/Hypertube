@@ -83,6 +83,26 @@ const getMoreMovies = (name, min_rating, max_rating, min_year, max_year, genres,
 	return res;
 }
 
+const getMovieInfo = (id) => async dispatch => {
+	function request() { return { type: userConstants.MOVIE_INFO_REQUEST} };
+	function success(movie) { return { type: userConstants.MOVIE_INFO_SUCCESS, movie} };
+
+	dispatch(request());
+	let res = await m.getMovieInfo(id)
+		.then(
+			res => {
+				if (res.status !== 200) {
+					return res.data;
+				}
+				else {
+					dispatch(success(res.data));
+					return res;
+				}
+			}
+		);
+	return res;
+}
+
 //name, min_rating, max_rating, min_year, max_year, genres, order
 const addFilter = (name, min_rating, max_rating, min_year, max_year, genres, order) => async dispatch => {
 	function success(filter) { return { type: userConstants.MOVIES_FILTER_SUCCESS, filter} };
@@ -95,5 +115,6 @@ export const movieActions = {
 	initMovies,
 	getMovies,
 	getMoreMovies,
+	getMovieInfo,
 	addFilter
 };

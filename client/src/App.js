@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import IndexPage from './views/indexPage';
 import HomePage from './views/homePage';
 import Page404 from './views/page404';
+import MoviePage from './views/moviePage';
 
 import { PrivateRoute } from './assets/helpers/privateRoute';
 
@@ -56,7 +57,8 @@ class App extends Component {
         <div>
           <Switch>
             <Route exact path='/' component={IndexPage}/>
-            <PrivateRoute path='/home' component={HomePage}/>
+            <PrivateRoute path='/home' component={HomePage} sideMenu={true}/>
+            <PrivateRoute path='/movie/:id' component={MoviePage} sideMenu={false}/>
             <Route component={Page404} />
           </Switch>
         </div>
