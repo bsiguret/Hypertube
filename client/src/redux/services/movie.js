@@ -64,9 +64,37 @@ const getMovies = async (name, min_rating, max_rating, min_year, max_year, genre
 	return res;
 }
 
+const getMovieInfo = async (id) => {
+
+	let res = await axios.get(
+		`/api/get_data/movie/${id}`
+		)
+	.then ((response) => {
+		return (response)
+	})
+	.catch((error) => {
+		return (error.response);
+	})
+	return res;
+}
+
+const startMovieDownload = async (id) => {
+	let res = await axios.get(
+		`/play/${id}`
+		)
+	.then ((response) => {
+		return (response)
+	})
+	.catch((error) => {
+		return (error.response);
+	})
+	return res;
+}
+
 export default {
 	getAllGenre,
 	initMovies,
 	getMovies,
-	getMovieInfo
+	getMovieInfo,
+	startMovieDownload
 }

@@ -4,14 +4,13 @@ import { Layout} from 'antd';
 import { connect } from 'react-redux';
 import SideMenu from '../../components/sideMenu';
 
-export const PrivateRoute = ({ component: Component, showMenu, ...rest }) => (
+export const PrivateRoute = ({ component: Component, sideMenu, ...rest }) => (
   <Route
     {...rest}
     render={props =>
         <div>
-					<Layout style={{height: '100vh'}}>
-            {showMenu &&
-						<SideMenu />}
+					<Layout style={{height: '100vh', overflow: 'auto'}}>
+						{sideMenu && <SideMenu />}
 						<Layout.Content>
 							<Component {...props}/>
 						</Layout.Content>

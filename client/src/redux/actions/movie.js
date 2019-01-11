@@ -82,13 +82,12 @@ const getMoreMovies = (name, min_rating, max_rating, min_year, max_year, genres,
 		);
 	return res;
 }
-
-const getMovieInfo = (movie_id) => async dispatch => {
+const getMovieInfo = (id) => async dispatch => {
 	function request() { return { type: userConstants.MOVIE_INFO_REQUEST} };
 	function success(movie) { return { type: userConstants.MOVIE_INFO_SUCCESS, movie} };
-	console.log(movie_id)
+
 	dispatch(request());
-	let res = await m.getMovieInfo(movie_id)
+	let res = await m.getMovieInfo(id)
 		.then(
 			res => {
 				if (res.status !== 200) {

@@ -57,8 +57,8 @@ class App extends Component {
         <div>
           <Switch>
             <Route exact path='/' component={IndexPage}/>
-            <PrivateRoute path='/home' component={HomePage} showMenu={true}/>
-            <PrivateRoute path='/movie/:movie_id' component={MoviePage} showMenu={false}/>
+            <PrivateRoute path='/home' component={HomePage} sideMenu={true}/>
+            <PrivateRoute path='/movie/:id' component={MoviePage} sideMenu={false}/>
             <Route component={Page404} />
           </Switch>
         </div>
