@@ -48,19 +48,25 @@ router.post('/all_movies/:nb', (req, res) => {
 
 router.get('/movie/:movie_id', (req, res) => {
     db.connection_db.query(sql.get_movie, [req.params.movie_id], (err, rows) => {
-        if (err)
+        if (err) {
             res.status(403).json({msg: "Error get info"});
-        else if (rows.length < 1) {
+        } else if (rows.length < 1) {
             res.status(403).json({msg: "Error no film"});
         } else {
             db.connection_db.query(sql.get_movie_genre, [req.params.movie_id], (err1, rows1) => {
-                if (err1)
+                if (err1) {
                     res.status(403).json({msg: "Error get info"});
-                else {
+                } else {
                     let genres = rows1.length ? rows1 : ["Unspecified"];
-                    res.json({info: rows, genres: genres});
+                    db.connection_db.query(sql.get_movie_torrent, [req.params.movie_id], (err2, rows2) => {
+                        if (err2) {
+                            res.status(403).json({msg: "Error get info"});
+                        } else {
+                            res.json({info: rows, genres: genres, torrents: rows2});
+                        }
+                    });
                 }
-            })
+            });
         }
     })
 });
