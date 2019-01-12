@@ -77,10 +77,29 @@ const startMovieDownload = async (id) => {
 	return res;
 }
 
+const getMovieDownload = async (action, id) => {
+	console.log(action, id)
+	let res = await axios.post(`/play`, {
+			action,
+			id,
+	})
+	.then ((response) => {
+		console.log(response)
+		return (response)
+	})
+	.catch((error) => {
+		console.log(error.response)
+		return (error.response);
+	})
+	return res;
+}
+
+
 export default {
 	getAllGenre,
 	initMovies,
 	getMovies,
 	getMovieInfo,
-	startMovieDownload
+	startMovieDownload,
+	getMovieDownload
 }

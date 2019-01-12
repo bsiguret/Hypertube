@@ -1,9 +1,8 @@
 import { userConstants } from '../constants';
 
-let user = JSON.parse(localStorage.getItem('user'));
-const initialState = user ? { isAuth: true, user } : { isAuth: false };
+// const initialState = user ? { isAuth: true, user } : { isAuth: false };
 
-export function authReducer(state = initialState, action) {
+export function authReducer(state = {}, action) {
 	switch (action.type) {
 		case userConstants.LOGIN_REQUEST:
 		return {
@@ -12,7 +11,6 @@ export function authReducer(state = initialState, action) {
 		case userConstants.LOGIN_SUCCESS:
 			return {
 				isAuth: true,
-				...action.user
 			};
 		// case userConstants.RESENDEMAIL_REQUEST:
 		// 	return {

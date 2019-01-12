@@ -1,0 +1,18 @@
+.movie-container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	align-content: center;
+	.wrapper-movie {
+		width: 80%;
+		.movie-title {
+			text-align: center;
+		}
+		.movie-cover {
+			width: 70%;
+		}
+		.right-movie {
+			height: 100%;
+		}
+	}
+}

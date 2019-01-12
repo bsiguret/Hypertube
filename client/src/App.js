@@ -15,7 +15,6 @@ import { movieActions } from './redux/actions/movie';
 
 class App extends Component {
 
-
   getAllGenre = async () => {
     let res = await this.props.dispatch(movieActions.getAllGenre())
     console.log(res)
@@ -29,6 +28,7 @@ class App extends Component {
   }
 
   componentDidMount = async () => {
+    console.log(this.state)
     this.getAllGenre();
     this.initMovies();
     // await this.getUserData();
@@ -57,8 +57,8 @@ class App extends Component {
         <div>
           <Switch>
             <Route exact path='/' component={IndexPage}/>
-            <PrivateRoute path='/home' component={HomePage} sideMenu={true}/>
-            <PrivateRoute path='/movie/:id' component={MoviePage} sideMenu={false}/>
+            <PrivateRoute path='/home' component={HomePage} sideMenuFilter={true}/>
+            <PrivateRoute path='/movie/:id' component={MoviePage} sideMenuFilter={false}/>
             <Route component={Page404} />
           </Switch>
         </div>
