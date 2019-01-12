@@ -162,9 +162,9 @@ function ft_magnet(url)
   return (url);
 }
 
-router.get('/', (req, res) =>
+router.get('/:id', (req, res) =>
 {
-  var id = req.query.id;
+  var id = req.params.id;
   mydb.connection_db.query(sql.get_movie_torrent, [[id]], function(err, rows)
   {
     if (err) {console.log(err); return;}
@@ -185,10 +185,10 @@ router.get('/', (req, res) =>
     engine = torrentStream(magnet, options);
     ft_engine(id);
 
-    res.render('./pages/play',
-    {
-      movies: rows
-    });
+    // res.render('./pages/play',
+    // {
+    //   movies: rows
+    // });
   });
 });
 
@@ -234,17 +234,17 @@ router.post('/', (req, res) =>
     });
   }
 
-  if (req.body['action'] == 'index')
-  {
-    if (command[id])
-      command[id].kill('SIGSTOP');
-    res.send('OK');
-  }
+  // if (req.body['action'] == 'index')
+  // {
+  //   if (command[id])
+  //     command[id].kill('SIGSTOP');
+  //   res.send('OK');
+  // }
 
-  if (req.body['action'] == 'engine')
-  {
-    engine.destroy();
-  }
+  // if (req.body['action'] == 'engine')
+  // {
+  //   engine.destroy();
+  // }
 
   if (req.body['action'] == 'sigstop')
   {
