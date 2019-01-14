@@ -5,7 +5,7 @@ const userQuery = require('../models/userModel');
 router.get('/:id', (req, res) => {
     userQuery.findOne({id: req.params.id}).then(user => {
         if (!user) {
-            res.json({msg: "No user"});
+            res.status(403).json({msg: "No user"});
         } else {
             let data = {
                 id: user.id,

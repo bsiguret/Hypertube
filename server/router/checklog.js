@@ -21,10 +21,10 @@ router.get('/', (req, res) => {
                 res.json({user: data});
             });
         } catch (e) {
-            res.json({msg: "Token invalid"});
+            res.status(403).json({msg: "Token invalid"});
         }
     } else {
-        res.json({msg: "User not log"});
+        res.status(403).json({msg: "User not log"});
     }
 });
 
