@@ -16,7 +16,8 @@ router.get('/', (req, res) => {
                     lastname: user.lastname,
                     firstname: user.firstname,
                     language: user.language,
-                    profile: user.profile
+                    profile: user.profile,
+                    isVerified: user.isVerified
                 }
                 res.json({user: data});
             });
