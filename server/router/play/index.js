@@ -62,7 +62,8 @@ function ft_one_subtitle(movie_id, subtitle_path, lang)
     {
       if (res.length != 0 && res[0].path != '')
       {
-        let data = [movie_id, res[0].lang, "http://localhost:3000/" + res[0].path];
+        var tmp_path = res[0].path.split("../client/public").join("");
+        let data = [movie_id, res[0].lang, tmp_path];
         mydb.connection_db.query(sql.add_movie_subtitle, [[data]], function(err2, rows)
         {
           if (err2) {console.log(err2)}
