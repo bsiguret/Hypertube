@@ -17,6 +17,21 @@ const login = async (email, password) => {
 	return res;
 }
 
+const logout = async () => {
+	let res = await axios.GET(
+		'/api/logout'
+	)
+	.then ((response) => {
+		console.log(response)
+		return (response)
+	})
+	.catch((error) => {
+		console.log(error.response)
+		return (error.response);
+	})
+	return res;
+}
+
 // const savePhoto = async (photo, defineAs, token) => {
 // 	let formData = new FormData();
 // 	formData.append('photo', photo.toString())
@@ -41,4 +56,5 @@ const login = async (email, password) => {
 
 export default {
 	login,
+	logout
 }
