@@ -17,9 +17,9 @@ export function userReducer(state={}, action) {
 			user: action.user
 		});
 		case userConstants.LOGIN_SUCCESS:
-			return {
-				...action.user
-			};
+		return {
+			...action.user
+		};
 		case userConstants.LOGOUT:
 			return {user: {}};
 		default:

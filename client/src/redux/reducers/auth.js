@@ -1,13 +1,9 @@
 import { userConstants } from '../constants';
 
-// const initialState = user ? { isAuth: true, user } : { isAuth: false };
-
-export function authReducer(state = {}, action) {
+export function authReducer(state = {isAuth: false}, action) {
 	switch (action.type) {
 		case userConstants.LOGIN_REQUEST:
-		return {
-			user: action.email
-		}
+		return state;
 		case userConstants.LOGIN_SUCCESS:
 			return {
 				isAuth: true,

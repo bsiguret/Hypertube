@@ -21,7 +21,6 @@ class SideMenu extends Component {
 	}
 
 	handleSearch = async (name) => {
-		console.log(name)
 		this.props.dispatch(
 			movieActions.addFilter(
 				name,
@@ -46,15 +45,9 @@ class SideMenu extends Component {
 				0
 			)
 		)
-		console.log(resp)
-	}
-
-	onChange(value) {
-		console.log('onChange: ', value);
 	}
 
 	handleSort = async (order) => {
-		console.log(order)
 		this.props.dispatch(
 			movieActions.addFilter(
 				this.props.filter.name,
@@ -79,11 +72,9 @@ class SideMenu extends Component {
 				0
 			)
 		)
-		console.log(resp)
 	}
 
 	handleYear = async (year) => {
-		console.log(year[0], year[1])
 		this.props.dispatch(
 			movieActions.addFilter(
 				this.props.filter.name,
@@ -108,12 +99,9 @@ class SideMenu extends Component {
 				0
 			)
 		)
-		console.log(resp)
 	}
 
 	handleRating = async (rating) => {
-		console.log(rating)
-		console.log(rating[0], rating[1])
 		this.props.dispatch(
 			movieActions.addFilter(
 				this.props.filter.name,
@@ -138,11 +126,6 @@ class SideMenu extends Component {
 				0
 			)
 		)
-		console.log(resp)
-	}
-
-	onAfterChange(value) {
-		console.log('onAfterChange: ', value);
 	}
 
 	handleHome() {
@@ -152,14 +135,11 @@ class SideMenu extends Component {
   render() {
 		const { name, min_rating, max_rating, min_year, max_year, genres, order } = this.props.filter
 		const handleMenuMovies = async (genre) => {
-			console.log(genre)
 			this.props.dispatch(movieActions.addFilter(name, min_rating, max_rating, min_year, max_year, genre, order))
 			let resp = await this.props.dispatch(
 				movieActions.getMovies(name, min_rating, max_rating, min_year, max_year, genre, order, 0)
 			)
-			console.log(resp)
 		}
-		console.log(this.props.filter)
     return (
 			<Layout.Sider
 				className='side-menu'

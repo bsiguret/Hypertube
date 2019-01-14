@@ -74,7 +74,7 @@ function ft_one_subtitle(movie_id, subtitle_path, lang)
 
 function ft_subtitle(id)
 {
-  var subtitle_path = './tmp/' + id + '/subtitle';
+  var subtitle_path = '../client/public/tmp/subtitles/' + id;
   ft_url_mkdir(subtitle_path);
 
   mydb.connection_db.query(sql.get_movie_subtitle, [[id]], function(err, rows)
