@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Button } from 'antd';
-import { List, Row, Col, Icon } from 'antd';
+import { List, Row, Col, Spin } from 'antd';
 
 import { movieActions } from '../redux/actions/movie';
 import movieService from '../redux/services/movie';
 import ReactPlayer from 'react-player'
 
-// import Movies from '../components/movies'
+import CommentBox from '../components/commentBox'
 
 import '../assets/css/movie.scss'
 
@@ -15,13 +15,16 @@ class MoviePage extends Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			source: ''
+			source: '',
+			loading: false,
+			file: {},
 		}
 		this.getMovieDownload = this.getMovieDownload.bind(this);
 	}
 
 	handleDownload = () => {
 		console.log('before startMovieDownload')
+		this.setState({ loading: true })
 		movieService.startMovieDownload(this.props.match.params.id);
 		this.get_movie = setInterval(() => {
 			this.getMovieDownload()
@@ -35,13 +38,51 @@ class MoviePage extends Component {
 			if (response.data != 'NO')
 			{
 				this.setState({
+					loading: false,
 					source: 'http://localhost:3000/tmp/' + this.props.match.params.id + '/out.m3u8' 
 				})
-				// ft_get_subtitle();
+				this.getSubtitle();
 				clearInterval(this.get_movie);
 			}
 		})
 	}
+
+	getSubtitle = () => {
+		let player = document.getElementsByClassName('player')[0];
+		movieService.getMovieDownload('get_subtitle', this.props.match.params.id)
+		.then((response) => {
+			console.log(response)
+			if (response.data != 'NO')
+			{
+				let json = response.data;
+				if (json.length != 0)
+				{
+					let i = 0;
+					let tracks = new Array ();
+					while (i < json.length)
+					{
+						tracks = [
+							...tracks,
+							{
+								kind: 'substitles',
+								src: json[i].path,
+								srcLang: json[i].language,
+							}
+						]
+						// var cTrack = document.createElement('track');
+						// cTrack.kind = 'subtitles';
+						// cTrack.src = json[i].path;
+						// cTrack.srclang = json[i].language;
+						// player.appendChild(cTrack);
+						i++;
+					}
+					console.log('TRACKS Array', tracks)
+					this.setState({ file: { tracks } })
+				}
+			}
+		})
+	}
+
 
 	componentWillMount = async () => {
 		console.log(this.props.match.params.id)
@@ -50,6 +91,7 @@ class MoviePage extends Component {
 	}
   render() {
 		const { movie } = this.props
+		console.log('file', this.state.file)
 		return (
 		<div className="movie-container">
 			{this.props.movie &&
@@ -65,10 +107,10 @@ class MoviePage extends Component {
 					justify='center'
 					align='middle'
 				>
-					<Col span={16} className='left-movie'>
+					<Col span={12} className='left-movie'>
 						<img className='movie-cover' alt="cover" src={movie.info[0].img}/>
 					</Col>
-					<Col span={8} className='right-movie'>
+					<Col span={12} className='right-movie'>
 						<List>
 							<List.Item>Year: {movie.info[0].year}</List.Item>
 							<List.Item>Director: {movie.info[0].director}</List.Item>
@@ -80,16 +122,36 @@ class MoviePage extends Component {
 						</List>
 					</Col>
 				</Row>
-				<h2 style={{textAlign: 'center'}}>Synopsis</h2>
-				<p style={{textAlign: 'center'}}>{movie.info[0].description}</p>
-				<Button type="primary" onClick={this.handleDownload.bind(this)}>TEST DL FILM</Button>
-				{this.state.source &&
-				<ReactPlayer
-					url={this.state.source}
-					controls
-					width='100%'
-          height='100%'
-				/>}
+				<Row>
+					<h2 style={{textAlign: 'center'}}>Synopsis</h2>
+					<p style={{textAlign: 'center'}}>{movie.info[0].description}</p>
+					<Button type="primary" onClick={this.handleDownload.bind(this)}>TEST DL FILM</Button>
+				</Row>
+				<Row type='flex' justify='center'>
+					{this.state.loading &&
+					<div className='player-loading'>
+						<Spin size="large"/>
+					</div>}
+					{this.state.source &&
+					<ReactPlayer
+						className='player'
+						url={this.state.source}
+						config={{ file: {
+							tracks: [
+								{kind: 'subtitles', src: "http://localhost:3000/tmp/tt0068646/subtitle/The.Godfather.Part.I.1972.720p.BrRip.x264.YIFY.vtt", srcLang: 'greek'},
+								{kind: 'subtitles', src: "http://localhost:3000/tmp/tt0068646/subtitle/The Godfather (1972) [1080p].vtt", srcLang: 'turkish'},
+								{kind: 'subtitles', src: "http://localhost:3000/tmp/tt0068646/subtitle/the-godfather-yify-english.vtt", srcLang: 'en', default: true}
+							]
+						}}}
+						controls
+						width='100%'
+						height='100%'
+					/>}
+				</Row>
+				<Row type='flex' justify='center'>
+					<h2 style={{textAlign: 'center'}}>Comments</h2>
+					<CommentBox />
+				</Row>
 			</div>}
 		</div>
 		)

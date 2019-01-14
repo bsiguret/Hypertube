@@ -14,5 +14,15 @@
 		.right-movie {
 			height: 100%;
 		}
+		.movie-comment {
+			width: 100%;
+			.comment-bts {
+				display: flex;
+				justify-content: flex-end;
+				align-self: flex-end;
+				margin-left: auto;
+				margin-top: 10px;
+			}
+		}
 	}
 }
