@@ -12,7 +12,7 @@ router.get('/all_genre', passport.authenticate('jwt', {session: false}), (req, r
     });
 });
 
-router.get('/all_movies', (req, res) => {
+router.get('/all_movies', passport.authenticate('jwt', {session: false}), (req, res) => {
     db.connection_db.query(sql.get_all_movies_by_rating, (err, rows) => {
         if (err)
             res.status(403).json({msg: "Error get movies"});
@@ -25,7 +25,7 @@ requete need:
 min_rating, max_rating, min_year, max_year, genres, order, nb
 */
 
-router.post('/all_movies/:nb', (req, res) => {
+router.post('/all_movies/:nb', passport.authenticate('jwt', {session: false}), (req, res) => {
     console.log(req.body)
     // cast convertit le nombre en decimal avec 2 chiffre max avant la virgule et 1 chiffre apres
     var where = "cast(ifNULL(movies.rating, 0) as decimal(2, 1)) >= " + req.body.min_rating + " AND cast(ifNULL(movies.rating, 0) as decimal(2, 1)) <= " + req.body.max_rating;
@@ -46,7 +46,7 @@ router.post('/all_movies/:nb', (req, res) => {
     });
 });
 
-router.get('/movie/:movie_id', (req, res) => {
+router.get('/movie/:movie_id', passport.authenticate('jwt', {session: false}), (req, res) => {
     db.connection_db.query(sql.get_movie, [req.params.movie_id], (err, rows) => {
         if (err) {
             res.status(403).json({msg: "Error get info"});

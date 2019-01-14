@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const userQuery = require('../models/userModel');
+const passport = require('../tools/passport');
 
-router.get('/:id', (req, res) => {
+router.get('/:id', passport.authenticate('jwt', {session: false}), (req, res) => {
     userQuery.findOne({id: req.params.id}).then(user => {
         if (!user) {
             res.status(403).json({msg: "No user"});
