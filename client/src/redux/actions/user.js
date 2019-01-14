@@ -1,24 +1,24 @@
 import u from '../services/user';
 import { userConstants } from '../constants';
 
-// const getUserData = (token) => async dispatch => {
-// 	function request(user) { return { type: userConstants.GETUSER_REQUEST, user} };
-// 	function success(user) { return { type: userConstants.GETUSER_SUCCESS, user} };
+const getUser = () => async dispatch => {
+	function request() { return { type: userConstants.LOGIN_REQUEST} };
+	function success(user) { return { type: userConstants.LOGIN_SUCCESS, user} };
 
-// 	dispatch(request(token));
-// 	let res = await u.getUser(token)
-// 		.then(
-// 			res => {
-// 				if (res.status === 200) {
-// 					dispatch(success(res.data));
-// 					return res.status;
-// 				}
-// 				else
-// 					return res;
-// 			}
-// 		);
-// 	return res;
-// }
+	dispatch(request());
+	let res = await u.getUser()
+		.then(
+			res => {
+				if (res.status === 200) {
+					dispatch(success(res.data));
+					return res;
+				}
+				else
+					return res;
+			}
+		);
+	return res;
+}
 
 const signup = (user) => async dispatch => {
 	function request() { return { type: userConstants.SIGNUP_REQUEST} };
@@ -47,7 +47,7 @@ const signupPhoto = (photo) => async dispatch => {
 }
 
 export const userActions = {
-	// getUserData,
+	getUser,
 	signup,
 	signupPhoto
 };

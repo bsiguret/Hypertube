@@ -39,7 +39,24 @@ class HomePage extends Component {
     });
 		console.log(resp)
 	}
-	
+
+	getAllGenre = async () => {
+    let res = await this.props.dispatch(movieActions.getAllGenre())
+    console.log(res)
+    return;
+  }
+
+  initMovies = async () => {
+    let res = await this.props.dispatch(movieActions.initMovies())
+    console.log(res)
+    return;
+  }
+
+	componentWillMount = () => {
+		this.getAllGenre();
+		this.initMovies();
+	}
+
   render() {
     return (
 			<InfiniteScroll

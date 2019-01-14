@@ -3,6 +3,7 @@ import { Router, Switch, Route } from "react-router-dom";
 import { message } from 'antd';
 import { history } from './assets/helpers/history'
 import { connect } from 'react-redux';
+import { Spin } from 'antd';
 
 import IndexPage from './views/indexPage';
 import HomePage from './views/homePage';
@@ -10,61 +11,61 @@ import Page404 from './views/page404';
 import MoviePage from './views/moviePage';
 
 import { PrivateRoute } from './assets/helpers/privateRoute';
+import { PublicRoute } from './assets/helpers/publicRoute';
 
-import { movieActions } from './redux/actions/movie';
+import { userActions } from './redux/actions/user';
 
 class App extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      loading: true
+    }
+  }
 
-  getAllGenre = async () => {
-    let res = await this.props.dispatch(movieActions.getAllGenre())
-    console.log(res)
+  getUser = async () => {
+    let res = await this.props.dispatch(userActions.getUser())
+    if (res.status !== 200) {
+      if (window.location.href !== 'http://localhost:3001/')
+        message.error('Please log in')
+    }
     return;
   }
 
-  initMovies = async () => {
-    let res = await this.props.dispatch(movieActions.initMovies())
-    console.log(res)
-    return;
-  }
-
-  componentDidMount = async () => {
-    console.log(this.state)
-    this.getAllGenre();
-    this.initMovies();
-    // await this.getUserData();
+  componentWillMount = async () => {
+    await this.getUser();
+    this.setState({ loading: false})
   }
 
   render() {
+    const { isAuth } = this.props
+    const { loading } = this.state
     message.config({
       maxCount: 3,
     });
-
-    // getUserData = async () => {
-    //   let token = JSON.parse(localStorage.getItem('user'));
-    //   if (token) {
-    //     let res = await this.props.dispatch(userActions.getUserData(token));
-    //     if (res !== 200 && res !== 500) {
-    //       await this.props.dispatch(authActions.logoutUser());
-    //     }
-    //     // else if (res === 500){
-    //     //   history.push('/yourenotsupposedtobehere/500');
-    //     // }
-    //     return res
-    //   }
-    // }
     return (
       <Router history={history}>
         <div>
+          {loading &&
+					<div className='router-loading' style={{ display: 'flex', justifyContent: 'center' }}>
+            <Spin size="large"/>
+          </div>}
+          {!loading &&
           <Switch>
-            <Route exact path='/' component={IndexPage}/>
-            <PrivateRoute path='/home' component={HomePage} sideMenuFilter={true}/>
-            <PrivateRoute path='/movie/:id' component={MoviePage} sideMenuFilter={false}/>
+            <PublicRoute exact path='/' component={IndexPage} isAuth={isAuth} isVerified={1} sideMenuFilter={true}/>
+            <PrivateRoute path='/home' component={HomePage} sideMenuFilter={true} isAuth={isAuth} isVerified={1}/>
+            <PrivateRoute path='/movie/:id' component={MoviePage} isAuth={isAuth} isVerified={1} sideMenuFilter={false}/>
             <Route component={Page404} />
-          </Switch>
+          </Switch>}
         </div>
       </Router>
     );
   }
 }
 
-export default connect()(App);
+const mapStateToProps = state => ({
+  isAuth: state.authReducer.isAuth,
+  user: state.userReducer.user,
+});
+
+export default connect(mapStateToProps)(App);

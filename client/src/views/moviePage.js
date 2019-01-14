@@ -33,51 +33,43 @@ class MoviePage extends Component {
 
 	getMovieDownload = () => {
 		movieService.getMovieDownload('get_movie', this.props.match.params.id)
-		.then((response) => {
+		.then(async (response) => {
 			console.log(response)
-			if (response.data != 'NO')
+			if (response.data !== 'NO')
 			{
-				this.setState({
-					loading: false,
-					source: 'http://localhost:3000/tmp/' + this.props.match.params.id + '/out.m3u8' 
-				})
-				this.getSubtitle();
+				await this.getSubtitle();
 				clearInterval(this.get_movie);
 			}
 		})
 	}
 
 	getSubtitle = () => {
-		let player = document.getElementsByClassName('player')[0];
 		movieService.getMovieDownload('get_subtitle', this.props.match.params.id)
 		.then((response) => {
 			console.log(response)
-			if (response.data != 'NO')
+			if (response.data !== 'NO')
 			{
 				let json = response.data;
-				if (json.length != 0)
+				if (json.length !== 0)
 				{
-					let i = 0;
-					let tracks = new Array ();
-					while (i < json.length)
+					let tracks = [];
+					for (let i = 0; i < json.length; i++)
 					{
 						tracks = [
 							...tracks,
 							{
-								kind: 'substitles',
+								kind: 'subtitles',
 								src: json[i].path,
-								srcLang: json[i].language,
+								srcLang: json[i].language
 							}
 						]
-						// var cTrack = document.createElement('track');
-						// cTrack.kind = 'subtitles';
-						// cTrack.src = json[i].path;
-						// cTrack.srclang = json[i].language;
-						// player.appendChild(cTrack);
-						i++;
 					}
 					console.log('TRACKS Array', tracks)
-					this.setState({ file: { tracks } })
+					this.setState({
+						loading: false,
+						source: 'http://localhost:3000/tmp/' + this.props.match.params.id + '/out.m3u8' ,
+						file: { tracks }
+					})
 				}
 			}
 		})
@@ -85,12 +77,21 @@ class MoviePage extends Component {
 
 
 	componentWillMount = async () => {
-		console.log(this.props.match.params.id)
 		let res = await this.props.dispatch(movieActions.getMovieInfo(this.props.match.params.id));
 		console.log(res);
 	}
+
+
+	componentWillUnmount = () => {
+		movieService.getMovieDownload('sigall', this.props.match.params.id)
+		.then((response) => {
+			console.log(response)
+		})
+	}
+
   render() {
 		const { movie } = this.props
+		const { file } = this.state
 		console.log('file', this.state.file)
 		return (
 		<div className="movie-container">
@@ -136,13 +137,7 @@ class MoviePage extends Component {
 					<ReactPlayer
 						className='player'
 						url={this.state.source}
-						config={{ file: {
-							tracks: [
-								{kind: 'subtitles', src: "http://localhost:3000/tmp/tt0068646/subtitle/The.Godfather.Part.I.1972.720p.BrRip.x264.YIFY.vtt", srcLang: 'greek'},
-								{kind: 'subtitles', src: "http://localhost:3000/tmp/tt0068646/subtitle/The Godfather (1972) [1080p].vtt", srcLang: 'turkish'},
-								{kind: 'subtitles', src: "http://localhost:3000/tmp/tt0068646/subtitle/the-godfather-yify-english.vtt", srcLang: 'en', default: true}
-							]
-						}}}
+						config={{file}}
 						controls
 						width='100%'
 						height='100%'
@@ -163,65 +158,3 @@ const mapStateToProps = state => ({
 });
 
 export default connect(mapStateToProps)(MoviePage);
-
-// var id = location.search.substr(1).split('=')[1];
-// var video = document.getElementById('video');
-
-// function ft_get_subtitle()
-// {
-//   let url = '/play';
-//   let data = 'action=get_subtitle&id=' + id;
-//   ft_ajax(url, data, 'post', function(response)
-//   {
-//     if (response != 'NO')
-//     {
-//       console.log(response);
-//       var json = JSON.parse(response);
-//       if (json.length != 0)
-//       {
-//         var i = 0;
-//         while (i < json.length)
-//         {
-//           var cTrack = document.createElement('track');
-//           cTrack.kind = 'subtitles';
-//           cTrack.src = json[i].path;
-//           cTrack.srclang = json[i].language;
-//           video.appendChild(cTrack);
-//           i++;
-//         }
-//       }
-//     }
-//   });
-// }
-
-// var get_movie = window.setInterval(function()
-// {
-//   let url = '/play';
-//   let data = 'action=get_movie&id=' + id;
-//   ft_ajax(url, data, 'post', function(response)
-//   {
-//     if (response != 'NO')
-//     {
-//       if (Hls.isSupported())
-//       {
-//         var hls = new Hls();
-//         hls.loadSource('http://localhost:3000/tmp/' + id + '/out.m3u8');
-//         hls.attachMedia(video);
-//         hls.on(Hls.Events.MANIFEST_PARSED,function()
-//         {
-//           video.play();
-//         });
-//       }
-//       else if (video.canPlayType('application/vnd.apple.mpegurl'))
-//       {
-//         video.src = 'http://localhost:3000/tmp/' + id + '/out.m3u8';
-//         video.addEventListener('loadedmetadata',function()
-//         {
-//           video.play();
-//         });
-//       }
-//       ft_get_subtitle();
-//       window.clearInterval(get_movie);
-//     }
-//   });
-// }, 1000);

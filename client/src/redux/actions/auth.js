@@ -1,7 +1,7 @@
 import a from '../services/auth';
 import { userConstants } from '../constants';
-import { userActions } from './user';
-import { history } from '../../assets/helpers/history';
+// import { userActions } from './user';
+// import { history } from '../../assets/helpers/history';
 // import { notifActions } from './notif';
 
 
