@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import { Form, Icon, Input, Button } from 'antd';
+import { connect } from 'react-redux';
+
+import { authActions } from '../redux/actions/auth';
 
 class LoginForm extends Component {
 
@@ -8,7 +11,7 @@ class LoginForm extends Component {
 		console.log(this.props.form)
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        console.log('Received values of form: ', values);
+				this.props.dispatch(authActions.login(values.email, values.password))
       }
     });
   }
@@ -47,4 +50,4 @@ class LoginForm extends Component {
   }
 }
 
-export default Form.create()(LoginForm);
+export default connect()(Form.create()(LoginForm));

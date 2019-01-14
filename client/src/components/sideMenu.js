@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Icon, Input, Menu, Layout, Slider, Select } from 'antd';
 import { connect } from 'react-redux';
 import { movieActions } from '../redux/actions/movie';
+import { history } from '../assets/helpers/history';
 
 class SideMenu extends Component {
 	constructor(props) {
@@ -144,6 +145,10 @@ class SideMenu extends Component {
 		console.log('onAfterChange: ', value);
 	}
 
+	handleHome() {
+		history.push('/home')
+	}
+
   render() {
 		const { name, min_rating, max_rating, min_year, max_year, genres, order } = this.props.filter
 		const handleMenuMovies = async (genre) => {
@@ -154,7 +159,7 @@ class SideMenu extends Component {
 			)
 			console.log(resp)
 		}
-
+		console.log(this.props.filter)
     return (
 			<Layout.Sider
 				className='side-menu'
@@ -163,21 +168,32 @@ class SideMenu extends Component {
 				collapsed={this.state.collapsed}
 				onCollapse={this.onCollapse}
 			>
+				
+				{!this.state.collapsed &&
+				<h1 style={{color: 'white', textAlign: 'center', cursor: 'pointer'}} onClick={this.handleHome}>HyperTube</h1>}
+				{this.state.collapsed &&
+				<h1 style={{color: 'white', textAlign: 'center', cursor: 'pointer'}} onClick={this.handleHome}>HT</h1>}
+				{this.props.sideMenuFilter &&
 				<Input.Search
 					placeholder="search"
 					onSearch={value => this.handleSearch(value)}
 					autosize='true'
-				/>
+				/>}
+				{this.props.sideMenuFilter &&
 				<Select className='sort-button' defaultValue="rating" style={{ width: 120 }} onChange={this.handleSort}>
 					<Select.Option value="title">Name</Select.Option>
 					<Select.Option value="rating">Rating</Select.Option>
 					<Select.Option value="year">Year</Select.Option>
-				</Select>
-				<h4 style={{color: 'white', textAlign: 'center'}}>Year</h4>
-  	 		<Slider className='slider' range step={1} min ={1895} max={2019} defaultValue={[1895, 2019]} onAfterChange={this.handleYear} />
-				<h4 style={{color: 'white', textAlign: 'center'}}>Rating</h4>
-  	 		<Slider classname='slider' range step={0.1} max={10} defaultValue={[0, 10]} onAfterChange={this.handleRating} />
+				</Select>}
+				{this.props.sideMenuFilter &&
+				<div>
+					<h4 style={{color: 'white', textAlign: 'center'}}>Year</h4>
+					<Slider className='slider' range step={1} min ={1895} max={2019} defaultValue={[1895, 2019]} onAfterChange={this.handleYear} />
+					<h4 style={{color: 'white', textAlign: 'center'}}>Rating</h4>
+					<Slider classname='slider' range step={0.1} max={10} defaultValue={[0, 10]} onAfterChange={this.handleRating} />
+				</div>}
 				<Menu theme="dark" mode="inline">
+					{this.props.sideMenuFilter &&
 					<Menu.SubMenu
 						key="sub1"
 						title={<span><Icon type="desktop" /><span>Movies</span></span>}
@@ -192,7 +208,7 @@ class SideMenu extends Component {
 									<span>{genre.genre}</span>
 								</Menu.Item>)
 							})}
-					</Menu.SubMenu>
+					</Menu.SubMenu>}
 					<Menu.SubMenu
 						key="sub2"
 						title={<span><Icon type="user" /><span>Account</span></span>}

@@ -205,9 +205,9 @@ function ft_objlen(obj)
 router.post('/', (req, res) =>
 {
   var id = req.body.id;
-  console.log(req.body['action']);
+  console.log(req.body.action);
 
-  if (req.body['action'] == 'get_movie')
+  if (req.body.action === 'get_movie')
   {
     if (fs.existsSync(__dirname + '/../../tmp/' + req.body.id + '/out.m3u8')) 
     {
@@ -219,7 +219,7 @@ router.post('/', (req, res) =>
     }
   }
 
-  if (req.body['action'] == 'get_subtitle')
+  if (req.body.action === 'get_subtitle')
   {
     mydb.connection_db.query(sql.get_movie_subtitle, [[req.body.id]], function(err, rows)
     {
@@ -246,17 +246,17 @@ router.post('/', (req, res) =>
   //   engine.destroy();
   // }
 
-  if (req.body['action'] == 'sigstop')
+  if (req.body.action === 'sigstop')
   {
     command[id].kill('SIGSTOP');
   }
 
-  if (req.body['action'] == 'sigcont')
+  if (req.body.action === 'sigcont')
   {
     command[id].kill('SIGCONT');
   }
 
-  if (req.body['action'] == 'sigall')
+  if (req.body.action === 'sigall')
   {
     if (command)
     {

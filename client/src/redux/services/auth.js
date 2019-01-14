@@ -1,15 +1,17 @@
 import axios from 'axios';
 
-const signup = async (user) => {
+const login = async (email, password) => {
 	let res = await axios.post(
-		'/api/signup',
-		user
-	)
+		'/api/signin',{
+		email,
+		password
+	})
 	.then ((response) => {
 		console.log(response)
 		return (response)
 	})
 	.catch((error) => {
+		console.log(error.response)
 		return (error.response);
 	})
 	return res;
@@ -38,6 +40,5 @@ const signup = async (user) => {
 // }
 
 export default {
-	signup,
+	login,
 }
-

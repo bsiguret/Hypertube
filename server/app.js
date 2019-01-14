@@ -8,6 +8,15 @@ const cookieParser = require('cookie-parser');
 require('dotenv').config();
 app.set('views', 'public/views');
 app.set('view engine', 'ejs');
+
+app.use((req, res, next) => {
+	res.setHeader('Access-Control-Allow-Origin',  '*');
+	res.setHeader('Access-Control-Allow-Credentials', true);
+	res.setHeader('Access-Control-Allow-Methods', 'GET, POST');
+	res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+	next();
+})
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
@@ -15,10 +24,11 @@ app.use(passport.initialize());
 
 if (process.env.NODE_ENV === 'prod') {
 	app.use(express.static(path.join(__dirname, "../client/build")));
-	app.get('/', (req, res)=>{
-		res.sendFile(path.join(__dirname, "../client/build", "index.html"));
-	})
+	app.get('*', function(req, res) {
+    res.sendFile(path.join(__dirname, '../client/build', 'index.html'));
+	});
 }
+
 app.use(cookieParser());
 app.use('/api/photo', express.static('./public'));
 
@@ -39,6 +49,6 @@ app.use('/tools', express.static('./tools'));
 app.use('/play', require('./router/play'));
 app.use('/tmp', express.static('tmp'))
 
-app.listen(3000, () => {
-	console.log('Listening on port 3000');
+app.listen(process.env.PORT_BACK, () => {
+	console.log(`Listening on port ${process.env.PORT_BACK}`);
 })

@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Icon } from 'antd';
 
+import { history } from '../assets/helpers/history'
+
 class Movies extends Component {
 	constructor(props){
 		super(props)
@@ -27,12 +29,16 @@ class Movies extends Component {
 		})
 	}
 
+	handleMovie = (movie_id) => {
+		history.push(`/movie/${movie_id}`)
+	}
+
 	render() {
 		const { isHover } = this.state
 		const Movies = ({movies}) => (
 			<>
 				{movies.map((movie, key) => (
-					<div key={key} className='movie-poster' >
+					<div key={key} className='movie-poster' onClick={() => this.handleMovie(movie.movie_id)}>
 						<div onMouseEnter={() => this.handleEnter(key)} onMouseLeave={() => this.handleLeave()}>
 							<img alt={movie.title} src={movie.img} style={{width: '100%'}} />
 						</div>
