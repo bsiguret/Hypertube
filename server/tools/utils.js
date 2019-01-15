@@ -6,7 +6,7 @@ const purifyString = (str, defaultLowerCase = true) => {
 
 const isValidString = (str, username = false) => {
     if (username) {
-        return (str.match(/^[A-Za-z0-9._-\s]{2,30}$/) ? true : false)
+        return (str.match(/^[A-Za-z0-9._-\S]{2,30}$/) ? true : false)
     } else {
         return (str.match(/^[A-Za-z\s]{2,20}$/) ? true : false)
     }
