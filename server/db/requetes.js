@@ -100,9 +100,9 @@ const create_table_comments = `CREATE TABLE IF NOT EXISTS comments
 const create_table_comments_movies_users = `CREATE TABLE IF NOT EXISTS comments_movies_users
 	(
 		id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-		movie_id INT DEFAULT NULL,
-		comment_id INT DEFAULT NULL,
-		user_id INT DEFAULT NULL
+		movie_id VARCHAR(50) NOT NULL,
+		comment_id INT NOT NULL,
+		user_id INT NOT NULL
 	)`;
 
 const add_movie = "INSERT INTO movies (movie_id, title, year, language, type, rating, runtime, director, writer, actors, description, img) VALUES ?";
@@ -119,7 +119,10 @@ const get_movie_file = "SELECT path FROM file WHERE movie_id=? AND quality=?";
 const get_movie_subtitle = "SELECT * FROM subtitle WHERE movie_id=?";
 const get_all_genre = "SELECT genre FROM genre GROUP BY genre";
 const get_movie_status = "SELECT * FROM status WHERE movie_id=?";
-
+const add_comment = "INSERT INTO comments (comment) VALUES (?)";
+const add_comment_movie_user = "INSERT INTO comments_movies_users (movie_id, comment_id, user_id) VALUES (?)";
+const get_comment_user_id = "SELECT * FROM comments_movies_users WHERE movie_id=?";
+const get_comment = "SELECT * FROM comments WHERE id=?";
 const insert_user = "INSERT INTO users (lastname,firstname,username,password,email,profile) VALUES(?)";
 const get_user = "SELECT * FROM users WHERE id=? || username=? || email=?";
 
@@ -152,4 +155,8 @@ module.exports = {
 	get_movie_status: get_movie_status,
 	insert_user: insert_user,
 	get_user: get_user,
+	add_comment: add_comment,
+	add_comment_movie_user: add_comment_movie_user,
+	get_comment_user_id: get_comment_user_id,
+	get_comment: get_comment
 };
