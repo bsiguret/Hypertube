@@ -4,6 +4,7 @@ import { Button } from 'antd';
 import { List, Row, Col, Spin } from 'antd';
 
 import { movieActions } from '../redux/actions/movie';
+import { authActions } from '../redux/actions/auth';
 import movieService from '../redux/services/movie';
 import ReactPlayer from 'react-player'
 
@@ -78,14 +79,20 @@ class MoviePage extends Component {
 
 	componentWillMount = async () => {
 		let res = await this.props.dispatch(movieActions.getMovieInfo(this.props.match.params.id));
-		console.log(res);
+		if (res.status !== 200) {
+			this.props.dispatch(authActions.logout())
+			message.error('Please log in, your session may have expired')
+		}
 	}
 
 
 	componentWillUnmount = () => {
 		movieService.getMovieDownload('sigall', this.props.match.params.id)
 		.then((response) => {
-			console.log(response)
+			if (response.status !== 200) {
+				this.props.dispatch(authActions.logout())
+				message.error('Please log in, your session may have expired')
+			}
 		})
 	}
 

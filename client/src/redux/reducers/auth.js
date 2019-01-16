@@ -28,8 +28,8 @@ export function authReducer(state = {isAuth: false}, action) {
 		// 		...action.user,
 		// 		...action.username
 		// 	};
-		// case userConstants.LOGOUT:
-		// 	return {isAuth: false};
+		case userConstants.LOGOUT:
+			return {isAuth: false};
 		default:
 			return state;
 	}

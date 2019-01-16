@@ -7,6 +7,32 @@ const login = async (email, password) => {
 		password
 	})
 	.then ((response) => {
+		return (response)
+	})
+	.catch((error) => {
+		return (error.response);
+	})
+	return res;
+}
+
+const logout = async (email, password) => {
+	let res = await axios.get(
+		'/api/logout'
+	)
+	.then ((response) => {
+		return (response)
+	})
+	.catch((error) => {
+		return (error.response);
+	})
+	return res;
+}
+
+const logout = async () => {
+	let res = await axios.GET(
+		'/api/logout'
+	)
+	.then ((response) => {
 		console.log(response)
 		return (response)
 	})
@@ -41,4 +67,5 @@ const login = async (email, password) => {
 
 export default {
 	login,
+	logout
 }

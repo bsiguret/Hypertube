@@ -9,7 +9,6 @@ const login = (email, password) => async dispatch => {
 	function request(email) { return { type: userConstants.LOGIN_REQUEST, email } };
 	function success(user) { return { type: userConstants.LOGIN_SUCCESS, user } };
 	dispatch(request(email));
-	console.log(email, password)
 	let res = await a.login(email, password)
 		.then(
 			async res => {
@@ -108,12 +107,12 @@ const login = (email, password) => async dispatch => {
 // 	return res;
 // };
 
-const logoutUser = () => {
+const logout = () => {
 	a.logout();
 	return { type: userConstants.LOGOUT };
 };
 
 export const authActions = {
 	login,
-	logoutUser
+	logout
 };

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Icon, Input, Button } from 'antd';
+import { Form, Icon, Input, Button, message } from 'antd';
 import { connect } from 'react-redux';
 
 import { authActions } from '../redux/actions/auth';
@@ -13,6 +13,9 @@ class LoginForm extends Component {
       if (!err) {
 				let res = await this.props.dispatch(authActions.login(values.email, values.password))
 				console.log(res);
+				if (res.status === 403) {
+					message.error(res.data.msg)
+				}
       }
     });
   }
