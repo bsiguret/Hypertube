@@ -1,61 +1,30 @@
 import React, { Component } from 'react';
-import { Row, Col, Layout, Icon, Divider, Button, Avatar } from 'antd';
+import { Row, Spin, message } from 'antd';
+import { connect } from 'react-redux';
 
-import SignForm from '../components/signForm';
-import LoginForm from '../components/loginForm';
-
-import '../assets/css/index.scss'
+import { userActions } from '../redux/actions/user';
+import { history } from '../assets/helpers/history';
 
 class EmailValidationPage extends Component {
-	constructor(props) {
-		super(props)
-		this.state = {
-			login: true,
-		}
+
+	async componentDidMount() {
+		console.log(this.props.match.params, this.props)
+		let res = await this.props.dispatch(userActions.verifEmail(this.props.match.params.username, this.props.match.params.token))
+		console.log(res)
+		if (res.status === 200)
+			message.success(res.data)
+		else
+			message.error(res.data)
+		history.push('/')
 	}
 
-	handleChange = () => this.setState({ login: !this.state.login })
-
   render() {
-		const { login } = this.state
     return (
-			<Layout style={{height: '100vh'}}>
-				<Layout.Content>
 				<Row type="flex" justify="space-around" align="middle" style={{height: '100vh'}}>
-					{!login &&
-					<Col span={8}>
-						<SignForm/>
-						<Divider>Or</Divider>
-						<Button block type="primary" onClick={this.handleChange.bind(this)}>Log in</Button>
-					</Col>}
-					{login &&
-					<Col span={8}>
-						<LoginForm />
-						<a href='/help' style={{position: 'relative', top: '-25px'}}>Need help?</a>
-						<div style={{display: 'flex', justifyContent: 'space-between'}}>
-							<Button shape="circle" type="primary" icon="google" style={{backgroundColor: 'red', borderColor: 'red'}}/>
-							<Button shape="circle" type="primary">
-								<Icon type="facebook" theme="filled" />
-							</Button>
-							<Button shape="circle" type="primary" style={{backgroundColor: 'black', borderColor: 'black'}}>
-								<Avatar src="/img/42.png" />
-							</Button>
-						</div>
-						<Divider>Or</Divider>
-						<Button block type="primary" onClick={this.handleChange.bind(this)}>Sign Up</Button>
-					</Col>}
+					<Spin size='large' />
 				</Row>
-				</Layout.Content>
-				<Layout.Footer>
-					<Row type="flex" justify="space-around" align="middle">
-						<Col>
-							Created by bsiguret & zxu & nrandria & lezhang with <Icon type="heart" style={{color: 'red'}} theme="filled" />
-						</Col>
-					</Row>
-				</Layout.Footer>
-			</Layout>
 		)
   }
 }
 
-export default EmailValidationPage;
+export default connect()(EmailValidationPage);

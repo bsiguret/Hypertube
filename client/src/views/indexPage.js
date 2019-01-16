@@ -31,7 +31,7 @@ class IndexPage extends Component {
 					{login &&
 					<Col span={8}>
 						<LoginForm />
-						<a href='/help' style={{position: 'relative', top: '-25px'}}>Need help?</a>
+						<a href='/loginHelp' style={{position: 'relative', top: '-25px'}}>Need help?</a>
 						<div style={{display: 'flex', justifyContent: 'space-between'}}>
 							<Button shape="circle" type="primary" icon="google" style={{backgroundColor: 'red', borderColor: 'red'}}/>
 							<Button shape="circle" type="primary">

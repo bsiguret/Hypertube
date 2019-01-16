@@ -30,6 +30,49 @@ const logout = async () => {
 	return res;
 }
 
+const resetPassEmail = async (email) => {
+	let res = await axios.post(
+		`/api/resetpassword/`, {
+			email
+	})
+	.then ((response) => {
+		return (response)
+	})
+	.catch((error) => {
+		return (error.response);
+	})
+	return res;
+}
+
+const resetPassToken = async (username, token) => {
+	let res = await axios.get(
+		`/api/resetpassword/${username}/${token}`
+	)
+	.then ((response) => {
+		return (response)
+	})
+	.catch((error) => {
+		return (error.response);
+	})
+	return res;
+}
+
+const resetPassToken2 = async (username, token, npassword, cpassword) => {
+	let res = await axios.post(
+		`/api/resetpassword/${username}/${token}`, {
+			npassword,
+			cpassword
+		}
+	)
+	.then ((response) => {
+		return (response)
+	})
+	.catch((error) => {
+		return (error.response);
+	})
+	return res;
+}
+
 // const savePhoto = async (photo, defineAs, token) => {
 // 	let formData = new FormData();
 // 	formData.append('photo', photo.toString())
@@ -54,5 +97,8 @@ const logout = async () => {
 
 export default {
 	login,
-	logout
+	logout,
+	resetPassEmail,
+	resetPassToken,
+	resetPassToken2
 }

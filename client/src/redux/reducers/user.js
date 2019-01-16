@@ -16,6 +16,10 @@ export function userReducer(state={user: {isVerified: 0}}, action) {
 		return Object.assign({}, state, {
 			user: action.user
 		});
+		case userConstants.EMAIL_VERIFICATION_REQUEST:
+		return state
+		case userConstants.EMAIL_VERIFICATION_SUCCESS:
+		return state
 		case userConstants.LOGIN_SUCCESS:
 		return {
 			...action.user

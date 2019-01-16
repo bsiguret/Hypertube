@@ -1,9 +1,5 @@
 import a from '../services/auth';
 import { userConstants } from '../constants';
-// import { userActions } from './user';
-// import { history } from '../../assets/helpers/history';
-// import { notifActions } from './notif';
-
 
 const login = (email, password) => async dispatch => {
 	function request(email) { return { type: userConstants.LOGIN_REQUEST, email } };
@@ -23,89 +19,59 @@ const login = (email, password) => async dispatch => {
 	return res;
 };
 
-// const oauth = (code, ip, lon, lat) => async dispatch => {
-// 	function request() { return { type: userConstants.LOGIN_REQUEST, } };
-// 	function success(token) { return { type: userConstants.LOGIN_SUCCESS, token } };
-// 	dispatch(request());
-// 	let res = await a.oauth(code, ip, lon, lat)
-// 		.then(
-// 			async res => {
-// 				if (res.status !== 200) {
-// 					return res.data;
-// 				}
-// 				else {
-// 					dispatch(userActions.getUserData(res.data.token))
-// 					.then(
-// 						response => {
-// 							if (response === 200) {
-// 								dispatch(success(res.data.token))
-// 								dispatch(notifActions.initNotif(res.data.notifications))
-// 							}
-// 							else {
-// 								dispatch(authActions.logoutUser());
-// 								history.push('/yourenotsupposedtobehere/500');
-// 							}
-// 						}
-// 					);
-// 					return;
-// 				}
-// 		});
-// 	return res;
-// };
+const resetPassEmail = (email) => async dispatch => {
+	function request() { return { type: userConstants.RESETPASS_EMAIL_REQUEST } };
+	function success() { return { type: userConstants.RESETPASS_EMAIL_SUCCESS } };
+	dispatch(request());
+	let res = await a.resetPassEmail(email)
+		.then(
+			async res => {
+				if (res.status !== 200) {
+					return res;
+				}
+				else {
+					dispatch(success())
+					return res;
+				}
+		});
+	return res;
+};
 
-// const resendEmail = (email) => async dispatch => {
-// 	function request(email) { return { type: userConstants.RESENDEMAIL_REQUEST, email } };
-// 	function success(email) { return { type: userConstants.RESENDEMAIL_SUCCESS, email } };
-// 	dispatch(request(email));
-// 	let res = await a.resendEmail(email)
-// 		.then(
-// 			async res => {
-// 				if (res.status !== 200) {
-// 					return res;
-// 				}
-// 				else {
-// 					dispatch(success(email))
-// 					return res;
-// 				}
-// 		});
-// 	return res;
-// };
+const resetPassToken = (username, token) => async dispatch => {
+	function request() { return { type: userConstants.RESETPASS_TOKEN_REQUEST } };
+	function success() { return { type: userConstants.RESETPASS_TOKEN_SUCCESS } };
+	dispatch(request());
+	let res = await a.resetPassToken(username, token)
+		.then(
+			async res => {
+				if (res.status !== 200) {
+					return res;
+				}
+				else {
+					dispatch(success())
+					return res;
+				}
+		});
+	return res;
+};
 
-// const resetPassEmail = (email) => async dispatch => {
-// 	function request() { return { type: userConstants.RESETPASSEMAIL_REQUEST } };
-// 	function success() { return { type: userConstants.RESETPASSEMAIL_SUCCESS } };
-// 	dispatch(request());
-// 	let res = await a.resetPassEmail(email)
-// 		.then(
-// 			async res => {
-// 				if (res.status !== 200) {
-// 					return res;
-// 				}
-// 				else {
-// 					dispatch(success())
-// 					return res;
-// 				}
-// 		});
-// 	return res;
-// };
-
-// const resetPass = (npassword, cpassword, username, token) => async dispatch => {
-// 	function request() { return { type: userConstants.RESETPASS_REQUEST } };
-// 	function success() { return { type: userConstants.RESETPASS_SUCCESS } };
-// 	dispatch(request());
-// 	let res = await a.resetPass(npassword, cpassword, username, token)
-// 		.then(
-// 			async res => {
-// 				if (res.status !== 200) {
-// 					return res;
-// 				}
-// 				else {
-// 					dispatch(success())
-// 					return res;
-// 				}
-// 		});
-// 	return res;
-// };
+const resetPassToken2 = (username, token, npassword, cpassword) => async dispatch => {
+	function request() { return { type: userConstants.RESETPASS_TOKEN_REQUEST } };
+	function success() { return { type: userConstants.RESETPASS_TOKEN_SUCCESS } };
+	dispatch(request());
+	let res = await a.resetPassToken2(username, token, npassword, cpassword)
+		.then(
+			async res => {
+				if (res.status !== 200) {
+					return res;
+				}
+				else {
+					dispatch(success())
+					return res;
+				}
+		});
+	return res;
+};
 
 const logout = () => {
 	a.logout();
@@ -114,5 +80,8 @@ const logout = () => {
 
 export const authActions = {
 	login,
-	logout
+	logout,
+	resetPassEmail,
+	resetPassToken,
+	resetPassToken2
 };

@@ -76,7 +76,6 @@ const startMovieDownload = async (id) => {
 }
 
 const getMovieDownload = async (action, id) => {
-	console.log(action, id)
 	let res = await axios.post(`/play`, {
 			action,
 			id,
