@@ -110,7 +110,7 @@ const get_all_movies_by_rating = "SELECT * FROM movies ORDER BY rating DESC LIMI
 const add_movie_genre = "INSERT INTO genre (movie_id, genre) VALUES ?";
 const add_movie_torrent = "INSERT INTO torrent (movie_id, url, quality, seeds, peers, size_bytes) VALUES ?";
 const check_movie_exists = "SELECT * FROM movies WHERE movie_id=?";
-const get_movie = "SELECT * FROM movies WHERE movie_id=?";
+const get_movie = "SELECT *, ifNULL(rating, 'N/A') as rating FROM movies WHERE movie_id=?";
 const get_movie_genre = "SELECT genre FROM genre WHERE movie_id=?";
 const get_movie_torrent = "SELECT * FROM torrent WHERE movie_id=?";
 const add_movie_file = "INSERT INTO file (movie_id, quality, path) VALUES ?";
@@ -125,6 +125,8 @@ const get_comment_user_id = "SELECT * FROM comments_movies_users WHERE movie_id=
 const get_comment = "SELECT * FROM comments WHERE id=?";
 const insert_user = "INSERT INTO users (lastname,firstname,username,password,email,profile) VALUES(?)";
 const get_user = "SELECT * FROM users WHERE id=? || username=? || email=?";
+const add_movie_view = "INSERT INTO viewed (uid, movie_id) VALUES (?)";
+const get_movie_view = "SELECT * FROM viewed WHERE uid=? AND movie_id=?";
 
 module.exports = {
 	create_database: create_database,
@@ -158,5 +160,7 @@ module.exports = {
 	add_comment: add_comment,
 	add_comment_movie_user: add_comment_movie_user,
 	get_comment_user_id: get_comment_user_id,
-	get_comment: get_comment
+	get_comment: get_comment,
+	add_movie_view: add_movie_view,
+	get_movie_view: get_movie_view
 };
