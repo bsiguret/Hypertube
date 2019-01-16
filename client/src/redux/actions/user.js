@@ -41,6 +41,26 @@ const signup = (user) => async dispatch => {
 	return res;
 }
 
+const verifEmail = (username, token) => async dispatch => {
+	function request() { return { type: userConstants.EMAIL_VERIFICATION_REQUEST} };
+	function success() { return { type: userConstants.EMAIL_VERIFICATION_SUCCESS} };
+
+	dispatch(request());
+	let res = await u.verifEmail(username, token)
+		.then(
+			res => {
+				if (res.status !== 200) {
+					return res;
+				}
+				else {
+					dispatch(success());
+					return res;
+				}
+			}
+		);
+	return res;
+}
+
 const signupPhoto = (photo) => async dispatch => {
 	function success(photo) { return { type: userConstants.SIGNUP_PHOTO, photo} };
 	dispatch(success(photo));
@@ -49,5 +69,6 @@ const signupPhoto = (photo) => async dispatch => {
 export const userActions = {
 	getUser,
 	signup,
-	signupPhoto
+	signupPhoto,
+	verifEmail
 };

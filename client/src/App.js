@@ -11,6 +11,8 @@ import HomePage from './views/homePage';
 import Page404 from './views/page404';
 import MoviePage from './views/moviePage';
 import EmailValidationPage from './views/emailValidationPage';
+import LoginHelp from './views/loginHelpPage';
+import ResetPassPage from './views/resetPassPage';
 
 import { PrivateRoute } from './assets/helpers/privateRoute';
 import { PublicRoute } from './assets/helpers/publicRoute';
@@ -55,11 +57,51 @@ class App extends Component {
           </div>}
           {!loading &&
           <Switch>
-            <PublicRoute exact path='/' component={IndexPage} isAuth={isAuth} isVerified={isVerified} sideMenuFilter={false} />
-            <PublicRoute exact path='/emailvalidation/:username/:token' component={EmailValidationPage} isAuth={isAuth} isVerified={isVerified} sideMenuFilter={false} />
-            <PrivateRoute path='/home' component={HomePage} isAuth={isAuth} isVerified={isVerified} sideMenuFilter={true} />
-            <PrivateRoute path='/movie/:id' component={MoviePage} isAuth={isAuth} isVerified={isVerified} sideMenuFilter={false} />
-            <Route component={Page404} />
+            <PublicRoute 
+              exact
+              path='/'
+              component={IndexPage}
+              isAuth={isAuth}
+              isVerified={isVerified}
+            />
+            <PublicRoute
+              exact
+              path='/emailvalidation/:username/:token'
+              component={EmailValidationPage}
+              isAuth={isAuth}
+              isVerified={isVerified}
+            />
+            <PublicRoute
+              exact
+              path='/resetpassword/:username/:token'
+              component={ResetPassPage}
+              isAuth={isAuth}
+              isVerified={isVerified}
+            />
+            <PublicRoute
+              exact
+              path='/loginHelp'
+              component={LoginHelp}
+              isAuth={isAuth}
+              isVerified={isVerified}
+            />
+            <PrivateRoute
+              path='/home'
+              component={HomePage}
+              isAuth={isAuth}
+              isVerified={isVerified}
+              sideMenuFilter={true}
+            />
+            <PrivateRoute
+              path='/movie/:id'
+              component={MoviePage}
+              isAuth={isAuth}
+              isVerified={isVerified}
+              sideMenuFilter={false}
+            />
+            <Route
+              component={Page404}
+            />
           </Switch>}
         </div>
       </Router>

@@ -8,6 +8,14 @@ export function authReducer(state = {isAuth: false}, action) {
 			return {
 				isAuth: true,
 			};
+		case userConstants.RESETPASS_EMAIL_REQUEST:
+			return state
+		case userConstants.RESETPASS_EMAIL_SUCCESS:
+			return state
+		case userConstants.RESETPASS_TOKEN_SUCCESS:
+			return state
+		case userConstants.RESETPASS_TOKEN_SUCCESS:
+			return state
 		// case userConstants.RESENDEMAIL_REQUEST:
 		// 	return {
 		// 		user: action.email

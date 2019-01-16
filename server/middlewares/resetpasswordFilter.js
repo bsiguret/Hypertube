@@ -7,7 +7,7 @@ let sql = require('../db/requetes');
 
 const RPFilterEmail = (req, res, next) => {
     if (!isValidEmail(req.body.email)) {
-        res.status(403).json({error: {email: "Not a valid email, example: stream@hypertube.com"}})
+        res.status(403).json("Not a valid email, example: stream@hypertube.com")
     } else {
         req.body.email = purifyString(req.body.email)
         db.query(sql.get_user, [null, null, req.body.email], (err,user) => {
@@ -19,7 +19,7 @@ const RPFilterEmail = (req, res, next) => {
                     req.body.email = user[0].email
                     next()
                 } else {
-                    res.status(403).json({error: {email: "Email unavailable"}})
+                    res.status(403).json("Email unavailable")
                 }
             }
         });
@@ -40,15 +40,15 @@ const RPFilterPass = async (req, res, next) => {
                         delete req.body.cpassword
                         next()
                     } else {
-                        res.status(403).json({error: {token: "Invalid Token"}})
+                        res.status(403).json("Invalid Token")
                     }
                 }
             });
         } else {
-            res.status(403).json({error: {npassword: "Password must contains at least 6 characters, one uppercase and lowercase letter and one digit, only letters and digits are allowed"}})
+            res.status(403).json({npassword: "Password must contains at least 6 characters, one uppercase and lowercase letter and one digit, only letters and digits are allowed"})
         }
     } else {
-        res.status(403).json({error: {npassword: "New password does not match with password confirmation"}})
+        res.status(403).json({npassword: "New password does not match with password confirmation"})
     }
 };
 

@@ -7,7 +7,7 @@ const sendMailTo = (username, email, action) => {
     username = encodeURIComponent(username)
     let verifyAccount = uuidv1()
     let subject = (action === 3) ? 'Hypertube reseting password' : 'Hypertube verifying account'
-    let url = (action === 3) ? 'http://localhost:3000/api/resetpassword/' + username + '/' + verifyAccount : 'http://localhost:3000/api/emailvalidation/' + username + '/' + verifyAccount
+    let url = (action === 3) ? 'http://localhost:3001/resetpassword/' + username + '/' + verifyAccount : 'http://localhost:3001/emailvalidation/' + username + '/' + verifyAccount
     let text = (action === 3) ? '<p>Click or copy/paste <a href="'+ url +'">'+ url +'</a> to reset your password</p>' : '<p>Click or copy/paste <a href="'+ url +'">'+ url +'</a> to confirm your account</p>'
 
     const transporter = nodemailer.createTransport({
