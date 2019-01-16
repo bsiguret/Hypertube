@@ -4,17 +4,20 @@ import { connect } from 'react-redux';
 
 import { authActions } from '../redux/actions/auth';
 
-class LoginForm extends Component {
+class ResetPassForm extends Component {
 
 	handleSubmit = (e) => {
 		e.preventDefault();
 		console.log(this.props.form)
     this.props.form.validateFields(async (err, values) => {
       if (!err) {
-				let res = await this.props.dispatch(authActions.login(values.email, values.password))
+				let res = await this.props.dispatch(authActions.resetPassEmail(values.email))
 				console.log(res);
-				if (res.status === 403) {
-					message.error(res.data.msg)
+				if (res.status !== 200) {
+					message.error(res.data)
+				}
+				else {
+					message.success(res.data)
 				}
       }
     });
@@ -23,8 +26,8 @@ class LoginForm extends Component {
   render() {
 		const { getFieldDecorator } = this.props.form;
     return (
-			<div className='indexLoginFormWrapper'>
-				<Form onSubmit={this.handleSubmit} className="indexLoginForm">
+			<div className='resetPassFormWrapper'>
+				<Form onSubmit={this.handleSubmit} className="resetPassForm">
 					<Form.Item>
 						{getFieldDecorator('email', {
 							rules: [{
@@ -37,15 +40,8 @@ class LoginForm extends Component {
 						)}
 					</Form.Item>
 					<Form.Item>
-						{getFieldDecorator('password', {
-							rules: [{ required: true, message: 'Please input your Password!' }],
-						})(
-							<Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} type="password" placeholder="Password" />
-						)}
-					</Form.Item>
-					<Form.Item>
-						<Button block type="primary" htmlType="submit" className="loginFormButton">
-							Log In
+						<Button block type="primary" htmlType="submit" className="resetPassFormButton">
+							Send me an e-mail
 						</Button>
 					</Form.Item>
 				</Form>
@@ -54,4 +50,4 @@ class LoginForm extends Component {
   }
 }
 
-export default connect()(Form.create()(LoginForm));
+export default connect()(Form.create()(ResetPassForm));

@@ -1,7 +1,7 @@
 import { userConstants } from '../constants';
 
 
-export function userReducer(state={}, action) {
+export function userReducer(state={user: {isVerified: 0}}, action) {
 	switch(action.type) {
 		case userConstants.SIGNUP_PHOTO:
 		return Object.assign({}, state, {
@@ -16,12 +16,16 @@ export function userReducer(state={}, action) {
 		return Object.assign({}, state, {
 			user: action.user
 		});
+		case userConstants.EMAIL_VERIFICATION_REQUEST:
+		return state
+		case userConstants.EMAIL_VERIFICATION_SUCCESS:
+		return state
 		case userConstants.LOGIN_SUCCESS:
 		return {
 			...action.user
 		};
 		case userConstants.LOGOUT:
-			return {user: {}};
+			return {user: {isVerified: 0}};
 		default:
 			return state;
 	}

@@ -3,6 +3,7 @@ var sql = require('../db/requetes');
 const express = require('express');
 const router = express.Router();
 const passport = require('../tools/passport');
+const jwt = require('jsonwebtoken');
 
 router.get('/all_genre', passport.authenticate('jwt', {session: false}), (req, res) => {
     db.connection_db.query(sql.get_all_genre, (err, rows) => {
@@ -14,9 +15,23 @@ router.get('/all_genre', passport.authenticate('jwt', {session: false}), (req, r
 
 router.get('/all_movies', passport.authenticate('jwt', {session: false}), (req, res) => {
     db.connection_db.query(sql.get_all_movies_by_rating, (err, rows) => {
-        if (err)
+        if (err) {
             res.status(403).json({msg: "Error get movies"});
-        res.json({movies: rows});
+        } else {
+            let uid = jwt.decode(req.cookies.token).id;
+            for (let i = 0; i < rows.length; i++) {
+                db.connection_db.query(sql.get_movie_view, [uid, rows[i].movie_id], (err1, rows1) => {
+                    if (err) {
+                        res.status(403).json({msg: "Error get movies"});
+                    } else {
+                        rows[i].viewed = (rows1.length);
+                        if (i == rows.length - 1) {
+                            res.json({movies: rows});
+                        }
+                    }
+                })
+            }
+        }
     });
 });
 
@@ -39,26 +54,42 @@ router.post('/all_movies/:nb', passport.authenticate('jwt', {session: false}), (
         order += " DESC"
     var get_all_movies_by_filtre = "SELECT movies.*, b.genres FROM movies INNER JOIN (SELECT movie_id, group_concat(genre) AS genres FROM genre GROUP BY movie_id) b ON movies.movie_id = b.movie_id WHERE " + where + " ORDER BY " + order + " LIMIT 20 OFFSET " + req.params.nb * 20;
     db.connection_db.query(get_all_movies_by_filtre, (err, rows) => {
-        if (err)
+        if (err) {
             res.status(403).json({msg: "Error get movies"});
-        else
+        } else if (rows.length > 0) {
+            let uid = jwt.decode(req.cookies.token).id;
+            for (let i = 0; i < rows.length; i++) {
+                db.connection_db.query(sql.get_movie_view, [uid, rows[i].movie_id], (err1, rows1) => {
+                    if (err) {
+                        res.status(403).json({msg: "Error get movies"});
+                    } else {
+                        rows[i].viewed = (rows1.length);
+                        if (i == rows.length - 1) {
+                            res.json({movies: rows});
+                        }
+                    }
+                })
+            }
+        } else {
             res.json({movies: rows});
+        }
     });
 });
 
 router.get('/movie/:movie_id', passport.authenticate('jwt', {session: false}), (req, res) => {
-    db.connection_db.query(sql.get_movie, [req.params.movie_id], (err, rows) => {
+    var movie_id = req.params.movie_id;
+    db.connection_db.query(sql.get_movie, [movie_id], (err, rows) => {
         if (err) {
             res.status(403).json({msg: "Error get info"});
         } else if (rows.length < 1) {
             res.status(403).json({msg: "Error no film"});
         } else {
-            db.connection_db.query(sql.get_movie_genre, [req.params.movie_id], (err1, rows1) => {
+            db.connection_db.query(sql.get_movie_genre, [movie_id], (err1, rows1) => {
                 if (err1) {
                     res.status(403).json({msg: "Error get info"});
                 } else {
                     let genres = rows1.length ? rows1 : ["Unspecified"];
-                    db.connection_db.query(sql.get_movie_torrent, [req.params.movie_id], (err2, rows2) => {
+                    db.connection_db.query(sql.get_movie_torrent, [movie_id], (err2, rows2) => {
                         if (err2) {
                             res.status(403).json({msg: "Error get info"});
                         } else {
@@ -69,6 +100,26 @@ router.get('/movie/:movie_id', passport.authenticate('jwt', {session: false}), (
             });
         }
     })
+});
+
+router.post('/movie/:movie_id/viewed', passport.authenticate('jwt', {session: false}), (req, res) => {
+    let uid = jwt.decode(req.cookies.token).id;
+    var movie_id = req.params.movie_id;
+    db.connection_db.query(sql.get_movie_view, [uid, movie_id], (err, rows) => {
+        if (err) {
+            res.status(403).json({msg: "Error add view"});
+        } else if (rows.length < 1) {
+            db.connection_db.query(sql.add_movie_view, [[uid, movie_id]], (err1, rows1) => {
+                if (err1) {
+                    res.status(403).json({msg: "Error add view"});
+                } else {
+                    res.json({msg: "OK"});
+                }
+            });
+        } else {
+            res.json({msg: "OK"});
+        }
+    });
 });
 
 module.exports = router;

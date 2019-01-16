@@ -42,6 +42,7 @@ app.use('/api/signin', require('./router/signin'));
 app.use('/api/signup', require('./router/signup'));
 app.use('/api/logout', require('./router/logout'));
 app.use('/api/checklog', require('./router/checklog'));
+app.use('/api/comments', require('./router/comments'));
 app.use('/api/resetpassword', require('./router/resetpassword'));
 app.use('/api/emailvalidation', require('./router/emailvalidation'));
 

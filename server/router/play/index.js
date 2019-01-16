@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const mydb = require('../../db/db');
 const sql = require('../../db/requetes');
+const passport = require('../../tools/passport');
 
 const yifysubtitles = require('yifysubtitles');//
 var http = require('http');//
@@ -163,7 +164,7 @@ function ft_magnet(url)
   return (url);
 }
 
-router.get('/:id', (req, res) =>
+router.get('/:id', passport.authenticate('jwt', {session: false}), (req, res) =>
 {
   var id = req.params.id;
   mydb.connection_db.query(sql.get_movie_torrent, [[id]], function(err, rows)
@@ -185,7 +186,7 @@ router.get('/:id', (req, res) =>
 
     engine = torrentStream(magnet, options);
     ft_engine(id);
-
+    res.send("OK");
     // res.render('./pages/play',
     // {
     //   movies: rows
@@ -203,7 +204,7 @@ function ft_objlen(obj)
   return (len);
 }
 
-router.post('/', (req, res) =>
+router.post('/', passport.authenticate('jwt', {session: false}), (req, res) =>
 {
   var id = req.body.id;
   console.log(req.body.action);
@@ -250,11 +251,13 @@ router.post('/', (req, res) =>
   if (req.body.action === 'sigstop')
   {
     command[id].kill('SIGSTOP');
+    res.send('OK');
   }
 
   if (req.body.action === 'sigcont')
   {
     command[id].kill('SIGCONT');
+    res.send('OK');
   }
 
   if (req.body.action === 'sigall')
@@ -269,6 +272,7 @@ router.post('/', (req, res) =>
         command[i].kill('SIGSTOP');
       }
     }
+    res.send('OK');
   }
 });
 

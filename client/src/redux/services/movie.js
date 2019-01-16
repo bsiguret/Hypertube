@@ -40,11 +40,9 @@ const getMovies = async (name, min_rating, max_rating, min_year, max_year, genre
 		order
 	})
 	.then ((response) => {
-		console.log(response)
 		return (response)
 	})
 	.catch((error) => {
-		console.log(error.response)
 		return (error.response);
 	})
 	return res;
@@ -78,17 +76,14 @@ const startMovieDownload = async (id) => {
 }
 
 const getMovieDownload = async (action, id) => {
-	console.log(action, id)
 	let res = await axios.post(`/play`, {
 			action,
 			id,
 	})
 	.then ((response) => {
-		console.log(response)
 		return (response)
 	})
 	.catch((error) => {
-		console.log(error.response)
 		return (error.response);
 	})
 	return res;

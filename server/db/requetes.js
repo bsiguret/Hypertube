@@ -100,9 +100,9 @@ const create_table_comments = `CREATE TABLE IF NOT EXISTS comments
 const create_table_comments_movies_users = `CREATE TABLE IF NOT EXISTS comments_movies_users
 	(
 		id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-		movie_id INT DEFAULT NULL,
-		comment_id INT DEFAULT NULL,
-		user_id INT DEFAULT NULL
+		movie_id VARCHAR(50) NOT NULL,
+		comment_id INT NOT NULL,
+		user_id INT NOT NULL
 	)`;
 
 const add_movie = "INSERT INTO movies (movie_id, title, year, language, type, rating, runtime, director, writer, actors, description, img) VALUES ?";
@@ -110,7 +110,7 @@ const get_all_movies_by_rating = "SELECT * FROM movies ORDER BY rating DESC LIMI
 const add_movie_genre = "INSERT INTO genre (movie_id, genre) VALUES ?";
 const add_movie_torrent = "INSERT INTO torrent (movie_id, url, quality, seeds, peers, size_bytes) VALUES ?";
 const check_movie_exists = "SELECT * FROM movies WHERE movie_id=?";
-const get_movie = "SELECT * FROM movies WHERE movie_id=?";
+const get_movie = "SELECT *, ifNULL(rating, 'N/A') as rating FROM movies WHERE movie_id=?";
 const get_movie_genre = "SELECT genre FROM genre WHERE movie_id=?";
 const get_movie_torrent = "SELECT * FROM torrent WHERE movie_id=?";
 const add_movie_file = "INSERT INTO file (movie_id, quality, path) VALUES ?";
@@ -119,9 +119,14 @@ const get_movie_file = "SELECT path FROM file WHERE movie_id=? AND quality=?";
 const get_movie_subtitle = "SELECT * FROM subtitle WHERE movie_id=?";
 const get_all_genre = "SELECT genre FROM genre GROUP BY genre";
 const get_movie_status = "SELECT * FROM status WHERE movie_id=?";
-
+const add_comment = "INSERT INTO comments (comment) VALUES (?)";
+const add_comment_movie_user = "INSERT INTO comments_movies_users (movie_id, comment_id, user_id) VALUES (?)";
+const get_comment_user_id = "SELECT * FROM comments_movies_users WHERE movie_id=?";
+const get_comment = "SELECT * FROM comments WHERE id=?";
 const insert_user = "INSERT INTO users (lastname,firstname,username,password,email,profile) VALUES(?)";
 const get_user = "SELECT * FROM users WHERE id=? || username=? || email=?";
+const add_movie_view = "INSERT INTO viewed (uid, movie_id) VALUES (?)";
+const get_movie_view = "SELECT * FROM viewed WHERE uid=? AND movie_id=?";
 
 module.exports = {
 	create_database: create_database,
@@ -152,4 +157,10 @@ module.exports = {
 	get_movie_status: get_movie_status,
 	insert_user: insert_user,
 	get_user: get_user,
+	add_comment: add_comment,
+	add_comment_movie_user: add_comment_movie_user,
+	get_comment_user_id: get_comment_user_id,
+	get_comment: get_comment,
+	add_movie_view: add_movie_view,
+	get_movie_view: get_movie_view
 };

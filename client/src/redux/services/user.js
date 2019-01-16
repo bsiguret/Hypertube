@@ -20,14 +20,25 @@ const getUser = async () => {
 		'/api/checklog'
 	)
 	.then ((response) => {
-		console.log(response)
 		return (response)
 	})
 	.catch((error) => {
 		return (error.response);
 	})
 	return res;
+}
 
+const verifEmail = async (username, token) => {
+	let res = await axios.get(
+		`/api/emailvalidation/${username}/${token}`
+	)
+	.then ((response) => {
+		return (response)
+	})
+	.catch((error) => {
+		return (error.response);
+	})
+	return res;
 }
 
 // const savePhoto = async (photo, defineAs, token) => {
@@ -54,6 +65,7 @@ const getUser = async () => {
 
 export default {
 	signup,
-	getUser
+	getUser,
+	verifEmail
 }
 

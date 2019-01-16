@@ -7,11 +7,67 @@ const login = async (email, password) => {
 		password
 	})
 	.then ((response) => {
+		return (response)
+	})
+	.catch((error) => {
+		return (error.response);
+	})
+	return res;
+}
+
+const logout = async () => {
+	let res = await axios.get(
+		'/api/logout'
+	)
+	.then ((response) => {
 		console.log(response)
 		return (response)
 	})
 	.catch((error) => {
 		console.log(error.response)
+		return (error.response);
+	})
+	return res;
+}
+
+const resetPassEmail = async (email) => {
+	let res = await axios.post(
+		`/api/resetpassword/`, {
+			email
+	})
+	.then ((response) => {
+		return (response)
+	})
+	.catch((error) => {
+		return (error.response);
+	})
+	return res;
+}
+
+const resetPassToken = async (username, token) => {
+	let res = await axios.get(
+		`/api/resetpassword/${username}/${token}`
+	)
+	.then ((response) => {
+		return (response)
+	})
+	.catch((error) => {
+		return (error.response);
+	})
+	return res;
+}
+
+const resetPassToken2 = async (username, token, npassword, cpassword) => {
+	let res = await axios.post(
+		`/api/resetpassword/${username}/${token}`, {
+			npassword,
+			cpassword
+		}
+	)
+	.then ((response) => {
+		return (response)
+	})
+	.catch((error) => {
 		return (error.response);
 	})
 	return res;
@@ -41,4 +97,8 @@ const login = async (email, password) => {
 
 export default {
 	login,
+	logout,
+	resetPassEmail,
+	resetPassToken,
+	resetPassToken2
 }

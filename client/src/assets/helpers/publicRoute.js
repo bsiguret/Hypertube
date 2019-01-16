@@ -1,7 +1,9 @@
 import React from 'react';
 import { Redirect, Route } from 'react-router-dom';
+import { Layout } from 'antd';
+import Footer from './footer';
 
-export const PublicRoute = ({ component: Component, isAuth, isVerified, sideMenuFilter, ...rest }) => (
+export const PublicRoute = ({ component: Component, isAuth, isVerified, ...rest }) => (
   <Route
     {...rest}
     render={props =>
@@ -9,10 +11,28 @@ export const PublicRoute = ({ component: Component, isAuth, isVerified, sideMenu
 				isVerified === 1 ? (
 					<Redirect to='/home' />
 				) : (
-					<Component {...props} />
+					<div>
+						<Layout style={{height: '100vh', overflow: 'auto'}}>
+							<Layout.Content>
+								<Component {...props}/>
+							</Layout.Content>
+							<Layout.Footer>
+								<Footer />
+							</Layout.Footer>
+						</Layout>
+        	</div>
 				)
 			) : (
-				<Component {...props} />
+				<div>
+					<Layout style={{height: '100vh', overflow: 'auto'}}>
+						<Layout.Content>
+							<Component {...props}/>
+						</Layout.Content>
+						<Layout.Footer>
+							<Footer />
+						</Layout.Footer>
+					</Layout>
+				</div>
 			)
 		}
 	/>

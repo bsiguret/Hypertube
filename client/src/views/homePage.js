@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import InfiniteScroll from 'react-infinite-scroller';
-import { Spin } from 'antd';
+import { Spin, message } from 'antd';
+import '../assets/css/home.scss'
 
 import { movieActions } from '../redux/actions/movie';
-import Movies from '../components/movies'
+import { authActions } from '../redux/actions/auth';
 
-import '../assets/css/home.scss'
+import Movies from '../components/movies'
 
 class HomePage extends Component {
 	constructor(props){
@@ -41,14 +42,20 @@ class HomePage extends Component {
 	}
 
 	getAllGenre = async () => {
-    let res = await this.props.dispatch(movieActions.getAllGenre())
-    console.log(res)
+		let res = await this.props.dispatch(movieActions.getAllGenre())
+		if (res.status !== 200) {
+			this.props.dispatch(authActions.logout())
+			message.error('Please log in, your session may have expired')
+		}
     return;
   }
 
   initMovies = async () => {
-    let res = await this.props.dispatch(movieActions.initMovies())
-    console.log(res)
+		let res = await this.props.dispatch(movieActions.initMovies())
+		if (res.status !== 200) {
+			this.props.dispatch(authActions.logout())
+			message.error('Please log in, your session may have expired')
+		}
     return;
   }
 
