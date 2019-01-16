@@ -10,7 +10,7 @@ router.get('/:movie_id', passport.authenticate('jwt', {session: false}), (req, r
     db.connection_db.query(sql.get_comment_user_id, [req.params.movie_id], (err, rows) => {
         if (err) {
             res.status(403).json({msg: "Error get comments"});
-        } else if (rows.length > 1) {
+        } else if (rows.length > 0) {
             var data = [];
             for (let i = 0; i < rows.length; i++) {
                 userQuery.findOne({id: rows[0].user_id}).then(user => {
