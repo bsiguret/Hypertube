@@ -2,31 +2,23 @@ const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
 const userQuery = require('../models/userModel');
+const passport = require('../tools/passport');
 
-router.get('/', (req, res) => {
-    if (req && req.cookies && req.cookies.token) {
-        try {
-            let token = jwt.decode(req.cookies.token);
-            let id = token.id;
-            userQuery.findOne({id: id}).then(user => {
-                let data = {
-                    id: user.id,
-                    username: user.username,
-                    email: user.email,
-                    lastname: user.lastname,
-                    firstname: user.firstname,
-                    language: user.language,
-                    profile: user.profile,
-                    isVerified: user.isVerified
-                }
-                res.json({user: data});
-            });
-        } catch (e) {
-            res.status(403).json({msg: "Token invalid"});
+router.get('/', passport.authenticate('jwt', {session: false}), (req, res) => {
+    let id = jwt.decode(req.cookies.token).id;
+    userQuery.findOne({id: id}).then(user => {
+        let data = {
+            id: user.id,
+            username: user.username,
+            email: user.email,
+            lastname: user.lastname,
+            firstname: user.firstname,
+            language: user.language,
+            profile: user.profile,
+            isVerified: user.isVerified
         }
-    } else {
-        res.status(403).json({msg: "User not log"});
-    }
+        res.json({user: data});
+    });
 });
 
 module.exports = router;
