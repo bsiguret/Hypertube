@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Button } from 'antd';
-import { List, Row, Col, Spin } from 'antd';
+import { List, Row, Col, Spin, message } from 'antd';
 
 import { movieActions } from '../redux/actions/movie';
 import { authActions } from '../redux/actions/auth';
