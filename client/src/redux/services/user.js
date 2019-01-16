@@ -20,7 +20,6 @@ const getUser = async () => {
 		'/api/checklog'
 	)
 	.then ((response) => {
-		console.log(response)
 		return (response)
 	})
 	.catch((error) => {

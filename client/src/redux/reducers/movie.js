@@ -69,7 +69,7 @@ export function movieReducer(state = initialState, action) {
 			}
 		})
 		case userConstants.LOGOUT:
-			return {user: {}};
+			return initialState;
 		default:
 			return state;
 	}

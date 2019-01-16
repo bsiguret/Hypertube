@@ -40,11 +40,9 @@ const getMovies = async (name, min_rating, max_rating, min_year, max_year, genre
 		order
 	})
 	.then ((response) => {
-		console.log(response)
 		return (response)
 	})
 	.catch((error) => {
-		console.log(error.response)
 		return (error.response);
 	})
 	return res;
@@ -84,11 +82,9 @@ const getMovieDownload = async (action, id) => {
 			id,
 	})
 	.then ((response) => {
-		console.log(response)
 		return (response)
 	})
 	.catch((error) => {
-		console.log(error.response)
 		return (error.response);
 	})
 	return res;

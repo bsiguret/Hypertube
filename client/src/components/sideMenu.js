@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { Icon, Input, Menu, Layout, Slider, Select } from 'antd';
+import { Icon, Input, Menu, Layout, Slider, Select, message } from 'antd';
 import { connect } from 'react-redux';
 import { movieActions } from '../redux/actions/movie';
 import { history } from '../assets/helpers/history';
+import { authActions } from '../redux/actions/auth';
 
 class SideMenu extends Component {
 	constructor(props) {
@@ -13,7 +14,6 @@ class SideMenu extends Component {
 			searchInput: '',
 			loading: false
 		};
-		// this.handleMenuMovies = this.handleMenuMovies.bind(this);
 	}
 
 	onCollapse = (collapsed) => {
@@ -45,6 +45,10 @@ class SideMenu extends Component {
 				0
 			)
 		)
+		if (resp.status !== 200) {
+			this.handleLogout()
+			message.error('Please log in, your session may have expired')
+		}
 	}
 
 	handleSort = async (order) => {
@@ -72,6 +76,10 @@ class SideMenu extends Component {
 				0
 			)
 		)
+		if (resp.status !== 200) {
+			this.handleLogout()
+			message.error('Please log in, your session may have expired')
+		}
 	}
 
 	handleYear = async (year) => {
@@ -99,6 +107,10 @@ class SideMenu extends Component {
 				0
 			)
 		)
+		if (resp.status !== 200) {
+			this.handleLogout()
+			message.error('Please log in, your session may have expired')
+		}
 	}
 
 	handleRating = async (rating) => {
@@ -126,19 +138,31 @@ class SideMenu extends Component {
 				0
 			)
 		)
+		if (resp.status !== 200) {
+			this.handleLogout()
+			message.error('Please log in, your session may have expired')
+		}
 	}
 
 	handleHome() {
 		history.push('/home')
 	}
 
+	handleLogout() {
+		this.props.dispatch(authActions.logout())
+	}
+
   render() {
-		const { name, min_rating, max_rating, min_year, max_year, genres, order } = this.props.filter
+		const { name, min_rating, max_rating, min_year, max_year, order } = this.props.filter
 		const handleMenuMovies = async (genre) => {
 			this.props.dispatch(movieActions.addFilter(name, min_rating, max_rating, min_year, max_year, genre, order))
 			let resp = await this.props.dispatch(
 				movieActions.getMovies(name, min_rating, max_rating, min_year, max_year, genre, order, 0)
 			)
+			if (resp.status !== 200) {
+				this.handleLogout()
+				message.error('Please log in, your session may have expired')
+			}
 		}
     return (
 			<Layout.Sider
@@ -197,7 +221,7 @@ class SideMenu extends Component {
 							<Icon type="setting" />
 							<span>Settings</span>
 						</Menu.Item>
-						<Menu.Item key="17">
+						<Menu.Item key="17" onClick={this.handleLogout.bind(this)}>
 							<Icon type="logout" />
 							<span>Logout</span>
 						</Menu.Item>
