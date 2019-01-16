@@ -17,7 +17,7 @@ router.get('/42/callback',
         else {
             const payload = {id: user.id, username: user.username, email: user.email};
             const token = jwt.sign(payload, process.env.JWT_KEY, {expiresIn: 86400 * 1000});
-            res.cookie('token', token, { maxAge: 86400 * 1000, httpOnly: true });
+            res.cookie('token', token, { maxAge: 86400 * 1000, httpOnly: false });
             res.redirect('http://localhost:3001/home');
         }
     }
@@ -37,7 +37,7 @@ router.get('/facebook/callback',
         else {
             const payload = {id: user.id, username: user.username, email: user.email};
             const token = jwt.sign(payload, process.env.JWT_KEY, {expiresIn: 86400 * 1000});
-            res.cookie('token', token, { maxAge: 86400 * 1000, httpOnly: true });
+            res.cookie('token', token, { maxAge: 86400 * 1000, httpOnly: false });
             res.redirect('http://localhost:3001/home');
         }
     }
@@ -57,7 +57,7 @@ router.get('/google/callback',
         else {
             const payload = {id: user.id, username: user.username, email: user.email};
             const token = jwt.sign(payload, process.env.JWT_KEY, {expiresIn: 86400 * 1000});
-            res.cookie('token', token, { maxAge: 86400 * 1000, httpOnly: true });
+            res.cookie('token', token, { maxAge: 86400 * 1000, httpOnly: false });
             res.redirect('http://localhost:3001/home');
         }
     }

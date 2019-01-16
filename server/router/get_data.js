@@ -93,28 +93,33 @@ router.get('/movie/:movie_id', passport.authenticate('jwt', {session: false}), (
                         if (err2) {
                             res.status(403).json({msg: "Error get info"});
                         } else {
-                            let uid = jwt.decode(req.cookies.token).id;
-                            db.connection_db.query(sql.get_movie_view, [uid, movie_id], (err3, rows3) => {
-                                if (err3) {
-                                    res.status(403).json({msg: "Error get info"});
-                                } else if (rows3.length < 1) {
-                                    db.connection_db.query(sql.add_movie_view, [[uid, movie_id]], (err4, rows4) => {
-                                        if (err4) {
-                                            res.status(403).json({msg: "Error get info"});
-                                        } else {
-                                            res.json({info: rows, genres: genres, torrents: rows2});
-                                        }
-                                    });
-                                } else {
-                                    res.json({info: rows, genres: genres, torrents: rows2});
-                                }
-                            });
+                            res.json({info: rows, genres: genres, torrents: rows2});
                         }
                     });
                 }
             });
         }
     })
+});
+
+router.post('/movie/:movie_id/viewed', passport.authenticate('jwt', {session: false}), (req, res) => {
+    let uid = jwt.decode(req.cookies.token).id;
+    var movie_id = req.params.movie_id;
+    db.connection_db.query(sql.get_movie_view, [uid, movie_id], (err, rows) => {
+        if (err) {
+            res.status(403).json({msg: "Error add view"});
+        } else if (rows.length < 1) {
+            db.connection_db.query(sql.add_movie_view, [[uid, movie_id]], (err1, rows1) => {
+                if (err1) {
+                    res.status(403).json({msg: "Error add view"});
+                } else {
+                    res.json({msg: "OK"});
+                }
+            });
+        } else {
+            res.json({msg: "OK"});
+        }
+    });
 });
 
 module.exports = router;
