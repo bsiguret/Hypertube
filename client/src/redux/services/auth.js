@@ -15,21 +15,8 @@ const login = async (email, password) => {
 	return res;
 }
 
-const logout = async (email, password) => {
-	let res = await axios.get(
-		'/api/logout'
-	)
-	.then ((response) => {
-		return (response)
-	})
-	.catch((error) => {
-		return (error.response);
-	})
-	return res;
-}
-
 const logout = async () => {
-	let res = await axios.GET(
+	let res = await axios.get(
 		'/api/logout'
 	)
 	.then ((response) => {
