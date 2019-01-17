@@ -102,6 +102,7 @@ const getComments = async (id) => {
 }
 
 const postComment = async (movie_id, comment) => {
+	console.log(movie_id, comment)
 	let res = await axios.post(`/api/comments/`, {
 		movie_id,
 		comment

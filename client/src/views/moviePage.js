@@ -84,7 +84,7 @@ class MoviePage extends Component {
 			this.props.dispatch(authActions.logout())
 			message.error('Please log in, your session may have expired')
 		}
-		let resp = await this.props.dispatch(movieActions.getCommments(this.props.match.params.id));
+		let resp = await this.props.dispatch(movieActions.getComments(this.props.match.params.id));
 		if (resp.status !== 200) {
 			this.props.dispatch(authActions.logout())
 			message.error('Please log in, your session may have expired')
@@ -158,10 +158,11 @@ class MoviePage extends Component {
 				</Row>
 				<Row type='flex' justify='center'>
 					<h2 style={{textAlign: 'center'}}>Comments</h2>
-					<CommentBox />
+					<CommentBox id={this.props.match.params.id}/>
 				</Row>
 				<Row>
-					<Comments />
+					{this.props.comments && this.props.comments.comments &&
+					<Comments comments={this.props.comments.comments}/>}
 				</Row>
 			</div>}
 		</div>
@@ -170,7 +171,8 @@ class MoviePage extends Component {
 }
 
 const mapStateToProps = state => ({
-	movie: state.movieReducer.movie
+	movie: state.movieReducer.movie,
+	comments: state.movieReducer.comments
 });
 
 export default connect(mapStateToProps)(MoviePage);

@@ -1,14 +1,33 @@
 import React, { Component } from 'react';
-// import { Input, Button } from 'antd';
+import { List, Avatar } from 'antd';
 
 
 class Comments extends Component {
 
+
+
   render() {
+		const Comments = ({comments}) => (
+			<>
+				{comments.map((comment, key) => (
+					<List.Item
+						key={key}
+					>
+						<List.Item.Meta
+							avatar={<Avatar src={comment.profile} />}
+							title={`${comment.firstname} ${comment.lastname}`}
+							description={comment.comment}
+						/>
+						{comment.date}
+					</List.Item>
+				))}
+			</>
+		);
     return (
-			<div className='comments'>
-				<h1>KOKDPSOKPDOSKPODSK</h1>
-			</div>
+			console.log(this.props.comments),
+			<List className='comments'>
+				<Comments comments={this.props.comments}/>
+			</List>
 		)
   }
 }

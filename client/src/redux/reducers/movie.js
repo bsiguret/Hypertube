@@ -84,8 +84,7 @@ export function movieReducer(state = initialState, action) {
 			return Object.assign({}, state, {
 				...state,
 				comments: {
-					...state.comments,
-					...action.comment
+					...action.comments
 				}
 			})
 		case userConstants.LOGOUT:

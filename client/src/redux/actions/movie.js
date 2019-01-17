@@ -124,7 +124,7 @@ const getComments = (id) => async dispatch => {
 
 const postComment = (id, comment) => async dispatch => {
 	function request() { return { type: userConstants.GET_COMMENT_REQUEST} };
-	function success(comment) { return { type: userConstants.GET_COMMENT_SUCCESS, comment} };
+	function success(comments) { return { type: userConstants.GET_COMMENT_SUCCESS, comments} };
 
 	dispatch(request());
 	let res = await m.postComment(id, comment)
@@ -134,7 +134,7 @@ const postComment = (id, comment) => async dispatch => {
 					return res.data;
 				}
 				else {
-					dispatch(success(comment));
+					// dispatch(success(res.data));
 					return res;
 				}
 			}
@@ -157,4 +157,5 @@ export const movieActions = {
 	getMovieInfo,
 	addFilter,
 	getComments,
+	postComment
 };
