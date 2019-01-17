@@ -11,7 +11,7 @@ let {sendMailTo} = require('../tools/sendMailTo')
 
 router.post('/', signupFilter, (req, res) => {
     const dir = __dirname + '/../public/'
-    const userStorage =  encodeURIComponent(req.body.user.username) + '/'
+    const userStorage =  encodeURIComponent(req.body.username) + '/'
     const filename = userStorage + 'profile.png'
     if (!fs.existsSync(dir)) {
         fs.mkdirSync(dir)
@@ -19,17 +19,17 @@ router.post('/', signupFilter, (req, res) => {
     if (!fs.existsSync(dir + userStorage)) {
         fs.mkdirSync(dir + userStorage)
     }
-    console.log(dir + filename);
-    fs.writeFile(dir + filename, req.body.user.photo, {encoding: 'base64'}, function(err) {
+
+    fs.writeFile(dir + filename, req.body.photo, {encoding: 'base64'}, function(err) {
 
     });
 
     let data = [
-        req.body.user.lastname,
-        req.body.user.firstname,
-        req.body.user.username,
-        req.body.user.password,
-        req.body.user.email,
+        req.body.lastname,
+        req.body.firstname,
+        req.body.username,
+        req.body.password,
+        req.body.email,
         "http://localhost:" + process.env.PORT_BACK + "/api/photo/" + filename
     ]
     
@@ -37,7 +37,7 @@ router.post('/', signupFilter, (req, res) => {
         if (err) {
             return res.status(403).json({error: err.code + ': ' + err.sqlMessage})
         }
-        sendMailTo(req.body.user.username, req.body.user.email, 1).then(success => {
+        sendMailTo(req.body.username, req.body.email, 1).then(success => {
             res.json(success)
         }).catch(err => {
             res.status(403).json({sendMail: err})
