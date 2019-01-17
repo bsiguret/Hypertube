@@ -3,26 +3,13 @@
 const express = require('express');
 const router = express.Router();
 const fs = require('fs');
-// const multer = require('multer');
-// const upload = multer({limits: { fieldSize: 2 * 1024 * 1024}});
 
 let db = require('../db/db').connection_db
 let sql = require('../db/requetes')
 let signupFilter = require('../middlewares/signupFilter')
 let {sendMailTo} = require('../tools/sendMailTo')
 
-//let photoFilter = require('../middlewares/photoFilter')
-// let fields = [
-//     {name: 'photo', maxCount:1},
-//     {name: 'username', maxCount:1},
-//     {name: 'email', maxCount:1},
-//     {name: 'firstname', maxCount:1},
-//     {name: 'lastname', maxCount:1},
-//     {name: 'password', maxCount:1},
-//     {name: 'cpassword', maxCount:1},
-// ];
-
-router.post('/', /*upload.array(fields) photoFilter*/ signupFilter, (req, res) => {
+router.post('/', signupFilter, (req, res) => {
     const dir = __dirname + '/../public/'
     const userStorage =  encodeURIComponent(req.body.username) + '/'
     const filename = userStorage + 'profile.png'
@@ -32,7 +19,7 @@ router.post('/', /*upload.array(fields) photoFilter*/ signupFilter, (req, res) =
     if (!fs.existsSync(dir + userStorage)) {
         fs.mkdirSync(dir + userStorage)
     }
-    console.log(dir + filename);
+
     fs.writeFile(dir + filename, req.body.photo, {encoding: 'base64'}, function(err) {
 
     });
