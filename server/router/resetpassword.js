@@ -48,6 +48,7 @@ router.post('/:username/:token', RPFilterPass, (req,res) => {
         if (err) {
             res.status(403).json("ERR_QUERY_MDLW")
         } else {
+            db.query(sql.update_reset_pass_time, [req.body.username], (err1, rows) => {})
             res.json("Password changed :) !")
         }
     })

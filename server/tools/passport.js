@@ -30,6 +30,9 @@ jwtOptions.secretOrKey = process.env.JWT_KEY;
 passport.use(new JWTStrategy(jwtOptions, (jwt_payload, done) => {
     userQuery.findOne({id: jwt_payload.id}).then((user) => {
         if (user) {
+            if (Date.parse(user.reset_pass_time) > (jwt_payload.iat * 1000)) {
+                return done(null, false);
+            }
             var info = {
                 id: user.id,
                 username: user.username,
