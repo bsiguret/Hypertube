@@ -16,7 +16,8 @@ const create_table_users = `CREATE TABLE IF NOT EXISTS users
 		isVerified INT DEFAULT 0,
 		id42 INT DEFAULT NULL UNIQUE,
 		facebookid BIGINT DEFAULT NULL UNIQUE,
-		googleid VARCHAR(30) DEFAULT NULL UNIQUE
+		googleid VARCHAR(30) DEFAULT NULL UNIQUE,
+		reset_pass_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 	)`;
 
 const create_table_movies = `CREATE TABLE IF NOT EXISTS movies
@@ -127,6 +128,7 @@ const insert_user = "INSERT INTO users (lastname,firstname,username,password,ema
 const get_user = "SELECT * FROM users WHERE id=? || username=? || email=?";
 const add_movie_view = "INSERT INTO viewed (uid, movie_id) VALUES (?)";
 const get_movie_view = "SELECT * FROM viewed WHERE uid=? AND movie_id=?";
+const update_reset_pass_time = "UPDATE users SET reset_pass_time=CURRENT_TIMESTAMP WHERE username=?";
 
 module.exports = {
 	create_database: create_database,
@@ -162,5 +164,6 @@ module.exports = {
 	get_comment_user_id: get_comment_user_id,
 	get_comment: get_comment,
 	add_movie_view: add_movie_view,
-	get_movie_view: get_movie_view
+	get_movie_view: get_movie_view,
+	update_reset_pass_time: update_reset_pass_time
 };
