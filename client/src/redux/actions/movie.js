@@ -102,6 +102,46 @@ const getMovieInfo = (id) => async dispatch => {
 	return res;
 }
 
+const getComments = (id) => async dispatch => {
+	function request() { return { type: userConstants.GET_COMMENT_REQUEST} };
+	function success(comments) { return { type: userConstants.GET_COMMENT_SUCCESS, comments} };
+
+	dispatch(request());
+	let res = await m.getComments(id)
+		.then(
+			res => {
+				if (res.status !== 200) {
+					return res.data;
+				}
+				else {
+					dispatch(success(res.data));
+					return res;
+				}
+			}
+		);
+	return res;
+}
+
+const postComment = (id, comment) => async dispatch => {
+	function request() { return { type: userConstants.GET_COMMENT_REQUEST} };
+	function success(comment) { return { type: userConstants.GET_COMMENT_SUCCESS, comment} };
+
+	dispatch(request());
+	let res = await m.postComment(id, comment)
+		.then(
+			res => {
+				if (res.status !== 200) {
+					return res.data;
+				}
+				else {
+					dispatch(success(comment));
+					return res;
+				}
+			}
+		);
+	return res;
+}
+
 //name, min_rating, max_rating, min_year, max_year, genres, order
 const addFilter = (name, min_rating, max_rating, min_year, max_year, genres, order) => async dispatch => {
 	function success(filter) { return { type: userConstants.MOVIES_FILTER_SUCCESS, filter} };
@@ -115,5 +155,6 @@ export const movieActions = {
 	getMovies,
 	getMoreMovies,
 	getMovieInfo,
-	addFilter
+	addFilter,
+	getComments,
 };

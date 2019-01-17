@@ -9,6 +9,7 @@ import movieService from '../redux/services/movie';
 import ReactPlayer from 'react-player'
 
 import CommentBox from '../components/commentBox'
+import Comments from '../components/comments'
 
 import '../assets/css/movie.scss'
 
@@ -83,6 +84,11 @@ class MoviePage extends Component {
 			this.props.dispatch(authActions.logout())
 			message.error('Please log in, your session may have expired')
 		}
+		let resp = await this.props.dispatch(movieActions.getCommments(this.props.match.params.id));
+		if (resp.status !== 200) {
+			this.props.dispatch(authActions.logout())
+			message.error('Please log in, your session may have expired')
+		}
 	}
 
 
@@ -153,6 +159,9 @@ class MoviePage extends Component {
 				<Row type='flex' justify='center'>
 					<h2 style={{textAlign: 'center'}}>Comments</h2>
 					<CommentBox />
+				</Row>
+				<Row>
+					<Comments />
 				</Row>
 			</div>}
 		</div>

@@ -89,6 +89,31 @@ const getMovieDownload = async (action, id) => {
 	return res;
 }
 
+const getComments = async (id) => {
+	let res = await axios.get(`/api/comments/${id}`
+	)
+	.then ((response) => {
+		return (response)
+	})
+	.catch((error) => {
+		return (error.response);
+	})
+	return res;
+}
+
+const postComment = async (movie_id, comment) => {
+	let res = await axios.post(`/api/comments/`, {
+		movie_id,
+		comment
+	})
+	.then ((response) => {
+		return (response)
+	})
+	.catch((error) => {
+		return (error.response);
+	})
+	return res;
+}
 
 export default {
 	getAllGenre,
@@ -96,5 +121,7 @@ export default {
 	getMovies,
 	getMovieInfo,
 	startMovieDownload,
-	getMovieDownload
+	getMovieDownload,
+	getComments,
+	postComment
 }
