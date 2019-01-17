@@ -148,6 +148,10 @@ class SideMenu extends Component {
 		history.push('/home')
 	}
 
+	handleSettings() {
+		history.push('/account')
+	}
+
 	handleLogout() {
 		this.props.dispatch(authActions.logout())
 	}
@@ -217,7 +221,7 @@ class SideMenu extends Component {
 						key="sub2"
 						title={<span><Icon type="user" /><span>Account</span></span>}
 					>
-						<Menu.Item key="16">
+						<Menu.Item key="16" onClick={this.handleSettings}>
 							<Icon type="setting" />
 							<span>Settings</span>
 						</Menu.Item>
