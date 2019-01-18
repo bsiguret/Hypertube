@@ -113,7 +113,8 @@ const add_movie_torrent = "INSERT INTO torrent (movie_id, url, quality, seeds, p
 const check_movie_exists = "SELECT * FROM movies WHERE movie_id=?";
 const get_movie = "SELECT *, ifNULL(rating, 'N/A') as rating FROM movies WHERE movie_id=?";
 const get_movie_genre = "SELECT genre FROM genre WHERE movie_id=?";
-const get_movie_torrent = "SELECT quality, seeds, peers, size_bytes FROM torrent WHERE movie_id=?";
+const get_movie_torrent_info = "SELECT quality, seeds, peers, size_bytes FROM torrent WHERE movie_id=?";
+const get_movie_torrent = "SELECT * FROM torrent WHERE movie_id=? AND quality=?";
 const add_movie_file = "INSERT INTO file (movie_id, quality, path) VALUES ?";
 const add_movie_subtitle = "INSERT INTO subtitle (movie_id, language, path) VALUES ?";
 const get_movie_file = "SELECT path FROM file WHERE movie_id=? AND quality=?";
@@ -149,6 +150,7 @@ module.exports = {
 	get_movie: get_movie,
 	get_movie_genre: get_movie_genre,
 	get_movie_torrent: get_movie_torrent,
+	get_movie_torrent_info: get_movie_torrent_info,
 	add_movie_genre: add_movie_genre,
 	add_movie_torrent: add_movie_torrent,
 	check_movie_exists: check_movie_exists,
