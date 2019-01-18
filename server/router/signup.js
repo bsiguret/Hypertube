@@ -29,7 +29,6 @@ router.post('/', signupFilter, (req, res) => {
         const file = "http://localhost:" + process.env.PORT_BACK + "/api/photo/" + filename
         db.query(sql.update_profile, [file, success.insertId], (err1, rows) => {
             if (err) {
-                console.log(err);
                 return res.status(403).json({error: err.code + ': ' + err.sqlMessage})
             }
             if (!fs.existsSync(dir)) {
