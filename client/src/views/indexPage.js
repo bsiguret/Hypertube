@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { Row, Col, Layout, Icon, Divider, Button, Avatar } from 'antd';
 
+import { authActions } from '../redux/actions/auth';
+import { connect } from 'react-redux';
+
 import SignForm from '../components/signForm';
 import LoginForm from '../components/loginForm';
 
@@ -15,6 +18,11 @@ class IndexPage extends Component {
 	}
 
 	handleChange = () => this.setState({ login: !this.state.login })
+
+	handleOAuth = async (name) => {
+		let res = await this.props.dispatch(authActions.oauth(name))
+		console.log(res)
+	}
 
   render() {
 		const { login } = this.state
@@ -33,11 +41,11 @@ class IndexPage extends Component {
 						<LoginForm />
 						<a href='/loginHelp' style={{position: 'relative', top: '-25px'}}>Need help?</a>
 						<div style={{display: 'flex', justifyContent: 'space-between'}}>
-							<Button shape="circle" type="primary" icon="google" style={{backgroundColor: 'red', borderColor: 'red'}}/>
-							<Button shape="circle" type="primary">
+							<Button shape="circle" type="primary" icon="google" onClick={() => {this.handleOAuth('google')}} style={{backgroundColor: 'red', borderColor: 'red'}}/>
+							<Button shape="circle" type="primary" onClick={() => {this.handleOAuth('facebook')}}>
 								<Icon type="facebook" theme="filled" />
 							</Button>
-							<Button shape="circle" type="primary" style={{backgroundColor: 'black', borderColor: 'black'}}>
+							<Button shape="circle" onClick={() => {this.handleOAuth('42')}} type="primary" style={{backgroundColor: 'black', borderColor: 'black'}}>
 								<Avatar src="/img/42.png" />
 							</Button>
 						</div>
@@ -58,4 +66,4 @@ class IndexPage extends Component {
   }
 }
 
-export default IndexPage;
+export default connect()(IndexPage);
