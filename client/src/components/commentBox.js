@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
-import { Input, Button } from 'antd';
+import { Input, Button, message } from 'antd';
 import { connect } from 'react-redux';
 
+import { movieActions } from '../redux/actions/movie';
+import { authActions } from '../redux/actions/auth';
 
 class Comment extends Component {
 	constructor(props) {
@@ -11,9 +13,16 @@ class Comment extends Component {
 		}
 	}
 
-	handleComment = () => {
-		if (this.state.comment.length >= 5)
-			console.log('hello', this.state.comment)
+	handleComment = async () => {
+		if (this.state.comment.length >= 5 && this.state.comment.length < 1000) {
+			let res = await this.props.dispatch(movieActions.postComment(this.props.id, this.state.comment));
+			if (res.status !== 200) {
+				this.props.dispatch(authActions.logout())
+				message.error('Please log in, your session may have expired')
+			}
+		}
+		else
+			message.error('Comment must be between 5 and 1000 chars')
 	}
 
 	onEnterPress = (e) => {
@@ -43,7 +52,7 @@ class Comment extends Component {
 					onPressEnter={this.onEnterPress}
 				/>
 				<div className='comment-bts'>
-					<Button type="primary" onClick={this.handleComment}>Send</Button>
+					<Button type="primary" onClick={this.handleComment.bind(this)}>Send</Button>
 				</div>
 			</div>
 		)

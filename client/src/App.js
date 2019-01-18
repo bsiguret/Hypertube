@@ -13,11 +13,13 @@ import MoviePage from './views/moviePage';
 import EmailValidationPage from './views/emailValidationPage';
 import LoginHelp from './views/loginHelpPage';
 import ResetPassPage from './views/resetPassPage';
+import AccountPage from './views/accountPage';
 
 import { PrivateRoute } from './assets/helpers/privateRoute';
 import { PublicRoute } from './assets/helpers/publicRoute';
 
 import { userActions } from './redux/actions/user';
+import { authActions } from './redux/actions/auth';
 
 class App extends Component {
   constructor(props) {
@@ -32,6 +34,7 @@ class App extends Component {
       let res = await this.props.dispatch(userActions.getUser())
       if (res.status !== 200) {
         message.error('Please log in, your session may have expired')
+        this.props.dispatch(authActions.logout())
       }
       return;
     }
@@ -95,6 +98,13 @@ class App extends Component {
             <PrivateRoute
               path='/movie/:id'
               component={MoviePage}
+              isAuth={isAuth}
+              isVerified={isVerified}
+              sideMenuFilter={false}
+            />
+            <PrivateRoute
+              path='/account'
+              component={AccountPage}
               isAuth={isAuth}
               isVerified={isVerified}
               sideMenuFilter={false}

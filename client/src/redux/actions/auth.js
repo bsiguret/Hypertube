@@ -19,6 +19,24 @@ const login = (email, password) => async dispatch => {
 	return res;
 };
 
+const oauth = (name) => async dispatch => {
+	function request() { return { type: userConstants.LOGIN_REQUEST } };
+	function success(user) { return { type: userConstants.LOGIN_SUCCESS, user } };
+	dispatch(request(name));
+	let res = await a.oauth(name)
+		.then(
+			async res => {
+				if (res.status !== 200) {
+					return res;
+				}
+				else {
+					dispatch(success(res.data))
+					return res;
+				}
+		});
+	return res;
+};
+
 const resetPassEmail = (email) => async dispatch => {
 	function request() { return { type: userConstants.RESETPASS_EMAIL_REQUEST } };
 	function success() { return { type: userConstants.RESETPASS_EMAIL_SUCCESS } };
@@ -80,8 +98,9 @@ const logout = () => {
 
 export const authActions = {
 	login,
+	oauth,
 	logout,
 	resetPassEmail,
 	resetPassToken,
-	resetPassToken2
+	resetPassToken2,
 };

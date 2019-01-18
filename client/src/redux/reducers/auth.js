@@ -3,7 +3,7 @@ import { userConstants } from '../constants';
 export function authReducer(state = {isAuth: false}, action) {
 	switch (action.type) {
 		case userConstants.LOGIN_REQUEST:
-		return state;
+			return state;
 		case userConstants.LOGIN_SUCCESS:
 			return {
 				isAuth: true,

@@ -15,6 +15,19 @@ const login = async (email, password) => {
 	return res;
 }
 
+const oauth = async (name) => {
+	let res = await axios.get(
+		`/api/auth/${name}`,
+	)
+	.then ((response) => {
+		return (response)
+	})
+	.catch((error) => {
+		return (error.response);
+	})
+	return res;
+}
+
 const logout = async () => {
 	let res = await axios.get(
 		'/api/logout'
@@ -97,8 +110,9 @@ const resetPassToken2 = async (username, token, npassword, cpassword) => {
 
 export default {
 	login,
+	oauth,
 	logout,
 	resetPassEmail,
 	resetPassToken,
-	resetPassToken2
+	resetPassToken2,
 }

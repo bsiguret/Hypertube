@@ -52,6 +52,21 @@ const verifEmail = async (username, token) => {
 	return res;
 }
 
+const resendMail = async (email) => {
+	let res = await axios.post(
+		`/api/emailvalidation/`, {
+			email
+		}
+	)
+	.then ((response) => {
+		return (response)
+	})
+	.catch((error) => {
+		return (error.response);
+	})
+	return res;
+}
+
 // const savePhoto = async (photo, defineAs, token) => {
 // 	let formData = new FormData();
 // 	formData.append('photo', photo.toString())
@@ -77,6 +92,7 @@ const verifEmail = async (username, token) => {
 export default {
 	signup,
 	getUser,
-	verifEmail
+	verifEmail,
+	resendMail
 }
 

@@ -15,59 +15,78 @@ const initialState = {
 export function movieReducer(state = initialState, action) {
 	switch(action.type) {
 		case userConstants.GENRE_REQUEST:
-		return Object.assign({}, state, {
-			...state,
-		});
+			return Object.assign({}, state, {
+				...state,
+			});
 		case userConstants.GENRE_SUCCESS:
-		return Object.assign({}, state, {
-			...action.genres
-		});
+			return Object.assign({}, state, {
+				...action.genres
+			});
 		case userConstants.INIT_MOVIES_REQUEST:
-		return Object.assign({}, state, {
-			...state,
-			movies: []
-		})
+			return Object.assign({}, state, {
+				...state,
+				movies: []
+			})
 		case userConstants.INIT_MOVIES_SUCCESS:
-		return Object.assign({}, state, {
-			...state,
-			...action.movies
-		})
+			return Object.assign({}, state, {
+				...state,
+				...action.movies
+			})
 		case userConstants.MOVIES_MORE_REQUEST:
-		return Object.assign({}, state, {
-			...state,
-		})
+			return Object.assign({}, state, {
+				...state,
+			})
 		case userConstants.MOVIES_MORE_SUCCESS:
-		return Object.assign({}, state, {
-			...state,
-			movies: state.movies.concat(action.movies)
-		})
+			return Object.assign({}, state, {
+				...state,
+				movies: state.movies.concat(action.movies)
+			})
 		case userConstants.MOVIES_REQUEST:
-		return Object.assign({}, state, {
-			...state,
-		})
+			return Object.assign({}, state, {
+				...state,
+			})
 		case userConstants.MOVIES_SUCCESS:
-		return Object.assign({}, state, {
-			...state,
-			movies: [...action.movies]
-		})
+			return Object.assign({}, state, {
+				...state,
+				movies: [...action.movies]
+			})
 		case userConstants.MOVIE_INFO_REQUEST:
-		return Object.assign({}, state, {
-			...state,
-		})
+			return Object.assign({}, state, {
+				...state,
+			})
 		case userConstants.MOVIE_INFO_SUCCESS:
-		return Object.assign({}, state, {
-			...state,
-			movie: action.movie
-		})
+			return Object.assign({}, state, {
+				...state,
+				movie: action.movie
+			})
 		case userConstants.MOVIES_FILTER_SUCCESS:
-		console.log(action)
-		return Object.assign({}, state, {
-			...state,
-			filter: {
-				...state.filter,
-				...action.filter.filter
-			}
-		})
+			console.log(action)
+			return Object.assign({}, state, {
+				...state,
+				filter: {
+					...state.filter,
+					...action.filter.filter
+				}
+			})
+		case userConstants.GET_COMMENT_REQUEST:
+			return Object.assign({}, state, {
+				...state,
+				comments: {}
+			})
+		case userConstants.GET_COMMENT_SUCCESS:
+			return Object.assign({}, state, {
+				...state,
+				comments: action.comments
+			})
+		case userConstants.POST_COMMENT_SUCCESS:
+			return state
+		case userConstants.POST_COMMENT_SUCCESS:
+			return Object.assign({}, state, {
+				...state,
+				comments: {
+					...action.comments
+				}
+			})
 		case userConstants.LOGOUT:
 			return initialState;
 		default:
