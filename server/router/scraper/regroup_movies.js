@@ -12,7 +12,7 @@ var regroup_movies = async function () {
 	if (yts_content.slice(-1) == ",")
 		yts_content = yts_content.substr(0, yts_content.length - 1) + "]";
 	var content = JSON.parse(yts_content).concat(JSON.parse(popcorn_content));
-	
+
 	// Variable qui verifie si un film est deja stocké
 	var movies = [];
 
@@ -28,7 +28,10 @@ var regroup_movies = async function () {
 				await axios.get(content[i].movie[11]);
 				fs.appendFileSync(movies_file, JSON.stringify(content[i]) + ",", 'utf8');
                 movies.push(content[i].movie[0]);
-                console.log(i);
+                if (i == content.length - 1) {
+					console.log("Regroup finish");
+					return ;
+				}
 			}
 		} catch (err) {
 

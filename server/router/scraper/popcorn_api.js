@@ -23,7 +23,7 @@ async function get_all_movies(page, total_page) {
 				throttle(async function() {
 					try {
 						// Recupere les détails du films
-						const omdb = await axios.get('http://www.omdbapi.com/?apikey=' + '2a86d74e' + '&plot=full&i=' + movie.imdb_id);
+						const omdb = await axios.get('http://www.omdbapi.com/?apikey=' + '988a398b' + '&plot=full&i=' + movie.imdb_id);
 
 						// Sauvegarder les données dans des variables
 						data['movie'] = [
@@ -74,8 +74,9 @@ async function get_all_movies(page, total_page) {
 						}
 
 						// Petit indice pour dire que c'est bientot fini
-						if (page == total_page)
-							console.log("Soon finished! " + i);
+						if (page == total_page) {
+							console.log("Soon finish");
+						}
 
 						// Apres chaque données des films on ajoute un ',' pour les séparés
 						// A la fin du fichier il faut changer le ',' en ']' pour qu'on puisse lire correctement les données
@@ -97,14 +98,14 @@ async function get_all_movies(page, total_page) {
  var get_popcorn_movies = async function () {
 	try {
 		// On recupere le nombre totals des pages
-		// const res = await axios.get('https://tv-v2.api-fetch.website/movies/');
-		// const number_page = res.data.length;
+		const res = await axios.get('https://tv-v2.api-fetch.website/movies/');
+		const number_page = res.data.length;
 
 		// On ecrit au debut du fichier un '[' pour lire correctement les données en json
 		fs.writeFileSync(filename, "[");
 		
 		// Recupere tous les films en recursive
-		get_all_movies(1, 1);
+		get_all_movies(1, number_page);
 	} catch(err) {
 		console.log(err);
 	}
