@@ -164,10 +164,11 @@ function ft_magnet(url)
   return (url);
 }
 
-router.get('/:id', passport.authenticate('jwt', {session: false}), (req, res) =>
+router.get('/:id/:qualite', passport.authenticate('jwt', {session: false}), (req, res) =>
 {
   var id = req.params.id;
-  mydb.connection_db.query(sql.get_movie_torrent, [[id]], function(err, rows)
+  var qualite = req.params.qualite;
+  mydb.connection_db.query(sql.get_movie_torrent, [id, qualite], function(err, rows)
   {
     if (err) {console.log(err); return;}
     ft_subtitle(id);

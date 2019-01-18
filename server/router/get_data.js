@@ -89,7 +89,7 @@ router.get('/movie/:movie_id', passport.authenticate('jwt', {session: false}), (
                     res.status(403).json({msg: "Error get info"});
                 } else {
                     let genres = rows1.length ? rows1 : ["Unspecified"];
-                    db.connection_db.query(sql.get_movie_torrent, [movie_id], (err2, rows2) => {
+                    db.connection_db.query(sql.get_movie_torrent_info, [movie_id], (err2, rows2) => {
                         if (err2) {
                             res.status(403).json({msg: "Error get info"});
                         } else {
