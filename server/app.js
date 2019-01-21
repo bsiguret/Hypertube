@@ -6,8 +6,6 @@ const passport = require('passport');
 const cookieParser = require('cookie-parser');
 
 require('dotenv').config();
-app.set('views', 'public/views');
-app.set('view engine', 'ejs');
 
 app.use((req, res, next) => {
 	res.setHeader('Access-Control-Allow-Origin',  '*');
@@ -45,7 +43,6 @@ app.use('/api/checklog', require('./router/checklog'));
 app.use('/api/comments', require('./router/comments'));
 app.use('/api/resetpassword', require('./router/resetpassword'));
 app.use('/api/emailvalidation', require('./router/emailvalidation'));
-
 app.use('/tools', express.static('./tools'));
 app.use('/play', require('./router/play'));
 app.use('/tmp', express.static('tmp'))

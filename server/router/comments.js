@@ -13,8 +13,8 @@ router.get('/:movie_id', passport.authenticate('jwt', {session: false}), (req, r
         } else if (rows.length > 0) {
             var data = [];
             for (let i = 0; i < rows.length; i++) {
-                userQuery.findOne({id: rows[0].user_id}).then(user => {
-                    db.connection_db.query(sql.get_comment, [rows[0].comment_id], (err1, rows1) => {
+                userQuery.findOne({id: rows[i].user_id}).then(user => {
+                    db.connection_db.query(sql.get_comment, [rows[i].comment_id], (err1, rows1) => {
                         if (err1) {
                             res.status(403).json({msg: "Error get comments"});
                         } else {
@@ -43,8 +43,8 @@ router.get('/:movie_id', passport.authenticate('jwt', {session: false}), (req, r
 
 router.post('/', passport.authenticate('jwt', {session: false}), (req, res) => {
     var user_id = jwt.decode(req.cookies.token).id;
-    if (req.body.comment.length < 1) {
-        res.status(403).json({msg: "Error empty comment"});
+    if (req.body.comment.length < 5) {
+        res.status(403).json({msg: "Error comment to short"});
     } else if (req.body.comment.length > 1000) {
         res.status(403).json({msg: "Error comment to large"});
     } else {

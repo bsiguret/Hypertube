@@ -9,7 +9,6 @@ router.get('/:id', passport.authenticate('jwt', {session: false}), (req, res) =>
             res.status(403).json({msg: "No user"});
         } else {
             let data = {
-                id: user.id,
                 username: user.username,
                 lastname: user.lastname,
                 firstname: user.firstname,

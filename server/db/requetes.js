@@ -113,7 +113,8 @@ const add_movie_torrent = "INSERT INTO torrent (movie_id, url, quality, seeds, p
 const check_movie_exists = "SELECT * FROM movies WHERE movie_id=?";
 const get_movie = "SELECT *, ifNULL(rating, 'N/A') as rating FROM movies WHERE movie_id=?";
 const get_movie_genre = "SELECT genre FROM genre WHERE movie_id=?";
-const get_movie_torrent = "SELECT quality, seeds, peers, size_bytes FROM torrent WHERE movie_id=?";
+const get_movie_torrent_info = "SELECT quality, seeds, peers, size_bytes FROM torrent WHERE movie_id=?";
+const get_movie_torrent = "SELECT * FROM torrent WHERE movie_id=? AND quality=?";
 const add_movie_file = "INSERT INTO file (movie_id, quality, path) VALUES ?";
 const add_movie_subtitle = "INSERT INTO subtitle (movie_id, language, path) VALUES ?";
 const get_movie_file = "SELECT path FROM file WHERE movie_id=? AND quality=?";
@@ -125,6 +126,7 @@ const add_comment_movie_user = "INSERT INTO comments_movies_users (movie_id, com
 const get_comment_user_id = "SELECT * FROM comments_movies_users WHERE movie_id=?";
 const get_comment = "SELECT * FROM comments WHERE id=?";
 const insert_user = "INSERT INTO users (lastname,firstname,username,password,email,profile) VALUES(?)";
+const update_profile = "UPDATE users SET profile=? WHERE id=?";
 const get_user = "SELECT * FROM users WHERE id=? || username=? || email=?";
 const add_movie_view = "INSERT INTO viewed (uid, movie_id) VALUES (?)";
 const get_movie_view = "SELECT * FROM viewed WHERE uid=? AND movie_id=?";
@@ -148,6 +150,7 @@ module.exports = {
 	get_movie: get_movie,
 	get_movie_genre: get_movie_genre,
 	get_movie_torrent: get_movie_torrent,
+	get_movie_torrent_info: get_movie_torrent_info,
 	add_movie_genre: add_movie_genre,
 	add_movie_torrent: add_movie_torrent,
 	check_movie_exists: check_movie_exists,
@@ -158,6 +161,7 @@ module.exports = {
 	get_all_genre: get_all_genre,
 	get_movie_status: get_movie_status,
 	insert_user: insert_user,
+	update_profile: update_profile,
 	get_user: get_user,
 	add_comment: add_comment,
 	add_comment_movie_user: add_comment_movie_user,

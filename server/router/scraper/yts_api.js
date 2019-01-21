@@ -11,7 +11,7 @@ async function get_all_movies(page, total_page) {
 		return ;
 	try {
 		// Recupere tous les films de cette page
-		const res = await axios.get('https://yts.am/api/v2/list_movies.json?limit=50&sort_by=date&page=' + page);
+		const res = await axios.get('https://yts.am/api/v2/list_movies.json?limit=50&sort_by=rating&page=' + page);
 		
 		// Parcourir tous les films
 		for (let i = 0; i < res.data.data.movies.length; i++) {
@@ -24,7 +24,7 @@ async function get_all_movies(page, total_page) {
 				throttle(async function() {
 					try {
 						// Recupere les détails du films
-						const omdb = await axios.get('http://www.omdbapi.com/?apikey=' + '2a86d74e' + '&plot=full&i=' + movie.imdb_code);
+						const omdb = await axios.get('http://www.omdbapi.com/?apikey=' + '988a398b' + '&plot=full&i=' + movie.imdb_code);
 
 						// Sauvegarder les données dans des variables
 						data['movie'] = [
@@ -62,9 +62,11 @@ async function get_all_movies(page, total_page) {
 								]
 							});
 						
-						// Petit indice pour dire que c'est bientot fini
-						if (page == total_page)
-							console.log("Soon finished! " + i);
+						// Petit indice pour dire que c'est fini
+						if (page == total_page && i == res.data.data.movies.length - 1) {
+							console.log("Get movie finish");
+							return ;
+						}
 
 						// Apres chaque données des films on ajoute un ',' pour les séparés
 						// A la fin du fichier il faut changer le ',' en ']' pour qu'on puisse lire correctement les données
@@ -87,14 +89,14 @@ async function get_all_movies(page, total_page) {
 var get_yts_movies = async function () {
 	try {
 		// Recupere les données pour compter le nombre total des pages
-        // const res = await axios.get('https://yts.am/api/v2/list_movies.json?limit=1&sort_by=rating');
-		// const number_page = parseInt(res.data.data.movie_count / 50) + 1
+        const res = await axios.get('https://yts.am/api/v2/list_movies.json?limit=1&sort_by=rating');
+		const number_page = parseInt(res.data.data.movie_count / 50) + 1
 		
 		// On ecrit au debut du fichier un '[' pour lire correctement les données en json
-		// fs.writeFileSync(filename, "[");
+		fs.writeFileSync(filename, "[");
 
 		// Recupere tous les films en recursive
-		get_all_movies(1, 10);
+		get_all_movies(1, number_page);
 	} catch(err) {
 		console.log(err);
     }
