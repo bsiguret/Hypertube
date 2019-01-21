@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { Row, Col, Layout, Icon, Divider, Button, Avatar } from 'antd';
 
-import { authActions } from '../redux/actions/auth';
+// import { authActions } from '../redux/actions/auth';
 import { connect } from 'react-redux';
+import { history } from '../assets/helpers/history'
 
 import SignForm from '../components/signForm';
 import LoginForm from '../components/loginForm';
@@ -20,8 +21,8 @@ class IndexPage extends Component {
 	handleChange = () => this.setState({ login: !this.state.login })
 
 	handleOAuth = async (name) => {
-		let res = await this.props.dispatch(authActions.oauth(name))
-		console.log(res)
+		console.log(name)
+		window.location = `localhost:3000/api/auth/${name}`
 	}
 
   render() {
