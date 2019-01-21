@@ -89,12 +89,12 @@ passport.use(new GitHubStrategy({
         callbackURL: "http://localhost:3000/api/auth/github/callback"
     },
     function(accessToken, refreshToken, profile, cb) {
-        let githubid = profile.id;
+        let githubid = profile._json.id;
         let lastname = "Doe";
         let firstname = profile.displayName;
         let username = profile.username;
-        let email = profile.emails[0].value;
-        let photo = profile.photos[0].value;
+        let email = profile._json.email;
+        let photo = profile._json.avatar_url;
         userQuery.findOne({githubid: githubid}).then(userId => {
             if (!userId) {
                 userQuery.findOne({email: email}).then(async userEmail => {
