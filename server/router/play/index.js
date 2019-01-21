@@ -19,29 +19,6 @@ var torrentStream = require('torrent-stream');//
 var engine;
 var command = {};
 
-const ft_slicing = (path, to, id) =>
-{
-  console.log('slicing parame: ', path, to);
-  command[id] = ffmpeg(path, {timeout: 432000})
-  .addOptions([
-    '-f hls',
-    '-deadline realtime',
-    '-preset ultrafast', // ultrafast, superfast, veryfast, faster, fast, medium, slow, slower, veryslow, placebo
-    '-start_number 0',// start the first .ts segment at index 0
-    '-hls_time 10',// 10 second segment duration
-    '-hls_list_size 0',
-  ])
-  .output(to)
-  .on('progress', function(progress)
-  {
-    console.log('progress', path);
-  })
-  .on('end', () => 
-  {
-    console.log('slicing completed ', path);
-  });
-}
-
 function ft_url_mkdir(url)
 {
   var tab_url = url.split('/');
@@ -97,24 +74,44 @@ function ft_subtitle(id)
   });
 };
 
-function ft_engine (id)
+const ft_slicing = (path_in, path_out, id, qualite) =>
+{
+  console.log('slicing parame: ', path_in, path_out);
+  command[id][qualite] = ffmpeg(path_in, {timeout: 432000})
+  .addOptions([
+    '-f hls',
+    '-deadline realtime',
+    '-preset ultrafast', // ultrafast, superfast, veryfast, faster, fast, medium, slow, slower, veryslow, placebo
+    '-start_number 0',// start the first .ts segment at index 0
+    '-hls_time 10',// 10 second segment duration
+    '-hls_list_size 0',
+  ])
+  .output(path_out)
+  .on('progress', function(progress)
+  {
+    console.log('progress', path_in);
+  })
+  .on('end', () => 
+  {
+    console.log('slicing completed ', path_in);
+  });
+}
+
+function ft_engine (id, qualite)
 {
   let status = 0;
 
   engine.on('ready', function()
   {
     console.log('engine ready ---------------');
-    if (command[id])
-    {
-      command[id].kill('SIGCONT');
-    }
+    ft_sigall(id, qualite);
     engine.files.forEach(function(file)
     {
       var tmp_tab = file.name.split('.');
       var format = tmp_tab[tmp_tab.length - 1];
       if (format == 'mp4' || format == 'mkv')
       {
-        movie_path = './tmp/' + id + '/' + file.path;
+        movie_path = './tmp/' + id + '/' + qualite + '/' + file.path;
         console.log('movie_path: ', movie_path);
         file.createReadStream({start: 0, end: 15});
         file.createReadStream({start: 16});
@@ -136,9 +133,9 @@ function ft_engine (id)
           if (err == null)
           {
             console.log('slicing -------------------');
-            var out = './tmp/' + id + '/out.m3u8';
-            ft_slicing(movie_path, out, id);
-            command[id].run();
+            var out = './tmp/' + id + '/' + qualite + '/out.m3u8';
+            ft_slicing(movie_path, out, id, qualite);
+            command[id][qualite].run();
           }
         });
       }
@@ -168,6 +165,7 @@ router.get('/:id/:qualite', passport.authenticate('jwt', {session: false}), (req
 {
   var id = req.params.id;
   var qualite = req.params.qualite;
+  console.log('id:' + id + ', qualite:' + qualite);
   mydb.connection_db.query(sql.get_movie_torrent, [id, qualite], function(err, rows)
   {
     if (err) {console.log(err); return;}
@@ -179,14 +177,14 @@ router.get('/:id/:qualite', passport.authenticate('jwt', {session: false}), (req
       connections: 20,
       uploads: 10,
       tmp: './tmp/',
-      path: './tmp/' + id,
+      path: './tmp/' + id + '/' + qualite,
       verif: true,
       dht: true,
       tracker: true
     }
 
     engine = torrentStream(magnet, options);
-    ft_engine(id);
+    ft_engine(id, qualite);
     res.send("OK");
     // res.render('./pages/play',
     // {
@@ -197,7 +195,7 @@ router.get('/:id/:qualite', passport.authenticate('jwt', {session: false}), (req
 
 function ft_objlen(obj)
 {
-  var len = 0;
+  let len = 0;
   for (i in obj)
   {
     len++;
@@ -205,16 +203,38 @@ function ft_objlen(obj)
   return (len);
 }
 
+function ft_sigall(id, qualite)
+{
+  if (command)
+  {
+    console.log('obj len: ', ft_objlen(command));
+    for (i in command)
+    {
+      console.log(i);
+      for (j in command[i])
+      {
+        if (i == id && j == qualite)
+          command[i][j].kill('SIGCONT');
+        else
+          command[i][j].kill('SIGSTOP');
+      }
+    }
+  }
+  else
+    console.log('no obj sigall');
+}
+
 router.post('/', passport.authenticate('jwt', {session: false}), (req, res) =>
 {
   var id = req.body.id;
+  var qualite = req.body.qualite;
   console.log(req.body.action);
 
   if (req.body.action === 'get_movie')
   {
-    if (fs.existsSync(__dirname + '/../../tmp/' + req.body.id + '/out.m3u8')) 
+    if (fs.existsSync(__dirname + '/../../tmp/' + id + '/' + qualite + '/out.m3u8')) 
     {
-      res.send('./tmp/' + req.body.id + '/out.m3u8');
+      res.send('./tmp/' + id + '/' + qualite + '/out.m3u8');
     }
     else
     {
@@ -237,18 +257,6 @@ router.post('/', passport.authenticate('jwt', {session: false}), (req, res) =>
     });
   }
 
-  // if (req.body['action'] == 'index')
-  // {
-  //   if (command[id])
-  //     command[id].kill('SIGSTOP');
-  //   res.send('OK');
-  // }
-
-  // if (req.body['action'] == 'engine')
-  // {
-  //   engine.destroy();
-  // }
-
   if (req.body.action === 'sigstop')
   {
     command[id].kill('SIGSTOP');
@@ -263,16 +271,7 @@ router.post('/', passport.authenticate('jwt', {session: false}), (req, res) =>
 
   if (req.body.action === 'sigall')
   {
-    if (command)
-    {
-
-      console.log('obj len: ', ft_objlen(command));
-      for (i in command)
-      {
-        console.log(i);
-        command[i].kill('SIGSTOP');
-      }
-    }
+    ft_sigall('all', 'all');
     res.send('OK');
   }
 });
