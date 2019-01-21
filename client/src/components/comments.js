@@ -33,3 +33,18 @@ class Comments extends Component {
 }
 
 export default Comments;
+
+// {/* <List.Item
+// key={key}
+// >
+// <List.Item.Meta
+// 	avatar={
+// 		<Avatar size={64} shape='square' src={`http://localhost:3000/photo/${checkpoint.pic_path}`} />
+// 	}
+// 	title={<div><p>{checkpoint.controlType}</p><p>{checkpoint.checkpoint}</p></div>}
+// 	description={checkpoint.defautTexte}
+// />
+// <div>
+// 	preconisation: {checkpoint.preconisation}
+// </div>
+// </List.Item> */}
