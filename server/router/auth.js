@@ -12,6 +12,7 @@ router.get('/42/callback',
     function(req, res) {
         const user = req.session.passport.user;
         if (user.err) {
+            res.cookie('err', "Please check your email!", { maxAge: 60 * 1000, httpOnly: false});
             res.redirect('http://localhost:3001');
         }
         else {
@@ -23,15 +24,16 @@ router.get('/42/callback',
     }
 );
 
-// Router pour passport facebook
-router.get('/facebook', passport.authenticate('facebook', { scope: ['email', 'public_profile'] }));
-router.get('/facebook/callback',
-    passport.authenticate('facebook', {
+// Router pour passport github
+router.get('/github', passport.authenticate('github'));
+router.get('/github/callback',
+    passport.authenticate('github', {
         failureRedirect: 'http://localhost:3001'
     }),
     function(req, res) {
         const user = req.session.passport.user;
         if (user.err) {
+            res.cookie('err', "Please check your email!", { maxAge: 60 * 1000, httpOnly: false});
             res.redirect('http://localhost:3001');
         }
         else {
@@ -52,6 +54,7 @@ router.get('/google/callback',
     function(req, res) {
         const user = req.session.passport.user;
         if (user.err) {
+            res.cookie('err', "Please check your email!", { maxAge: 60 * 1000, httpOnly: false});
             res.redirect('http://localhost:3001');
         }
         else {

@@ -5,13 +5,13 @@ const findOne = (userObj) => {
 	const username = userObj.username ? userObj.username : null
 	const email = userObj.email ? userObj.email : null
 	const id42 = userObj.id42 ? userObj.id42 : null
-	const facebookid = userObj.facebookid ? userObj.facebookid : null
+	const githubid = userObj.githubid ? userObj.githubid : null
 	const googleid = userObj.googleid ? userObj.googleid : null
 
-	const sql = 'SELECT * FROM users WHERE id = ? OR username = ? OR email = ? OR id42 = ? OR facebookid = ? OR googleid = ?'
+	const sql = 'SELECT * FROM users WHERE id = ? OR username = ? OR email = ? OR id42 = ? OR githubid = ? OR googleid = ?'
 
 	return new Promise((resolve, reject) => {
-		connection.query(sql, [id, username, email, id42, facebookid, googleid], async (err, user) => {
+		connection.query(sql, [id, username, email, id42, githubid, googleid], async (err, user) => {
 			if (err) {
 				reject(err)
 			}
@@ -25,7 +25,7 @@ const findOne = (userObj) => {
 }
 
 const findOrCreate = async (userObj) => {
-	const sql = 'INSERT INTO users (lastname,firstname,username,email,password,profile,isVerified,id42,googleid,facebookid) VALUES(?)'
+	const sql = 'INSERT INTO users (lastname,firstname,username,email,password,profile,isVerified,id42,googleid,githubid) VALUES(?)'
 	const userData = [
 		userObj.lastname,
 		userObj.firstname, 
@@ -36,7 +36,7 @@ const findOrCreate = async (userObj) => {
 		1,
 		userObj.id42 ? userObj.id42 : null,
 		userObj.googleid ? userObj.googleid : null,
-		userObj.facebookid ? userObj.facebookid : null
+		userObj.githubid ? userObj.githubid : null
 	]
 	let user = await findOne(userObj)
 	if (user[0])
@@ -51,7 +51,7 @@ const findOrCreate = async (userObj) => {
 }
 
 const createOne = async (userObj) => {
-	const sql = 'INSERT INTO users (lastname, firstname, username, email, password, profile, isVerified, id42, googleid, facebookid) VALUES(?)';
+	const sql = 'INSERT INTO users (lastname, firstname, username, email, password, profile, isVerified, id42, googleid, githubid) VALUES(?)';
 	const userData = [
 		userObj.lastname,
 		userObj.firstname, 
@@ -62,7 +62,7 @@ const createOne = async (userObj) => {
 		1,
 		userObj.id42 ? userObj.id42 : null,
 		userObj.googleid ? userObj.googleid : null,
-		userObj.facebookid ? userObj.facebookid : null
+		userObj.githubid ? userObj.githubid : null
 	];
 	return new Promise((resolve, reject) => {
 		return connection.query(sql, [userData], (err, user) => {

@@ -1,6 +1,6 @@
 const passport = require('passport');
 var FortyTwoStrategy = require('passport-42').Strategy;
-var FacebookStrategy = require('passport-facebook').Strategy;
+var GitHubStrategy = require('passport-github').Strategy;
 var GoogleStrategy = require('passport-google-oauth20').Strategy;
 const passportJWT = require('passport-jwt');
 const JWTStrategy   = passportJWT.Strategy;
@@ -83,20 +83,19 @@ passport.use(new FortyTwoStrategy({
     }
 ));
 
-passport.use(new FacebookStrategy({
-    clientID: process.env.PASSPORT_FACEBOOK_APP_ID,
-    clientSecret: process.env.PASSPORT_FACEBOOK_APP_SECRET,
-    callbackURL: "http://localhost:3000/api/auth/facebook/callback",
-    profileFields: ['id', 'first_name', 'last_name', 'picture.type(large)', 'email']
+passport.use(new GitHubStrategy({
+        clientID: process.env.PASSPORT_GITHUB_CLIENT_ID,
+        clientSecret: process.env.PASSPORT_GITHUB_CLIENT_SECRET,
+        callbackURL: "http://localhost:3000/api/auth/github/callback"
     },
     function(accessToken, refreshToken, profile, cb) {
-        let facebookid = profile._json.id;
-        let lastname = profile._json.last_name;
-        let firstname = profile._json.first_name;
-        let username = lastname.toLowerCase();
-        let email = profile._json.email;
-        let photo = profile._json.picture.data.url;
-        userQuery.findOne({facebookid: facebookid}).then(userId => {
+        let githubid = profile.id;
+        let lastname = "Doe";
+        let firstname = profile.displayName;
+        let username = profile.username;
+        let email = profile.emails[0].value;
+        let photo = profile.photos[0].value;
+        userQuery.findOne({githubid: githubid}).then(userId => {
             if (!userId) {
                 userQuery.findOne({email: email}).then(async userEmail => {
                     if (userEmail) {
@@ -108,8 +107,8 @@ passport.use(new FacebookStrategy({
                                 break ;
                             username += Math.floor(Math.random() * 1001);
                         }
-                        userQuery.createOne({lastname: lastname, firstname: firstname, username: username, email: email, profile: photo, facebookid: facebookid}).then(data => {
-                            userQuery.findOne({facebookid: facebookid}).then(userInfo => {
+                        userQuery.createOne({lastname: lastname, firstname: firstname, username: username, email: email, profile: photo, githubid: githubid}).then(data => {
+                            userQuery.findOne({githubid: githubid}).then(userInfo => {
                                 return cb(null, userInfo);
                             });
                         });
@@ -132,7 +131,7 @@ passport.use(new GoogleStrategy({
         let googleid = profile._json.id;
         let lastname = profile._json.name.familyName;
         let firstname = profile._json.name.givenName;
-        let username = lastname.toLowerCase();
+        let username = lastname ? lastname.toLowerCase() : firstname.toLowerCase();
         let email = profile._json.emails[0].value;
         let photo = profile._json.image.url.slice(0, -2) + "200";
         userQuery.findOne({googleid: googleid}).then(userId => {
