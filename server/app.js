@@ -31,6 +31,7 @@ app.use(cookieParser());
 app.use('/api/photo', express.static('./public'));
 
 app.use('/api/user', require('./router/user'));
+app.use('/api/profile', require('./router/settings'));
 app.use('/api/create_base', require('./router/create_base'));
 app.use('/api/drop_base', require('./router/drop_base'));
 app.use('/api/save_movies', require('./router/save_movies'));

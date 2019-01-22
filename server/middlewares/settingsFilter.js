@@ -1,37 +1,45 @@
 'use strict'
 
+const multer = require('multer');
 const bcrypt = require('bcryptjs');
+
 const db = require('../db/db').connection_db;
 const sql = require('../db/requetes');
+const {purifyString, isValidString, isValidEmail, isValidPassword, isValidPhoto, isValidLang} = require('../tools/utils');
 
-const multer = require('multer');
 const fields = [
-    {name: 'username', maxCount:1},
     {name: 'email', maxCount:1},
+    {name: 'username', maxCount:1},
     {name: 'firstname', maxCount:1},
     {name: 'lastname', maxCount:1},
+    {name: 'language', maxCount: 1},
     {name: 'password', maxCount:1},
     {name: 'cpassword', maxCount:1},
     {name: 'photo', maxCount:1},
 ];
 const upload = multer({limits: { fieldSize: 2 * 1024 * 1024}}).array(fields);
-const {purifyString, isValidString, isValidEmail, isValidPassword, isValidPhoto} = require('../tools/utils');
+const settingsFilter = (req, res, next) => {
 
-const signupFilter = (req, res, next) => {
-    
     upload(req, res, (err) => {
         req.body.error = {} 
 
         if (err) {
             req.body.error[err.field] = err.field === "photo" ? "Photo too large, 2MB max !" : err.message
-            return res.status(403).json(req.body.error)
+            return res.status(403).json(req.body.error);
         }
-        
+
         db.query(sql.get_user, [null, req.body.username, null], (_err, usernameExist) => {
             db.query(sql.get_user, [null, null, req.body.email], async (err_, emailExist) => {
                 if (_err || err_) {
                     res.status(403).json("ERR_MIDDLW_SIGNUP")
                 } else {
+                    let lastname = req.body.lastname;
+                    let firstname = req.body.firstname;
+                    let language = req.body.language;
+                    // let email = req.body.email;
+                    // let username = req.body.username;
+                    let password = req.body.password;
+                    let cpassword = req.body.cpassword;
                     if (!isValidPhoto(req.body.photo)) {
                         req.body.error.photo = "Image must be jpg/jpeg/png format"
                     } else {
@@ -42,19 +50,19 @@ const signupFilter = (req, res, next) => {
                             req.body.photo = content[1]
                         }
                     }
-
-                    if (!isValidString(req.body.lastname)) {
+    
+                    if (lastname == undefined || !lastname || !isValidString(lastname)) {
                         req.body.error.lastname = "Lastname must contains only letters, 2-20 characters"
                     } else {
-                        req.body.lastname = purifyString(req.body.lastname)
+                        req.body.lastname = purifyString(lastname)
                     }
-
-                    if (!isValidString(req.body.firstname)) {
+    
+                    if (firstname == undefined || !firstname || !isValidString(firstname)) {
                         req.body.error.firstname = "Firstname must contains only letters, 2-20 characters"
                     } else {
-                        req.body.firstname = purifyString(req.body.firstname)
+                        req.body.firstname = purifyString(firstname)
                     }
-
+    
                     if (usernameExist[0] && usernameExist[0].username) {
                         req.body.error.username = "Username unavailable"
                     } else {
@@ -64,19 +72,25 @@ const signupFilter = (req, res, next) => {
                             req.body.username = purifyString(req.body.username)
                         }
                     }
-
-                    if (req.body.password === req.body.cpassword) {
-                        if (!isValidPassword(req.body.password)) {
+    
+                    if (language == undefined || !language || !isValidLang(purifyString(language))) {
+                        req.body.error.language = "Language value must be 'en' or 'fr'"
+                    } else {
+                        req.body.language = purifyString(language)
+                    }
+    
+                    if (password && cpassword && req.body.password === req.body.cpassword) {
+                        if (!isValidPassword(password)) {
                             req.body.error.password = "Password must contains at least 6 characters, one uppercase and lowercase letter and one digit, only letters and digits are allowed"
                         } else {
-                            req.body.password = purifyString(req.body.password, false)
-                            req.body.password = await bcrypt.hash(req.body.password, 10)
+                            req.body.password = purifyString(password, false)
+                            req.body.password = await bcrypt.hash(password, 10)
                             delete req.body.cpassword
                         }
                     } else {
                         req.body.error.password = "Password does not match with password confirmation"
                     }
-
+    
                     if (emailExist[0] && emailExist[0].email) {
                         req.body.error.email = "Email unavailable"    
                     } else {
@@ -86,7 +100,7 @@ const signupFilter = (req, res, next) => {
                             req.body.email = purifyString(req.body.email)
                         }
                     }
-
+    
                     if (Object.values(req.body.error).length) {
                         res.status(403).json(req.body.error)
                     } else {
@@ -96,8 +110,7 @@ const signupFilter = (req, res, next) => {
                 }
             });    
         });
-    });
-    
+    });    
 };
 
-module.exports = signupFilter;
+module.exports = settingsFilter;
