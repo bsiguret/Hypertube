@@ -24,10 +24,15 @@ const isValidPhoto = (photo) => {
     return (photo.match(/^data:image\/(?:jpeg|jpg|png)/) ? true : false)
 }
 
+const isValidLang = (language) => {
+    return (language.match(/^(en|fr)$/) ? true : false)
+}
+
 module.exports = {
     purifyString,
     isValidString,
     isValidPassword,
     isValidEmail,
-    isValidPhoto
+    isValidPhoto,
+    isValidLang
 }
