@@ -9,7 +9,7 @@ const create_table_users = `CREATE TABLE IF NOT EXISTS users
 		firstname VARCHAR(30) NOT NULL,
 		username VARCHAR(30) NOT NULL UNIQUE,
 		password VARCHAR(100),
-		email VARCHAR(100) NOT NULL UNIQUE,
+		email VARCHAR(100) UNIQUE,
 		language VARCHAR(2) NOT NULL DEFAULT 'en',
 		profile TEXT NOT NULL,
 		token VARCHAR(100) DEFAULT NULL,
