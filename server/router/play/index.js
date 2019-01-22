@@ -19,6 +19,12 @@ var torrentStream = require('torrent-stream');//
 var engine;
 var command = {};
 
+function ft_json(id)
+{
+  if (!command[id])
+    command[id] = {};
+}
+
 function ft_url_mkdir(url)
 {
   var tab_url = url.split('/');
@@ -74,14 +80,15 @@ function ft_subtitle(id)
   });
 };
 
-const ft_slicing = (path_in, path_out, id, qualite) =>
+function ft_slicing (path_in, path_out, id, qualite)
 {
   console.log('slicing parame: ', path_in, path_out);
+  ft_json(id);
   command[id][qualite] = ffmpeg(path_in, {timeout: 432000})
   .addOptions([
     '-f hls',
     '-deadline realtime',
-    '-preset ultrafast', // ultrafast, superfast, veryfast, faster, fast, medium, slow, slower, veryslow, placebo
+    // '-preset ultrafast', // ultrafast, superfast, veryfast, faster, fast, medium, slow, slower, veryslow, placebo
     '-start_number 0',// start the first .ts segment at index 0
     '-hls_time 10',// 10 second segment duration
     '-hls_list_size 0',
@@ -93,7 +100,7 @@ const ft_slicing = (path_in, path_out, id, qualite) =>
   })
   .on('end', () => 
   {
-    console.log('slicing completed ', path_in);
+    console.log("slicing completed:\n" + path_in + "\n\n");
   });
 }
 
@@ -210,9 +217,9 @@ function ft_sigall(id, qualite)
     console.log('obj len: ', ft_objlen(command));
     for (i in command)
     {
-      console.log(i);
       for (j in command[i])
       {
+        console.log("sigall:\n" + "id: " + i + " qualite: " + j);
         if (i == id && j == qualite)
           command[i][j].kill('SIGCONT');
         else
@@ -232,13 +239,17 @@ router.post('/', passport.authenticate('jwt', {session: false}), (req, res) =>
 
   if (req.body.action === 'get_movie')
   {
+    // console.log(id, qualite);
+    // console.log(req.body.qualite);
     if (fs.existsSync(__dirname + '/../../tmp/' + id + '/' + qualite + '/out.m3u8')) 
     {
       res.send('./tmp/' + id + '/' + qualite + '/out.m3u8');
+      // console.log('ok************************************************');
     }
     else
     {
       res.send("NO");
+      // console.log('not found');
     }
   }
 
