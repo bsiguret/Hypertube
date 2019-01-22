@@ -12,7 +12,7 @@ router.get('/42/callback',
     function(req, res) {
         const user = req.session.passport.user;
         if (user.err) {
-            res.cookie('err', "Please check your email!", { maxAge: 60 * 1000, httpOnly: false});
+            res.cookie('err', "Please check your email!", { maxAge: 10 * 1000, httpOnly: false});
             res.redirect('http://localhost:3001');
         }
         else {
@@ -33,7 +33,7 @@ router.get('/github/callback',
     function(req, res) {
         const user = req.session.passport.user;
         if (user.err) {
-            res.cookie('err', "Please check your email!", { maxAge: 60 * 1000, httpOnly: false});
+            res.cookie('err', "Please check your email!", { maxAge: 10 * 1000, httpOnly: false});
             res.redirect('http://localhost:3001');
         }
         else {
@@ -54,7 +54,7 @@ router.get('/google/callback',
     function(req, res) {
         const user = req.session.passport.user;
         if (user.err) {
-            res.cookie('err', "Please check your email!", { maxAge: 60 * 1000, httpOnly: false});
+            res.cookie('err', "Please check your email!", { maxAge: 10 * 1000, httpOnly: false});
             res.redirect('http://localhost:3001');
         }
         else {
