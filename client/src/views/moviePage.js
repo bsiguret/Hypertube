@@ -13,6 +13,16 @@ import Comments from '../components/comments'
 
 import '../assets/css/movie.scss'
 
+function formatBytes(bytes,decimals) {
+	if(bytes == 0) return '0 Bytes';
+	var k = 1024,
+			dm = decimals <= 0 ? 0 : decimals || 2,
+			sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
+			i = Math.floor(Math.log(bytes) / Math.log(k));
+	return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+}
+
+
 class MoviePage extends Component {
 	constructor(props) {
 		super(props)
@@ -22,12 +32,13 @@ class MoviePage extends Component {
 			file: {},
 		}
 		this.getMovieDownload = this.getMovieDownload.bind(this);
+		this.handleDownload = this.handleDownload.bind(this);
 	}
 
-	handleDownload = () => {
+	handleDownload = (quality) => {
 		console.log('before startMovieDownload')
 		this.setState({ loading: true })
-		movieService.startMovieDownload(this.props.match.params.id);
+		movieService.startMovieDownload(this.props.match.params.id, quality);
 		this.get_movie = setInterval(() => {
 			this.getMovieDownload()
 		}, 1000)
@@ -105,6 +116,17 @@ class MoviePage extends Component {
   render() {
 		const { movie } = this.props
 		const { file } = this.state
+		const Qualities = ({qualities}) => (
+			<>
+				{qualities.map((quality, key) => (
+						<p key={key}>
+							<Button type="primary" onClick={() => this.handleDownload(quality.quality)}>{quality.quality}</Button>
+							Seeds:<span>{quality.seeds}</span> | Peers: <span>{quality.peers} | Size: {formatBytes(quality.size_bytes)}</span>
+						</p>
+				))}
+			</>
+			);
+		console.log(movie)
 		console.log('file', this.state.file)
 		return (
 		<div className="movie-container">
@@ -136,10 +158,12 @@ class MoviePage extends Component {
 						</List>
 					</Col>
 				</Row>
-				<Row>
+				<Row type='flex' justify='center' align='middle'>
 					<h2 style={{textAlign: 'center'}}>Synopsis</h2>
 					<p style={{textAlign: 'center'}}>{movie.info[0].description}</p>
-					<Button type="primary" onClick={this.handleDownload.bind(this)}>TEST DL FILM</Button>
+					<div className='movie-button'>
+						<Qualities qualities={movie.torrents}/>
+					</div>
 				</Row>
 				<Row type='flex' justify='center'>
 					{this.state.loading &&

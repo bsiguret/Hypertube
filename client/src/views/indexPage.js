@@ -38,8 +38,8 @@ class IndexPage extends Component {
 						<a href='/loginHelp' style={{position: 'relative', top: '-25px'}}>Need help?</a>
 						<div style={{display: 'flex', justifyContent: 'space-between'}}>
 							<Button shape="circle" type="primary" icon="google" href='http://localhost:3000/api/auth/google' style={{backgroundColor: 'red', borderColor: 'red'}}/>
-							<Button shape="circle" type="primary" href='http://localhost:3000/api/auth/facebook'>
-								<Icon type="facebook" theme="filled" />
+							<Button shape="circle" type="primary" href='http://localhost:3000/api/auth/github' style={{backgroundColor: 'black', borderColor: 'black'}}>
+								<Icon type="github" theme="filled" />
 							</Button>
 							<Button shape="circle" href='http://localhost:3000/api/auth/42' type="primary" style={{backgroundColor: 'black', borderColor: 'black'}}>
 								<Avatar src="/img/42.png" />

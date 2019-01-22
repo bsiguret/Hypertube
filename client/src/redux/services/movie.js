@@ -62,9 +62,9 @@ const getMovieInfo = async (id) => {
 	return res;
 }
 
-const startMovieDownload = async (id) => {
+const startMovieDownload = async (id, quality) => {
 	let res = await axios.get(
-		`/play/${id}`
+		`/play/${id}/${quality}`
 		)
 	.then ((response) => {
 		return (response)
