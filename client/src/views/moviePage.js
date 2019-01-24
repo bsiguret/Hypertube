@@ -40,24 +40,24 @@ class MoviePage extends Component {
 		this.setState({ loading: true })
 		movieService.startMovieDownload(this.props.match.params.id, quality);
 		this.get_movie = setInterval(() => {
-			this.getMovieDownload()
+			this.getMovieDownload(quality)
 		}, 1000)
 	}
 
-	getMovieDownload = () => {
-		movieService.getMovieDownload('get_movie', this.props.match.params.id)
+	getMovieDownload = (quality) => {
+		movieService.getMovieDownload('get_movie', this.props.match.params.id, quality)
 		.then(async (response) => {
 			console.log(response)
 			if (response.data !== 'NO')
 			{
-				await this.getSubtitle();
+				await this.getSubtitle(quality);
 				clearInterval(this.get_movie);
 			}
 		})
 	}
 
-	getSubtitle = () => {
-		movieService.getMovieDownload('get_subtitle', this.props.match.params.id)
+	getSubtitle = (quality) => {
+		movieService.getMovieDownload('get_subtitle', this.props.match.params.id, quality)
 		.then((response) => {
 			console.log(response)
 			if (response.data !== 'NO')
@@ -80,7 +80,7 @@ class MoviePage extends Component {
 					console.log('TRACKS Array', tracks)
 					this.setState({
 						loading: false,
-						source: 'http://localhost:3000/tmp/' + this.props.match.params.id + '/out.m3u8' ,
+						source: 'http://localhost:3000/tmp/' + this.props.match.params.id + '/' + quality + '/out.m3u8' ,
 						file: { tracks }
 					})
 				}

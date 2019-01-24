@@ -75,10 +75,11 @@ const startMovieDownload = async (id, quality) => {
 	return res;
 }
 
-const getMovieDownload = async (action, id) => {
+const getMovieDownload = async (action, id, qualite) => {
 	let res = await axios.post(`/play`, {
 			action,
 			id,
+			qualite
 	})
 	.then ((response) => {
 		return (response)
