@@ -111,7 +111,7 @@ const getComments = (id) => async dispatch => {
 		.then(
 			res => {
 				if (res.status !== 200) {
-					return res.data;
+					return res;
 				}
 				else {
 					dispatch(success(res.data));
@@ -123,8 +123,8 @@ const getComments = (id) => async dispatch => {
 }
 
 const postComment = (id, comment) => async dispatch => {
-	function request() { return { type: userConstants.GET_COMMENT_REQUEST} };
-	function success(comments) { return { type: userConstants.GET_COMMENT_SUCCESS, comments} };
+	function request() { return { type: userConstants.POST_COMMENT_REQUEST} };
+	function success(comments) { return { type: userConstants.POST_COMMENT_SUCCESS, comments} };
 
 	dispatch(request());
 	let res = await m.postComment(id, comment)
@@ -134,7 +134,7 @@ const postComment = (id, comment) => async dispatch => {
 					return res.data;
 				}
 				else {
-					// dispatch(success(res.data));
+					dispatch(success(res.data));
 					return res;
 				}
 			}

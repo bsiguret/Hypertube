@@ -12,20 +12,23 @@ class Comments extends Component {
 				{comments.map((comment, key) => (
 					<List.Item
 						key={key}
+						
 					>
 						<List.Item.Meta
 							avatar={<Avatar src={comment.profile} />}
-							title={`${comment.firstname} ${comment.lastname}`}
-							description={comment.comment}
+							title={`${comment.username}`}
+							description={comment.date}
 						/>
-						{comment.date}
+						<div>
+							{comment.comment}
+						</div>
 					</List.Item>
 				))}
 			</>
 		);
     return (
 			console.log(this.props.comments),
-			<List className='comments'>
+			<List className='comments' itemLayout="vertical">
 				<Comments comments={this.props.comments}/>
 			</List>
 		)
