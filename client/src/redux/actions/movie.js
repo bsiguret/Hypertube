@@ -131,7 +131,7 @@ const postComment = (id, comment) => async dispatch => {
 		.then(
 			res => {
 				if (res.status !== 200) {
-					return res.data;
+					return res;
 				}
 				else {
 					dispatch(success(res.data));
@@ -145,8 +145,27 @@ const postComment = (id, comment) => async dispatch => {
 //name, min_rating, max_rating, min_year, max_year, genres, order
 const addFilter = (name, min_rating, max_rating, min_year, max_year, genres, order) => async dispatch => {
 	function success(filter) { return { type: userConstants.MOVIES_FILTER_SUCCESS, filter} };
-
 	dispatch(success({filter: {name, min_rating, max_rating, min_year, max_year, genres, order}}));
+}
+
+const movieViewed = (movie_id) => async dispatch => {
+	function request() { return { type: userConstants.MOVIE_VIEWED_REQUEST} };
+	function success(movie_id) { return { type: userConstants.MOVIE_VIEWED_SUCCESS, movie_id} };
+
+	dispatch(request());
+	let res = await m.movieViewed(movie_id)
+		.then(
+			res => {
+				if (res.status !== 200) {
+					return res;
+				}
+				else {
+					dispatch(success(movie_id));
+					return res;
+				}
+			}
+		);
+	return res;
 }
 
 export const movieActions = {
@@ -157,5 +176,6 @@ export const movieActions = {
 	getMovieInfo,
 	addFilter,
 	getComments,
-	postComment
+	postComment,
+	movieViewed
 };

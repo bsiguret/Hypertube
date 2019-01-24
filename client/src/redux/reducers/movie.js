@@ -87,6 +87,12 @@ export function movieReducer(state = initialState, action) {
 					...action.comments
 				}
 			})
+		case userConstants.MOVIE_VIEWED_REQUEST:
+			return state
+		case userConstants.MOVIE_VIEWED_SUCCESS:
+			return Object.assign({}, state, {
+				...state,
+			})
 		case userConstants.LOGOUT:
 			return initialState;
 		default:
