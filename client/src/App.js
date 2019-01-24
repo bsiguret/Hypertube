@@ -14,6 +14,7 @@ import EmailValidationPage from './views/emailValidationPage';
 import LoginHelp from './views/loginHelpPage';
 import ResetPassPage from './views/resetPassPage';
 import AccountPage from './views/accountPage';
+import VisitPage from './views/visitPage';
 
 import { PrivateRoute } from './assets/helpers/privateRoute';
 import { PublicRoute } from './assets/helpers/publicRoute';
@@ -105,6 +106,13 @@ class App extends Component {
             <PrivateRoute
               path='/account'
               component={AccountPage}
+              isAuth={isAuth}
+              isVerified={isVerified}
+              sideMenuFilter={false}
+            />
+            <PrivateRoute
+              path='/user/:id'
+              component={VisitPage}
               isAuth={isAuth}
               isVerified={isVerified}
               sideMenuFilter={false}

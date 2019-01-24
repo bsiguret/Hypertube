@@ -20,6 +20,25 @@ const getUser = () => async dispatch => {
 	return res;
 }
 
+const getOtherUser = (id) => async dispatch => {
+	function request() { return { type: userConstants.GET_OTHER_USER_REQUEST} };
+	function success(oUser) { return { type: userConstants.GET_OTHER_USER_SUCCESS, oUser} };
+
+	dispatch(request());
+	let res = await u.getOtherUser(id)
+		.then(
+			res => {
+				if (res.status === 200) {
+					dispatch(success(res.data.user));
+					return res;
+				}
+				else
+					return res;
+			}
+		);
+	return res;
+}
+
 const signup = (user) => async dispatch => {
 	function request() { return { type: userConstants.SIGNUP_REQUEST} };
 	function success(user) { return { type: userConstants.SIGNUP_SUCCESS, user} };
@@ -108,9 +127,10 @@ const signupPhoto = (photo) => async dispatch => {
 
 export const userActions = {
 	getUser,
+	getOtherUser,
 	signup,
 	signupPhoto,
 	verifEmail,
 	resendMail,
-	update
+	update,
 };

@@ -1,10 +1,14 @@
 import React, { Component } from 'react';
 import { List, Avatar } from 'antd';
 
+import { history } from '../assets/helpers/history'
 
 class Comments extends Component {
 
-
+	handleVisit(id) {
+		console.log(id)
+		history.push(`/user/${id}`)
+	}
 
   render() {
 		const Comments = ({comments}) => (
@@ -12,7 +16,7 @@ class Comments extends Component {
 				{comments.map((comment, key) => (
 					<List.Item
 						key={key}
-						
+						onClick={() => {this.handleVisit(comment.uid)}}
 					>
 						<List.Item.Meta
 							avatar={<Avatar src={comment.profile} />}

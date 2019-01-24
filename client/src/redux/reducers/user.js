@@ -8,6 +8,14 @@ export function userReducer(state={user: {isVerified: 0}}, action) {
 				...state,
 				photo: action.photo
 			});
+		case userConstants.GET_OTHER_USER_REQUEST:
+			return Object.assign({}, state, {
+				...state
+			});
+		case userConstants.GET_OTHER_USER_SUCCESS:
+			return Object.assign({}, state, {
+				oUser: action.oUser
+			});
 		case userConstants.SIGNUP_REQUEST:
 			return Object.assign({}, state, {
 				...state
