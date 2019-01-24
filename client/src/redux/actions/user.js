@@ -81,6 +81,26 @@ const resendMail = (email) => async dispatch => {
 	return res;
 }
 
+const update = (user, photo) => async dispatch => {
+	function request() { return { type: userConstants.UPDATE_REQUEST} };
+	function success() { return { type: userConstants.UPDATE_SUCCESS, user} };
+
+	dispatch(request());
+	let res = await u.update(user, photo)
+		.then(
+			res => {
+				if (res.status !== 200) {
+					return res;
+				}
+				else {
+					dispatch(success());
+					return res;
+				}
+			}
+		);
+	return res;
+}
+
 const signupPhoto = (photo) => async dispatch => {
 	function success(photo) { return { type: userConstants.SIGNUP_PHOTO, photo} };
 	dispatch(success(photo));
@@ -91,5 +111,6 @@ export const userActions = {
 	signup,
 	signupPhoto,
 	verifEmail,
-	resendMail
+	resendMail,
+	update
 };

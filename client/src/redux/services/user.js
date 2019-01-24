@@ -26,6 +26,32 @@ const signup = async (user) => {
 	return res;
 }
 
+const update = async (user, photo) => {
+	console.log(user, photo)
+	let formData = new FormData();
+	formData.append("photo", photo)
+	formData.append("username", user.username)
+	formData.append("email", user.email)
+	formData.append("firstname", user.firstname)
+	formData.append("lastname", user.lastname)
+	formData.append("password", user.password)
+	formData.append("cpassword", user.cpassword)
+
+	let res = await axios.post(
+		'/api/profile/settings',
+		formData,
+		{ headers: { "Content-Type": "multipart/form-data" } }
+	)
+	.then ((response) => {
+		console.log(response)
+		return (response)
+	})
+	.catch((error) => {
+		return (error.response);
+	})
+	return res;
+}
+
 const getUser = async () => {
 	let res = await axios.get(
 		'/api/checklog'
@@ -67,32 +93,11 @@ const resendMail = async (email) => {
 	return res;
 }
 
-// const savePhoto = async (photo, defineAs, token) => {
-// 	let formData = new FormData();
-// 	formData.append('photo', photo.toString())
-// 	formData.append('defineAs', defineAs)
-	
-// 	let res = await axios.post(
-// 		'/api/profile/photos',
-// 		formData,
-// 		{ headers: {
-// 			"Authorization": "Bearer " + token,
-// 			"Content-Type": "multipart/form-data"
-// 		}}
-// 	)
-// 	.then ((response) => {
-// 		return (response)
-// 	})
-// 	.catch((error) => {
-// 		return (error.response);
-// 	})
-// 	return res;
-// }
-
 export default {
 	signup,
+	update,
 	getUser,
 	verifEmail,
-	resendMail
+	resendMail,
 }
 

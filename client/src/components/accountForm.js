@@ -3,28 +3,42 @@ import { Form, Icon, Input, Button, Avatar, Select } from 'antd';
 import { connect } from 'react-redux';
 
 import PhotoUploader from './photoUploader';
+import { userActions } from '../redux/actions/user';
 
 class AccountForm extends Component {
 	constructor(props){
 		super(props)
 		this.state = {
-			err: {}
+			err: {},
+			user: {
+				username: this.props.user.username ? this.props.user.username : '',
+				email: this.props.user.email ? this.props.user.email : '',
+				firstname: this.props.user.firstname ? this.props.user.firstname : '',
+				lastname: this.props.user.lastname ? this.props.user.lastname : '',
+				npassword: '',
+				cpassword: '',
+				language: this.props.user.language ? this.props.user.language : '',
+				password: ''
+			}
 		}
 	}
 
 	handleSubmit = (e) => {
 		e.preventDefault();
-    this.props.form.validateFields(async (err, values) => {
-      if (!err) {
-				console.log(values)
-      }
-    });
-  }
+		if (!this.props.photo) {
+		 this.props.dispatch(userActions.update(this.state.user, this.props.user.profile))
+		} else {
+			this.props.dispatch(userActions.update(this.state.user, this.props.photo))
+		}
+	}
+	
+	handleChange = (e) => { this.setState({ user: {...this.state.user, [e.target.name] : e.target.value }}) }
+	handleLanguage = (e) => { this.setState({ user: {...this.state.user, language: e }}) }
 
   render() {
 		const { err } = this.state;
-		const { user } = this.props;
-		const { getFieldDecorator } = this.props.form;
+		const { user } = this.state;
+		console.log(this.props)
     return (
 			<Form onSubmit={this.handleSubmit} className="indexSignupForm">
 				<div style={{display: 'flex', justifyContent: 'space-around'}}>
@@ -35,91 +49,43 @@ class AccountForm extends Component {
 					validateStatus={err.username ? 'error' : 'success'}
 					help={err.username}
 				>
-					{getFieldDecorator('username', {
-						rules: [{ 
-							type: 'string', message: 'The input is not valid',
-						}, {
-							whitespace: true , message: 'The input is not valid',
-						}],
-					})(
-						<Input prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder={user.username} />
-					)}
+					<Input prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />} name='username' value={user.username} onChange={this.handleChange.bind(this)}/>
 				</Form.Item>
 				<Form.Item
 					validateStatus={err.email ? 'error' : 'success'}
 					help={err.email}
 				>
-					{getFieldDecorator('email', {
-						rules: [{
-							type: 'email', message: 'The input is not valid',
-						}, {
-							whitespace: true , message: 'The input is not valid',
-						}],
-					})(
-						<Input prefix={<Icon type="mail" style={{ color: 'rgba(0,0,0,.25)' }} />} type="email" placeholder={user.email} />
-					)}
+					<Input prefix={<Icon type="mail" style={{ color: 'rgba(0,0,0,.25)' }} />} name='email' type="email" value={user.email} onChange={this.handleChange.bind(this)}/>
 				</Form.Item>
 				<Form.Item
 					validateStatus={err.firstname ? 'error' : 'success'}
 					help={err.firstname}
 				>
-					{getFieldDecorator('firstname', {
-						rules: [{ 
-							type: 'string', message: 'The input is not valid',
-						}, {
-							whitespace: true , message: 'The input is not valid',
-						}],
-					})(
-						<Input prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder={user.firstname} />
-					)}
+					<Input prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />} name='firstname' value={user.firstname} onChange={this.handleChange.bind(this)}/>
 				</Form.Item>
 				<Form.Item
 					validateStatus={err.lastname ? 'error' : 'success'}
 					help={err.lastname}
 				>
-					{getFieldDecorator('lastname', {
-						rules: [{ 
-							type: 'string', message: 'The input is not valid',
-						}, {
-							whitespace: true , message: 'The input is not valid',
-						}],
-					})(
-						<Input prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder={user.lastname} />
-					)}
+					<Input prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />} name='lastname' value={user.lastname} onChange={this.handleChange.bind(this)}/>
 				</Form.Item>
 				<Form.Item
-					validateStatus={err.password ? 'error' : 'success'}
-					help={err.password}
+					validateStatus={err.npassword ? 'error' : 'success'}
+					help={err.npassword}
 				>
-					{getFieldDecorator('npassword', {
-						rules: [{ 
-							type: 'string', message: 'The input is not valid',
-						}, {
-							whitespace: true , message: 'The input is not valid',
-						}],
-					})(
-							<Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} type="password" placeholder="New Password" />
-					)}
+					<Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} name='npassword' type="password" placeholder="New Password" onChange={this.handleChange.bind(this)}/>
 				</Form.Item>
 				<Form.Item
 					validateStatus={err.cpassword ? 'error' : 'success'}
 					help={err.cpassword}
 				>
-					{getFieldDecorator('cpassword', {
-						rules: [{ 
-							type: 'string', message: 'The input is not valid',
-						}, {
-							whitespace: true , message: 'The input is not valid',
-						}],
-					})(
-						<Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} type="password" placeholder="Confirm Password" />
-					)}
+					<Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} name='cpassword' type="password" placeholder="Confirm Password" onChange={this.handleChange.bind(this)}/>
 				</Form.Item>
 				<Form.Item
 					validateStatus={err.language ? 'error' : 'success'}
 					help={err.language}
 				>
-					<Select defaultValue="en">
+					<Select defaultValue={user.language} onChange={this.handleLanguage}>
 							<Select.Option value="en">english</Select.Option>
 							<Select.Option value="fr">french</Select.Option>
           </Select>
@@ -128,15 +94,7 @@ class AccountForm extends Component {
 					validateStatus={err.password ? 'error' : 'success'}
 					help={err.password}
 				>
-					{getFieldDecorator('password', {
-						rules: [{
-							whitespace: true , message: 'The input is not valid',
-						}, {
-							required: true, message: 'Please input your password to submit your change(s)',
-						}],
-					})(
-						<Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} type="password" placeholder="Password" />
-					)}
+					<Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} name='password' type="password" placeholder="Password" onChange={this.handleChange.bind(this)}/>
 				</Form.Item>
 				<Form.Item>
 					<Button block type="primary" htmlType="submit" className="signFormButton">
@@ -150,6 +108,7 @@ class AccountForm extends Component {
 
 const mapStateToProps = state => ({
 	user: state.userReducer.user,
+	photo: state.userReducer.photo
 });
 
 export default connect(mapStateToProps)(Form.create()(AccountForm));
