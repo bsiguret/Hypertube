@@ -80,7 +80,7 @@ class MoviePage extends Component {
 					console.log('TRACKS Array', tracks)
 					this.setState({
 						loading: false,
-						source: 'http://localhost:3000/tmp/' + this.props.match.params.id + '/out.m3u8' ,
+						source: 'http://localhost:3000/tmp/' + this.props.match.params.id + '/' + quality + '/out.m3u8' ,
 						file: { tracks }
 					})
 				}
