@@ -78,7 +78,7 @@ export function movieReducer(state = initialState, action) {
 				...state,
 				comments: action.comments
 			})
-		case userConstants.POST_COMMENT_SUCCESS:
+		case userConstants.POST_COMMENT_REQUEST:
 			return state
 		case userConstants.POST_COMMENT_SUCCESS:
 			return Object.assign({}, state, {
@@ -86,6 +86,12 @@ export function movieReducer(state = initialState, action) {
 				comments: {
 					...action.comments
 				}
+			})
+		case userConstants.MOVIE_VIEWED_REQUEST:
+			return state
+		case userConstants.MOVIE_VIEWED_SUCCESS:
+			return Object.assign({}, state, {
+				...state,
 			})
 		case userConstants.LOGOUT:
 			return initialState;

@@ -65,6 +65,19 @@ const getUser = async () => {
 	return res;
 }
 
+const getOtherUser = async (id) => {
+	let res = await axios.get(
+		`/api/user/${id}`
+	)
+	.then ((response) => {
+		return (response)
+	})
+	.catch((error) => {
+		return (error.response);
+	})
+	return res;
+}
+
 const verifEmail = async (username, token) => {
 	let res = await axios.get(
 		`/api/emailvalidation/${username}/${token}`
@@ -97,6 +110,7 @@ export default {
 	signup,
 	update,
 	getUser,
+	getOtherUser,
 	verifEmail,
 	resendMail,
 }

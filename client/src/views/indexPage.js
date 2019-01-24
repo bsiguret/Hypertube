@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 import { Row, Col, Layout, Icon, Divider, Button, Avatar } from 'antd';
 
-// import { authActions } from '../redux/actions/auth';
 import { connect } from 'react-redux';
-import { history } from '../assets/helpers/history'
 
 import SignForm from '../components/signForm';
 import LoginForm from '../components/loginForm';

@@ -20,6 +20,7 @@ class Comment extends Component {
 				this.props.dispatch(authActions.logout())
 				message.error('Please log in, your session may have expired')
 			}
+			console.log(res)
 		}
 		else
 			message.error('Comment must be between 5 and 1000 chars')

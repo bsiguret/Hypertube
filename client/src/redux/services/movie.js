@@ -117,6 +117,18 @@ const postComment = async (movie_id, comment) => {
 	return res;
 }
 
+const movieViewed = async (movie_id) => {
+	let res = await axios.post(`/api/get_data/movie/${movie_id}/viewed`
+	)
+	.then ((response) => {
+		return (response)
+	})
+	.catch((error) => {
+		return (error.response);
+	})
+	return res;
+}
+
 export default {
 	getAllGenre,
 	initMovies,
@@ -125,5 +137,8 @@ export default {
 	startMovieDownload,
 	getMovieDownload,
 	getComments,
-	postComment
+	postComment,
+	movieViewed
 }
+
+// /movie/:movie_id/viewed jpense avoir trouvé

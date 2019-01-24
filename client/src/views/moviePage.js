@@ -36,7 +36,14 @@ class MoviePage extends Component {
 	}
 
 	handleDownload = (quality) => {
-		console.log('before startMovieDownload')
+		movieService.getMovieDownload('sigall', this.props.match.params.id)
+		.then((response) => {
+			if (response.status !== 200) {
+				this.props.dispatch(authActions.logout())
+				message.error('Please log in, your session may have expired')
+			}
+		})
+		this.props.dispatch(movieActions.movieViewed(this.props.match.params.id))
 		this.setState({ loading: true })
 		movieService.startMovieDownload(this.props.match.params.id, quality);
 		this.get_movie = setInterval(() => {
