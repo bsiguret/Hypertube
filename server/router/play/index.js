@@ -3,26 +3,67 @@ const router = express.Router();
 const mydb = require('../../db/db');
 const sql = require('../../db/requetes');
 const passport = require('../../tools/passport');
-
-const yifysubtitles = require('yifysubtitles');//
-var http = require('http');//
-var fs = require('fs');//
-var url = require('url');//
-var path = require('path');//
-
-const ffmpegPath = require('@ffmpeg-installer/ffmpeg').path;//
-const ffmpeg = require('fluent-ffmpeg');//
-ffmpeg.setFfmpegPath(ffmpegPath);//
-
-var torrentStream = require('torrent-stream');//
+const yifysubtitles = require('yifysubtitles');
+var fs = require('fs');
+const ffmpegPath = require('@ffmpeg-installer/ffmpeg').path;
+const ffmpeg = require('fluent-ffmpeg');
+ffmpeg.setFfmpegPath(ffmpegPath);
+var torrentStream = require('torrent-stream');
 
 var engine;
 var command = {};
 
+// ********************************************************************** //
+// TOOLS
+// ********************************************************************** //
+
 function ft_json(id)
 {
-  if (!command[id])
+  if (command && !command[id])
     command[id] = {};
+}
+
+function ft_magnet(url)
+{
+  var is_magnet = url.indexOf('magnet');
+  if (is_magnet == -1)
+  {
+    var hash_url = url.split('/');
+    var hash = hash_url[hash_url.length - 1];
+    var magnet = 'magnet:?xt=urn:btih:' + hash;
+    return (magnet);
+  }
+  return (url);
+}
+
+function ft_objlen(obj)
+{
+  let len = 0;
+  for (i in obj)
+  {
+    len++;
+  }
+  return (len);
+}
+
+function ft_sigall(id, qualite)
+{
+  if (command)
+  {
+    console.log("SLICING WILL BE STOBED TO START ANOTHER");
+    for (i in command)
+    {
+      for (j in command[i])
+      {
+        if (i == id && j == qualite)
+          command[i][j].kill('SIGCONT');
+        else
+          command[i][j].kill('SIGSTOP');
+      }
+    }
+  }
+  else
+    console.log('no obj sigall');
 }
 
 function ft_url_mkdir(url)
@@ -39,6 +80,10 @@ function ft_url_mkdir(url)
     i++;
   }
 }
+
+// ********************************************************************** //
+// SUBTITLE
+// ********************************************************************** //
 
 function ft_one_subtitle(movie_id, subtitle_path, lang)
 {
@@ -80,9 +125,13 @@ function ft_subtitle(id)
   });
 };
 
+// ********************************************************************** //
+// STREAMING / SLICE
+// ********************************************************************** //
+
 function ft_slicing (path_in, path_out, id, qualite)
 {
-  console.log('slicing parame: ', path_in, path_out);
+  console.log("slicing start:\npath_in: " + path_in + "\npath_out: " + path_out);
   ft_json(id);
   command[id][qualite] = ffmpeg(path_in, {timeout: 432000})
   .addOptions([
@@ -94,15 +143,20 @@ function ft_slicing (path_in, path_out, id, qualite)
     '-hls_list_size 0',
   ])
   .output(path_out)
-  .on('progress', function(progress)
-  {
-    console.log('progress', path_in);
-  })
+  // .on('progress', function()
+  // {
+  //   console.log('progress', path_in);
+  // })
   .on('end', () => 
   {
     console.log("slicing completed:\n" + path_in + "\n\n");
-  });
+  })
+  // .run();
 }
+
+// ********************************************************************** //
+// DOWNLOAD / ENGINE
+// ********************************************************************** //
 
 function ft_engine (id, qualite)
 {
@@ -119,7 +173,7 @@ function ft_engine (id, qualite)
       if (format == 'mp4' || format == 'mkv')
       {
         movie_path = './tmp/' + id + '/' + qualite + '/' + file.path;
-        console.log('movie_path: ', movie_path);
+        console.log('engine: ' + file.path);
         file.createReadStream({start: 0, end: 15});
         file.createReadStream({start: 16});
       }
@@ -128,23 +182,15 @@ function ft_engine (id, qualite)
 
   engine.on('download', (pieceindex) =>
   {
-    console.log('download', movie_path);
-    if (pieceindex <= 15)
+    if (pieceindex < 15)
     {
-      status = status + Math.pow(2, pieceindex);
-      console.log('status:', status, pieceindex);
-      if (status === 0b1111111111111111)
+      status++;
+      console.log('status: ' + status + '/15');
+      if (status == 15)
       {
-        fs.access(movie_path, (err) =>
-        {
-          if (err == null)
-          {
-            console.log('slicing -------------------');
-            var out = './tmp/' + id + '/' + qualite + '/out.m3u8';
-            ft_slicing(movie_path, out, id, qualite);
-            command[id][qualite].run();
-          }
-        });
+        var out = './tmp/' + id + '/' + qualite + '/out.m3u8';
+        ft_slicing(movie_path, out, id, qualite);
+        command[id][qualite].run();
       }
     }
   });
@@ -155,81 +201,39 @@ function ft_engine (id, qualite)
   });
 }
 
-function ft_magnet(url)
-{
-  var is_magnet = url.indexOf('magnet');
-  if (is_magnet == -1)
-  {
-    var hash_url = url.split('/');
-    var hash = hash_url[hash_url.length - 1];
-    var magnet = 'magnet:?xt=urn:btih:' + hash;
-    return (magnet);
-  }
-  return (url);
-}
+// ********************************************************************** //
+// GET
+// ********************************************************************** //
 
 router.get('/:id/:qualite', passport.authenticate('jwt', {session: false}), (req, res) =>
 {
   var id = req.params.id;
   var qualite = req.params.qualite;
-  console.log('id:' + id + ', qualite:' + qualite);
+  const options =
+  {
+    connections: 20,
+    uploads: 10,
+    tmp: './tmp/',
+    path: './tmp/' + id + '/' + qualite,
+    verif: true,
+    dht: true,
+    tracker: true
+  }
+
   mydb.connection_db.query(sql.get_movie_torrent, [id, qualite], function(err, rows)
   {
     if (err) {console.log(err); return;}
     ft_subtitle(id);
     var magnet = ft_magnet(rows[0].url);
-
-    const options =
-    {
-      connections: 20,
-      uploads: 10,
-      tmp: './tmp/',
-      path: './tmp/' + id + '/' + qualite,
-      verif: true,
-      dht: true,
-      tracker: true
-    }
-
     engine = torrentStream(magnet, options);
     ft_engine(id, qualite);
     res.send("OK");
-    // res.render('./pages/play',
-    // {
-    //   movies: rows
-    // });
   });
 });
 
-function ft_objlen(obj)
-{
-  let len = 0;
-  for (i in obj)
-  {
-    len++;
-  }
-  return (len);
-}
-
-function ft_sigall(id, qualite)
-{
-  if (command)
-  {
-    console.log('obj len: ', ft_objlen(command));
-    for (i in command)
-    {
-      for (j in command[i])
-      {
-        console.log("sigall:\n" + "id: " + i + " qualite: " + j);
-        if (i == id && j == qualite)
-          command[i][j].kill('SIGCONT');
-        else
-          command[i][j].kill('SIGSTOP');
-      }
-    }
-  }
-  else
-    console.log('no obj sigall');
-}
+// ********************************************************************** //
+// POST
+// ********************************************************************** //
 
 router.post('/', passport.authenticate('jwt', {session: false}), (req, res) =>
 {
@@ -239,17 +243,14 @@ router.post('/', passport.authenticate('jwt', {session: false}), (req, res) =>
 
   if (req.body.action === 'get_movie')
   {
-    // console.log(id, qualite);
-    // console.log(req.body.qualite);
     if (fs.existsSync(__dirname + '/../../tmp/' + id + '/' + qualite + '/out.m3u8')) 
     {
       res.send('./tmp/' + id + '/' + qualite + '/out.m3u8');
-      // console.log('ok************************************************');
+      console.log('ok************************************************');
     }
     else
     {
       res.send("NO");
-      // console.log('not found');
     }
   }
 
@@ -266,18 +267,6 @@ router.post('/', passport.authenticate('jwt', {session: false}), (req, res) =>
       console.log('subtitle in db: ', rows.length);
       res.send(rows);
     });
-  }
-
-  if (req.body.action === 'sigstop')
-  {
-    command[id].kill('SIGSTOP');
-    res.send('OK');
-  }
-
-  if (req.body.action === 'sigcont')
-  {
-    command[id].kill('SIGCONT');
-    res.send('OK');
   }
 
   if (req.body.action === 'sigall')
