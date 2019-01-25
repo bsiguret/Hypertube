@@ -36,6 +36,7 @@ class MoviePage extends Component {
 	}
 
 	handleDownload = (quality) => {
+		// clearInterval(this.get_movie);
 		movieService.getMovieDownload('sigall', this.props.match.params.id)
 		.then((response) => {
 			if (response.status !== 200) {
@@ -118,6 +119,7 @@ class MoviePage extends Component {
 				message.error('Please log in, your session may have expired')
 			}
 		})
+		// clearInterval(this.get_movie);
 	}
 
   render() {
