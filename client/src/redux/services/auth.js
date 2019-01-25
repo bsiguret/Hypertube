@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from '../../assets/helpers/axios';
 
 const login = async (email, password) => {
 	let res = await axios.post(
