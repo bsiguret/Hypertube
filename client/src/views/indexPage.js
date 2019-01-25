@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { Row, Col, Layout, Icon, Divider, Button, Avatar } from 'antd';
+import { Row, Col, Layout, Icon, Divider, Button, Avatar, message } from 'antd';
 
 import { connect } from 'react-redux';
+import Cookies from 'js-cookie';
 
 import SignForm from '../components/signForm';
 import LoginForm from '../components/loginForm';
@@ -17,6 +18,12 @@ class IndexPage extends Component {
 	}
 
 	handleChange = () => this.setState({ login: !this.state.login })
+
+	componentWillMount = () => {
+		if (Cookies.get('err')) {
+      message.error(Cookies.get('err'))
+    }
+	}
 
   render() {
 		const { login } = this.state
