@@ -42,11 +42,16 @@ class Movies extends Component {
 						<div onMouseEnter={() => this.handleEnter(key)} onMouseLeave={() => this.handleLeave()}>
 							<img alt={movie.title} src={movie.img} style={{width: '100%'}} />
 						</div>
-						{((isHover && key === this.state.key) || movie.viewed === 1) &&
-						<div className='movie-image'>
+						{isHover && key === this.state.key && movie.viewed !== 1 &&
+						<div className='movie-image' onMouseEnter={() => this.handleEnter(key)} onMouseLeave={() => this.handleLeave()}>
 							<span className='movie-title'>{movie.title}</span>
-							{movie.viewed === 1 &&
-							<p>Seen,</p>}
+							<p className='movie-rating'><Icon type="star" theme="filled" style={{color: 'yellow'}}/>{movie.rating}</p>
+							<p className='movie-year'>{movie.year}</p>
+						</div>}
+						{movie.viewed === 1 &&
+						<div className='movie-image' onMouseEnter={() => this.handleEnter(key)} onMouseLeave={() => this.handleLeave()}>
+							<span className='movie-title'>{movie.title}</span>
+							<p>Seen,</p>
 							<p className='movie-rating'><Icon type="star" theme="filled" style={{color: 'yellow'}}/>{movie.rating}</p>
 							<p className='movie-year'>{movie.year}</p>
 						</div>}
