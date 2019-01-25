@@ -2,30 +2,23 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const path = require('path');
+const cors = require('cors');
 const passport = require('passport');
 const cookieParser = require('cookie-parser');
 
 require('dotenv').config();
 
-app.use((req, res, next) => {
-	res.setHeader('Access-Control-Allow-Origin',  '*');
-	res.setHeader('Access-Control-Allow-Credentials', true);
-	res.setHeader('Access-Control-Allow-Methods', 'GET, POST');
-	res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
-	next();
-})
+app.use(
+	cors({
+		origin: 'http://localhost:3001',
+		credentials: true
+	})
+)
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(passport.initialize());
-
-if (process.env.NODE_ENV === 'prod') {
-	app.use(express.static(path.join(__dirname, "../client/build")));
-	app.get('*', function(req, res) {
-    res.sendFile(path.join(__dirname, '../client/build', 'index.html'));
-	});
-}
 
 app.use(cookieParser());
 app.use('/api/photo', express.static('./public'));

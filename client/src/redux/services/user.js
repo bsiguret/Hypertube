@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from '../../assets/helpers/axios';
 
 const signup = async (user) => {
 	
