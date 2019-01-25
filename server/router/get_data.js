@@ -94,6 +94,15 @@ router.get('/movie/:movie_id', passport.authenticate('jwt', {session: false}), (
                         if (err2) {
                             res.status(403).json({msg: "Error get info"});
                         } else {
+                            let torrents = [];
+                            for (let i = 0; i < rows2.length; i++) {
+                                if (torrents.includes(rows2[i].quality)) {
+                                    delete rows2[i];
+                                } else {
+                                    torrents.push(rows2[i].quality);
+                                }
+                            }
+                            rows2 = rows2.filter(function(e) {return e});
                             res.json({info: rows, genres: genres, torrents: rows2});
                         }
                     });
