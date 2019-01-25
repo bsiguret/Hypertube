@@ -119,6 +119,7 @@ class MoviePage extends Component {
 				message.error('Please log in, your session may have expired')
 			}
 		})
+		this.setState({ loading: false })
 		// clearInterval(this.get_movie);
 	}
 

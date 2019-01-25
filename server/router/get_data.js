@@ -41,7 +41,6 @@ min_rating, max_rating, min_year, max_year, genres, order, nb
 */
 
 router.post('/all_movies/:nb', passport.authenticate('jwt', {session: false}), (req, res) => {
-    console.log(req.body)
     // cast convertit le nombre en decimal avec 2 chiffre max avant la virgule et 1 chiffre apres
     var where = "cast(ifNULL(movies.rating, 0) as decimal(2, 1)) >= " + req.body.min_rating + " AND cast(ifNULL(movies.rating, 0) as decimal(2, 1)) <= " + req.body.max_rating;
     where += " AND movies.year >= " + req.body.min_year + " AND movies.year <= " + req.body.max_year;
@@ -52,7 +51,9 @@ router.post('/all_movies/:nb', passport.authenticate('jwt', {session: false}), (
     var order = req.body.order
     if (order !== "title")
         order += " DESC"
-    var get_all_movies_by_filtre = "SELECT movies.*, b.genres FROM movies INNER JOIN (SELECT movie_id, group_concat(genre) AS genres FROM genre GROUP BY movie_id) b ON movies.movie_id = b.movie_id WHERE " + where + " ORDER BY " + order + " LIMIT 20 OFFSET " + req.params.nb * 20;
+    var get_all_movies_by_filtre_with_genre = "SELECT movies.*, b.genres FROM movies INNER JOIN (SELECT movie_id, group_concat(genre) AS genres FROM genre GROUP BY movie_id) b ON movies.movie_id = b.movie_id WHERE " + where + " ORDER BY " + order + " LIMIT 20 OFFSET " + req.params.nb * 20;
+    var get_all_movies_by_filtre_without_genre = "SELECT movies.* FROM movies WHERE " + where + " ORDER BY " + order + " LIMIT 20 OFFSET " + req.params.nb * 20;
+    var get_all_movies_by_filtre = (req.body.genres) ? get_all_movies_by_filtre_with_genre : get_all_movies_by_filtre_without_genre;
     db.connection_db.query(get_all_movies_by_filtre, (err, rows) => {
         if (err) {
             res.status(403).json({msg: "Error get movies"});
