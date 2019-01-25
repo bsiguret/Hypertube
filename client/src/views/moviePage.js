@@ -120,7 +120,7 @@ class MoviePage extends Component {
 			}
 		})
 		this.setState({ loading: false })
-		// clearInterval(this.get_movie);
+		clearInterval(this.get_movie);
 	}
 
   render() {
