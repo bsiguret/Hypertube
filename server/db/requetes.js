@@ -123,7 +123,7 @@ const get_all_genre = "SELECT genre FROM genre GROUP BY genre";
 const get_movie_status = "SELECT * FROM status WHERE movie_id=?";
 const add_comment = "INSERT INTO comments (comment) VALUES (?)";
 const add_comment_movie_user = "INSERT INTO comments_movies_users (movie_id, comment_id, user_id) VALUES (?)";
-const get_comment_user_id = "SELECT * FROM comments_movies_users WHERE movie_id=?";
+const get_comment_user_id = "SELECT * FROM comments_movies_users WHERE movie_id=? ORDER BY id DESC";
 const get_comment = "SELECT * FROM comments WHERE id=?";
 const insert_user = "INSERT INTO users (lastname,firstname,username,password,email,profile) VALUES(?)";
 const update_profile = "UPDATE users SET profile=? WHERE id=?";
