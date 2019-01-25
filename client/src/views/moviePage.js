@@ -36,8 +36,8 @@ class MoviePage extends Component {
 	}
 
 	handleDownload = (quality) => {
-		// clearInterval(this.get_movie);
-		movieService.getMovieDownload('sigall', this.props.match.params.id)
+		clearInterval(this.get_movie); //
+		movieService.getMovieDownload('sigall', this.props.match.params.id, quality)
 		.then((response) => {
 			if (response.status !== 200) {
 				this.props.dispatch(authActions.logout())
