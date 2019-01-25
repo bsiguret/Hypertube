@@ -20,18 +20,18 @@ router.get('/', (req, response) => {
                 if (err)
                     console.log(err);
                 else {
-                    if (movies[i].genre.length) {
-                        db.connection_db.query(sql.add_movie_genre, [movies[i].genre], function(err, rows) {
-                            if (err)
-                                console.log(err);
-                        });
-                    }
                     db.connection_db.query(sql.add_movie_torrent, [movies[i].torrent], function(err, rows) {
                         if (err)
                             console.log(err);
-                        if (i == movies.length - 1) {
-                            console.log("Finish");
-                            response.json("SAVE_MOVIES FINISHED")
+                        if (movies[i].genre.length) {
+                            db.connection_db.query(sql.add_movie_genre, [movies[i].genre], function(err, rows) {
+                                if (err)
+                                    console.log(err);
+                                if (i == movies.length - 1) {
+                                    console.log("Finish");
+                                    response.json("SAVE_MOVIES FINISHED")
+                                }
+                            });
                         }
                     });
                 }
