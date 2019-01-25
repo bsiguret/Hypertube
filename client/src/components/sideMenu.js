@@ -83,6 +83,7 @@ class SideMenu extends Component {
 	}
 
 	handleYear = async (year) => {
+		this.s1.blur()
 		this.props.dispatch(
 			movieActions.addFilter(
 				this.props.filter.name,
@@ -114,6 +115,7 @@ class SideMenu extends Component {
 	}
 
 	handleRating = async (rating) => {
+		this.s2.blur()
 		this.props.dispatch(
 			movieActions.addFilter(
 				this.props.filter.name,
@@ -196,9 +198,9 @@ class SideMenu extends Component {
 				{this.props.sideMenuFilter &&
 				<div>
 					<h4 style={{color: 'white', textAlign: 'center'}}>Year</h4>
-					<Slider className='slider' range step={1} min ={1895} max={2019} defaultValue={[1895, 2019]} onAfterChange={this.handleYear} />
+					<Slider autoFocus={false} className='slider' range step={1} min ={1895} max={2019} defaultValue={[1895, 2019]} ref={(s1) => this.s1 = s1} onAfterChange={this.handleYear} />
 					<h4 style={{color: 'white', textAlign: 'center'}}>Rating</h4>
-					<Slider classname='slider' range step={0.1} max={10} defaultValue={[0, 10]} onAfterChange={this.handleRating} />
+					<Slider autoFocus={false} classname='slider' range step={0.1} max={10} defaultValue={[0, 10]} ref={(s2) => this.s2 = s2} onAfterChange={this.handleRating} />
 				</div>}
 				<Menu theme="dark" mode="inline">
 					{this.props.sideMenuFilter &&
