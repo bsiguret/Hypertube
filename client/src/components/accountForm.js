@@ -42,7 +42,7 @@ class AccountForm extends Component {
     return (
 			<Form onSubmit={this.handleSubmit} className="indexSignupForm">
 				<div style={{display: 'flex', justifyContent: 'space-around'}}>
-					<Avatar shape="square" size={105} src={user.profile} />
+					<Avatar shape="square" size={105} src={this.props.user.profile} />
 					<PhotoUploader dispatch={this.props.dispatch}/>
 				</div>
 				<Form.Item

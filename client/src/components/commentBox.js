@@ -15,6 +15,7 @@ class Comment extends Component {
 
 	handleComment = async () => {
 		if (this.state.comment.length >= 5 && this.state.comment.length < 1000) {
+			this.setState({ comment: '' })
 			let res = await this.props.dispatch(movieActions.postComment(this.props.id, this.state.comment));
 			if (res.status !== 200) {
 				this.props.dispatch(authActions.logout())
