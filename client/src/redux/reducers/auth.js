@@ -14,8 +14,6 @@ export function authReducer(state = {isAuth: false}, action) {
 			return state
 		case userConstants.RESETPASS_TOKEN_SUCCESS:
 			return state
-		case userConstants.RESETPASS_TOKEN_SUCCESS:
-			return state
 		case userConstants.LOGOUT:
 			return {isAuth: false};
 		default:

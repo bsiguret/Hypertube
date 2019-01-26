@@ -13,7 +13,7 @@ export const PublicRoute = ({ component: Component, isAuth, isVerified, ...rest 
 				) : (
 					<div>
 						<Layout style={{height: '100vh', overflow: 'auto'}}>
-							<Layout.Content>
+							<Layout.Content style={{minHeight: '700px', display: 'flex', alignContent: 'middle', justifyContent: 'center'}}>
 								<Component {...props}/>
 							</Layout.Content>
 							<Layout.Footer>
@@ -25,7 +25,7 @@ export const PublicRoute = ({ component: Component, isAuth, isVerified, ...rest 
 			) : (
 				<div>
 					<Layout style={{height: '100vh', overflow: 'auto'}}>
-						<Layout.Content>
+						<Layout.Content style={{minHeight: '700px', display: 'flex', alignContent: 'middle', justifyContent: 'center'}}>
 							<Component {...props}/>
 						</Layout.Content>
 						<Layout.Footer>
