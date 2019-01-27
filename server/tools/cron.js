@@ -22,12 +22,12 @@ function deleteAll(path) {
     }
 }
 
+// Verifier tous les minutes
 module.exports = () => cron.schedule('* * * * *', () => {
 	db.query(sql.get_movie_file_by_time, (err, rows) => {
 		if (err) {
 			console.log("Error get movie file");
 		} else if (rows.length > 0) {
-			console.log(rows);
 			for (let i = 0; i < rows.length; i++) {
                 deleteAll(rows[i].path);
             }
