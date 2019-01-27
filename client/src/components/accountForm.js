@@ -85,8 +85,8 @@ class AccountForm extends Component {
 					help={err.language}
 				>
 					<Select defaultValue={user.language} onChange={this.handleLanguage}>
-							<Select.Option value="en">english</Select.Option>
-							<Select.Option value="fr">french</Select.Option>
+							<Select.Option value="english">english</Select.Option>
+							<Select.Option value="french">french</Select.Option>
           </Select>
 				</Form.Item>
 				<Form.Item
