@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Row, Col, message } from 'antd';
+import { Row, message } from 'antd';
 import { connect } from 'react-redux';
 import { userActions } from '../redux/actions/user';
 import { authActions } from '../redux/actions/auth';
@@ -25,12 +25,10 @@ class VisitPage extends Component {
   render() {
     return (
 				<Row type="flex" justify="space-around" align="middle" style={{height: '100vh'}}>
-					<Col span={16}>
-						<div className='visitPageWrapper' style={{width: '100%'}}>
+						<div className='visitPageWrapper' style={{width: '100%', maxWidth: '500px', minWidth: '250px'}}>
 							{this.props.oUser &&
 							<VisitCard user={this.props.oUser} />}
 						</div>
-					</Col>
 				</Row>
 		)
   }

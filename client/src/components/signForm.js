@@ -23,6 +23,7 @@ class SignForm extends Component {
 					}
 				}
 				else if (res.status === 200) {
+					this.setState({ err: {} })
 					message.success(res.data)
 					this.props.form.resetFields();
 				}
