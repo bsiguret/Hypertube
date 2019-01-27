@@ -202,7 +202,7 @@ class SideMenu extends Component {
 					<h4 style={{color: 'white', textAlign: 'center'}}>Rating</h4>
 					<Slider autoFocus={false} classname='slider' range step={0.1} max={10} defaultValue={[0, 10]} ref={(s2) => this.s2 = s2} onAfterChange={this.handleRating} />
 				</div>}
-				<Menu theme="dark" mode="inline">
+				<Menu theme="dark" mode="inline" defaultSelectedKeys={['0']}>
 					{this.props.sideMenuFilter &&
 					<Menu.SubMenu
 						key="sub1"

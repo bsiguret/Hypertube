@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import { Form, Icon, Input, Button, Avatar, Select } from 'antd';
+import { Form, Icon, Input, Button, Avatar, Select, message } from 'antd';
 import { connect } from 'react-redux';
 
 import PhotoUploader from './photoUploader';
 import { userActions } from '../redux/actions/user';
+import { authActions } from '../redux/actions/auth';
 
 class AccountForm extends Component {
 	constructor(props){
@@ -23,12 +24,31 @@ class AccountForm extends Component {
 		}
 	}
 
-	handleSubmit = (e) => {
+	handleSubmit = async (e) => {
 		e.preventDefault();
 		if (!this.props.photo) {
-		 this.props.dispatch(userActions.update(this.state.user, this.props.user.profile))
+			console.log('no photo')
+			let res = await this.props.dispatch(userActions.update(this.state.user, this.props.user.profile))
+			console.log(res)
+			if (res.status !== 200) {
+				if (res.status === 401) {
+					message.error('Please log in, your session may have expired')
+					this.props.dispatch(authActions.logout())
+				}
+			}
+			else
+				message.success('Account successfully updated')
 		} else {
-			this.props.dispatch(userActions.update(this.state.user, this.props.photo))
+			let res = await this.props.dispatch(userActions.update(this.state.user, this.props.photo))
+			console.log(res)
+			if (res.status !== 200) {
+				if (res.status === 401) {
+					message.error('Please log in, your session may have expired')
+					this.props.dispatch(authActions.logout())
+				}
+			}
+			else
+				message.success('Account successfully updated')
 		}
 	}
 	

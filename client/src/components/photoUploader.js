@@ -58,7 +58,12 @@ class PhotoUploader extends Component {
 		}
 		else if (info.file.status === 'removed')
 			this.setState({ fileList: info.fileList })
-	}
+  }
+  
+  handleRemove = async () => {
+    console.log('dasdsa')
+    this.props.dispatch(userActions.deletePhoto())
+  }
 
   render() {
 		const { previewVisible, previewImage, fileList } = this.state;
@@ -78,6 +83,7 @@ class PhotoUploader extends Component {
           fileList={fileList}
           onPreview={this.handlePreview}
           onChange={this.handleChange}
+          onRemove={this.handleRemove}
         >
           {fileList.length >= 1 ? null : uploadButton}
         </Upload>
