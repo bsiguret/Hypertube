@@ -146,6 +146,13 @@ class MoviePage extends Component {
 				))}
 			</>
 			);
+		const Genres = ({genres}) => (
+			<>
+				{genres.map((genre, key) => (
+						<span key={key}>{genre.genre},</span>
+				))}
+			</>
+			);
 		return (
 		<div className="movie-container">
 			{this.props.movie &&
@@ -173,6 +180,7 @@ class MoviePage extends Component {
 							<List.Item>Language: {movie.info[0].language}</List.Item>
 							<List.Item>Runtime: {movie.info[0].runtime}min</List.Item>
 							<List.Item>Rating: {movie.info[0].rating}</List.Item>
+							<List.Item>Genre:<Genres genres={movie.genres} /></List.Item>
 						</List>
 					</Col>
 				</Row>

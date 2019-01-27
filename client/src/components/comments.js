@@ -15,14 +15,15 @@ class Comments extends Component {
 				{comments.map((comment, key) => (
 					<List.Item
 						key={key}
-						onClick={() => {this.handleVisit(comment.uid)}}
 					>
 						<List.Item.Meta
 							avatar={<Avatar src={comment.profile} />}
 							title={`${comment.username}`}
 							description={comment.date}
+							style={{cursor: 'pointer'}}
+							onClick={() => {this.handleVisit(comment.uid)}}
 						/>
-						<div>
+						<div style={{wordBreak: 'break-all'}}>
 							{comment.comment}
 						</div>
 					</List.Item>
@@ -38,18 +39,3 @@ class Comments extends Component {
 }
 
 export default Comments;
-
-// {/* <List.Item
-// key={key}
-// >
-// <List.Item.Meta
-// 	avatar={
-// 		<Avatar size={64} shape='square' src={`http://localhost:3000/photo/${checkpoint.pic_path}`} />
-// 	}
-// 	title={<div><p>{checkpoint.controlType}</p><p>{checkpoint.checkpoint}</p></div>}
-// 	description={checkpoint.defautTexte}
-// />
-// <div>
-// 	preconisation: {checkpoint.preconisation}
-// </div>
-// </List.Item> */}
