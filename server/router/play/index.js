@@ -12,6 +12,7 @@ var torrentStream = require('torrent-stream');//
 
 var engine;
 var command = {};
+var movie_path;
 
 // ********************************************************************** //
 // TOOLS
@@ -183,11 +184,11 @@ function ft_engine (id, qualite)
   engine.on('download', (pieceindex) =>
   {
     console.log('download', movie_path);
-    if (pieceindex < 15)
+    if (pieceindex < 14)
     {
       status++;
       console.log('status:', status);
-      if (status == 15)
+      if (status == 14)
       {
         fs.access(movie_path, (err) =>
         {
@@ -237,6 +238,21 @@ router.get('/:id/:qualite', passport.authenticate('jwt', {session: false}), (req
 
     engine = torrentStream(magnet, options);
     ft_engine(id, qualite);
+    mydb.connection_db.query(sql.get_movie_file, [id, qualite], function(err1, rows1) {
+      if (err1) {
+        console.log(err1);
+      } else if (rows1.length) {
+        mydb.connection_db.query(sql.update_movie_file_date, [id, qualite], function(err2, rows2) {
+          if (err2) {
+            console.log(err2);
+          }
+        })
+      } else {
+        mydb.connection_db.query(sql.add_movie_file, [[id, qualite, options.path]], function(err3, rows3) {
+          if (err3) console.log(err3);
+        })
+      }
+    })
     res.send("OK");
   });
 });

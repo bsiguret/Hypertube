@@ -25,7 +25,7 @@ const isValidPhoto = (photo) => {
 }
 
 const isValidLang = (language) => {
-    return (language.match(/^(en|fr)$/) ? true : false)
+    return (language.match(/^(english|french)$/) ? true : false)
 }
 
 module.exports = {

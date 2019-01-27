@@ -38,9 +38,8 @@ router.post('/', signupFilter, (req, res) => {
                 fs.mkdirSync(dir + userStorage)
             }
     
-            fs.writeFile(dir + filename, req.body.photo, {encoding: 'base64'}, function(err) {
-    
-            });
+            fs.writeFileSync(dir + filename, req.body.photo, {encoding: 'base64'});
+            
             sendMailTo(req.body.username, req.body.email, 1).then(success => {
                 res.json(success)
             }).catch(err => {

@@ -33,6 +33,8 @@ const update = async (user, photo) => {
 	formData.append("firstname", user.firstname)
 	formData.append("lastname", user.lastname)
 	formData.append("password", user.password)
+	formData.append("npassword", user.npassword)
+	formData.append("language", user.language)
 	formData.append("cpassword", user.cpassword)
 
 	let res = await axios.post(
