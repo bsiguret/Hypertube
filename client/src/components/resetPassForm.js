@@ -8,11 +8,9 @@ class ResetPassForm extends Component {
 
 	handleSubmit = (e) => {
 		e.preventDefault();
-		console.log(this.props.form)
     this.props.form.validateFields(async (err, values) => {
       if (!err) {
 				let res = await this.props.dispatch(authActions.resetPassEmail(values.email))
-				console.log(res);
 				if (res.status !== 200) {
 					message.error(res.data)
 				}

@@ -21,7 +21,6 @@ class Comment extends Component {
 				this.props.dispatch(authActions.logout())
 				message.error('Please log in, your session may have expired')
 			}
-			console.log(res)
 		}
 		else
 			message.error('Comment must be between 5 and 1000 chars')
@@ -35,9 +34,8 @@ class Comment extends Component {
 	}
 
 	handleChange = (e) => {
-		console.log(e.target.value.length)
-		if (e.target.value.length > 2000)
-			console.log('nope')
+		if (e.target.value.length > 1000)
+			message.error('max chars authorized is 1000')
 		else
 			this.setState({ [e.target.name]: e.target.value})
 	}

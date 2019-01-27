@@ -38,7 +38,6 @@ class HomePage extends Component {
 			loading: false,
 			page: this.state.page + 1
     });
-		console.log(resp)
 	}
 
 	getAllGenre = async () => {

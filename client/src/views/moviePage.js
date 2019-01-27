@@ -55,7 +55,6 @@ class MoviePage extends Component {
 	getMovieDownload = (quality) => {
 		movieService.getMovieDownload('get_movie', this.props.match.params.id, quality)
 		.then(async (response) => {
-			console.log(response)
 			if (response.data !== 'NO')
 			{
 				await this.getSubtitle(quality);
@@ -67,7 +66,6 @@ class MoviePage extends Component {
 	getSubtitle = (quality) => {
 		movieService.getMovieDownload('get_subtitle', this.props.match.params.id, quality)
 		.then((response) => {
-			console.log(response)
 			if (response.data !== 'NO')
 			{
 				let json = response.data;
@@ -76,16 +74,28 @@ class MoviePage extends Component {
 					let tracks = [];
 					for (let i = 0; i < json.length; i++)
 					{
-						tracks = [
-							...tracks,
-							{
-								kind: 'subtitles',
-								src: json[i].path,
-								srcLang: json[i].language
-							}
-						]
+						if (this.props.language === json[i].language) {
+							tracks = [
+								...tracks,
+								{
+									kind: 'subtitles',
+									src: json[i].path,
+									srcLang: json[i].language,
+									default: true
+								}
+							]
+						}
+						else {
+							tracks = [
+								...tracks,
+								{
+									kind: 'subtitles',
+									src: json[i].path,
+									srcLang: json[i].language
+								}
+							]
+						}
 					}
-					console.log('TRACKS Array', tracks)
 					this.setState({
 						loading: false,
 						source: 'http://localhost:3000/tmp/' + this.props.match.params.id + '/' + quality + '/out.m3u8' ,
@@ -136,8 +146,6 @@ class MoviePage extends Component {
 				))}
 			</>
 			);
-		console.log(movie)
-		console.log('file', this.state.file)
 		return (
 		<div className="movie-container">
 			{this.props.movie &&
@@ -206,7 +214,8 @@ class MoviePage extends Component {
 
 const mapStateToProps = state => ({
 	movie: state.movieReducer.movie,
-	comments: state.movieReducer.comments
+	comments: state.movieReducer.comments,
+	language: state.userReducer.user.language
 });
 
 export default connect(mapStateToProps)(MoviePage);

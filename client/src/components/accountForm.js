@@ -38,7 +38,6 @@ class AccountForm extends Component {
   render() {
 		const { err } = this.state;
 		const { user } = this.state;
-		console.log(this.props)
     return (
 			<Form onSubmit={this.handleSubmit} className="indexSignupForm">
 				<div style={{display: 'flex', justifyContent: 'space-around'}}>

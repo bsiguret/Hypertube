@@ -17,7 +17,6 @@ const signup = async (user) => {
 		{ headers: { "Content-Type": "multipart/form-data" } }
 	)
 	.then ((response) => {
-		console.log(response)
 		return (response)
 	})
 	.catch((error) => {
@@ -27,7 +26,6 @@ const signup = async (user) => {
 }
 
 const update = async (user, photo) => {
-	console.log(user, photo)
 	let formData = new FormData();
 	formData.append("photo", photo)
 	formData.append("username", user.username)
@@ -43,7 +41,6 @@ const update = async (user, photo) => {
 		{ headers: { "Content-Type": "multipart/form-data" } }
 	)
 	.then ((response) => {
-		console.log(response)
 		return (response)
 	})
 	.catch((error) => {
