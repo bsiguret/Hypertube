@@ -10,22 +10,27 @@ function deleteAll(path) {
         files.forEach(function(file, index) {
             var curPath = path + "/" + file;
             if(fs.statSync(curPath).isDirectory()) { // recurse
-                deleteaAll(curPath);
+                deleteAll(curPath);
             } else { // delete file
                 fs.unlinkSync(curPath);
             }
         });
         fs.rmdirSync(path);
+        db.query(sql.delete_movie_file, [path], (err, rows) => {
+            if (err) console.log(err);
+        })
     }
 }
 
 module.exports = () => cron.schedule('* * * * *', () => {
-	db.query(sql.get_movie_file, (err, rows) => {
+	db.query(sql.get_movie_file_by_time, (err, rows) => {
 		if (err) {
 			console.log("Error get movie file");
 		} else if (rows.length > 0) {
 			console.log(rows);
-			// deleteAll();
+			for (let i = 0; i < rows.length; i++) {
+                deleteAll(rows[i].path);
+            }
         }
     })
 });
