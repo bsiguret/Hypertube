@@ -55,11 +55,11 @@ class EmailValidationPage extends Component {
 		const { loading, err } = this.state
 		const { getFieldDecorator } = this.props.form;
     return (
-				<Row type="flex" justify="space-around" align="middle" style={{height: '100vh'}}>
+				<Row type="flex" justify="space-around" align="middle" style={{height: '100vh', width:'100%'}}>
 					{loading &&
 					<Spin size='large' />}
 					{!loading &&
-					<Col span={8}>
+					<Col span={8} style={{minWidth: '250px'}}>
 						<div className='resetPassFormWrapper'>
 							<Form onSubmit={this.handleSubmit} className="resetPassForm">
 								<Form.Item
