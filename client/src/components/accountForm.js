@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import { Form, Icon, Input, Button, Avatar, Select } from 'antd';
+import { Form, Icon, Input, Button, Avatar, Select, message } from 'antd';
 import { connect } from 'react-redux';
 
 import PhotoUploader from './photoUploader';
 import { userActions } from '../redux/actions/user';
+import { authActions } from '../redux/actions/auth';
 
 class AccountForm extends Component {
 	constructor(props){
@@ -23,12 +24,31 @@ class AccountForm extends Component {
 		}
 	}
 
-	handleSubmit = (e) => {
+	handleSubmit = async (e) => {
 		e.preventDefault();
 		if (!this.props.photo) {
-		 this.props.dispatch(userActions.update(this.state.user, this.props.user.profile))
+			console.log('no photo')
+			let res = await this.props.dispatch(userActions.update(this.state.user, this.props.user.profile))
+			console.log(res)
+			if (res.status !== 200) {
+				if (res.status === 401) {
+					message.error('Please log in, your session may have expired')
+					this.props.dispatch(authActions.logout())
+				}
+			}
+			else
+				message.success('Account successfully updated')
 		} else {
-			this.props.dispatch(userActions.update(this.state.user, this.props.photo))
+			let res = await this.props.dispatch(userActions.update(this.state.user, this.props.photo))
+			console.log(res)
+			if (res.status !== 200) {
+				if (res.status === 401) {
+					message.error('Please log in, your session may have expired')
+					this.props.dispatch(authActions.logout())
+				}
+			}
+			else
+				message.success('Account successfully updated')
 		}
 	}
 	
@@ -50,36 +70,40 @@ class AccountForm extends Component {
 				>
 					<Input prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />} name='username' value={user.username} onChange={this.handleChange.bind(this)}/>
 				</Form.Item>
+				{!this.props.user.oauth &&
 				<Form.Item
 					validateStatus={err.email ? 'error' : 'success'}
 					help={err.email}
 				>
 					<Input prefix={<Icon type="mail" style={{ color: 'rgba(0,0,0,.25)' }} />} name='email' type="email" value={user.email} onChange={this.handleChange.bind(this)}/>
-				</Form.Item>
+				</Form.Item>}
 				<Form.Item
 					validateStatus={err.firstname ? 'error' : 'success'}
 					help={err.firstname}
 				>
 					<Input prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />} name='firstname' value={user.firstname} onChange={this.handleChange.bind(this)}/>
 				</Form.Item>
+
 				<Form.Item
 					validateStatus={err.lastname ? 'error' : 'success'}
 					help={err.lastname}
 				>
 					<Input prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />} name='lastname' value={user.lastname} onChange={this.handleChange.bind(this)}/>
 				</Form.Item>
+				{!this.props.user.oauth &&
 				<Form.Item
 					validateStatus={err.npassword ? 'error' : 'success'}
 					help={err.npassword}
 				>
 					<Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} name='npassword' type="password" placeholder="New Password" onChange={this.handleChange.bind(this)}/>
-				</Form.Item>
+				</Form.Item>}
+				{!this.props.user.oauth &&
 				<Form.Item
 					validateStatus={err.cpassword ? 'error' : 'success'}
 					help={err.cpassword}
 				>
 					<Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} name='cpassword' type="password" placeholder="Confirm Password" onChange={this.handleChange.bind(this)}/>
-				</Form.Item>
+				</Form.Item>}
 				<Form.Item
 					validateStatus={err.language ? 'error' : 'success'}
 					help={err.language}
@@ -89,12 +113,13 @@ class AccountForm extends Component {
 							<Select.Option value="french">french</Select.Option>
           </Select>
 				</Form.Item>
+				{!this.props.user.oauth &&
 				<Form.Item
 					validateStatus={err.password ? 'error' : 'success'}
 					help={err.password}
 				>
 					<Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} name='password' type="password" placeholder="Password" onChange={this.handleChange.bind(this)}/>
-				</Form.Item>
+				</Form.Item>}
 				<Form.Item>
 					<Button block type="primary" htmlType="submit" className="signFormButton">
 						Submit

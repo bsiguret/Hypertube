@@ -124,11 +124,17 @@ const signupPhoto = (photo) => async dispatch => {
 	dispatch(success(photo));
 }
 
+const deletePhoto = () => async dispatch => {
+	function success() { return { type: userConstants.DELETE_PHOTO} };
+	dispatch(success());
+}
+
 export const userActions = {
 	getUser,
 	getOtherUser,
 	signup,
 	signupPhoto,
+	deletePhoto,
 	verifEmail,
 	resendMail,
 	update,
