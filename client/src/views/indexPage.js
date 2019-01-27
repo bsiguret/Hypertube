@@ -28,7 +28,7 @@ class IndexPage extends Component {
   render() {
 		const { login } = this.state
     return (
-			<Row style={{height: '100vh', margintop: '15px'}}>
+			<Row style={{height: '100vh', margintop: '15px', display: 'flex', alignItems: 'center'}}>
 				{!login &&
 				<Col span={8} style={{minWidth: '250px'}}>
 					<SignForm/>

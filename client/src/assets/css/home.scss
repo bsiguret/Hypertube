@@ -16,6 +16,8 @@
 		margin-top: 15px;
 		position: relative;
 		width: 20%;
+		max-width: 300px;
+		min-width: 150px;
 		flex-grow: 1;
 		.movie-image {
 			color: #fff;
