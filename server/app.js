@@ -5,6 +5,7 @@ const path = require('path');
 const cors = require('cors');
 const passport = require('passport');
 const cookieParser = require('cookie-parser');
+const cron = require('./tools/cron');
 
 require('dotenv').config();
 
@@ -40,6 +41,7 @@ app.use('/api/emailvalidation', require('./router/emailvalidation'));
 app.use('/tools', express.static('./tools'));
 app.use('/play', require('./router/play'));
 app.use('/tmp', express.static('tmp'))
+cron();
 
 app.listen(process.env.PORT_BACK, () => {
 	console.log(`Listening on port ${process.env.PORT_BACK}`);

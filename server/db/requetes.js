@@ -10,7 +10,7 @@ const create_table_users = `CREATE TABLE IF NOT EXISTS users
 		username VARCHAR(30) NOT NULL UNIQUE,
 		password VARCHAR(100),
 		email VARCHAR(100) UNIQUE,
-		language VARCHAR(2) NOT NULL DEFAULT 'en',
+		language ENUM('french', 'english') NOT NULL DEFAULT 'english',
 		profile TEXT NOT NULL,
 		token VARCHAR(100) DEFAULT NULL,
 		isVerified INT DEFAULT 0,
@@ -80,7 +80,8 @@ const create_table_movies_file = `CREATE TABLE IF NOT EXISTS file
 		id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
 		movie_id VARCHAR(50) NOT NULL,
 		quality VARCHAR(10) NOT NULL,
-		path TEXT NOT NULL
+		path TEXT NOT NULL,
+		last_view TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 	)`;
 
 const create_table_movies_subtitle = `CREATE TABLE IF NOT EXISTS subtitle
@@ -116,8 +117,10 @@ const get_movie_genre = "SELECT genre FROM genre WHERE movie_id=?";
 const get_movie_torrent_info = "SELECT quality, seeds, peers, size_bytes FROM torrent WHERE movie_id=?";
 const get_movie_torrent = "SELECT * FROM torrent WHERE movie_id=? AND quality=?";
 const add_movie_file = "INSERT INTO file (movie_id, quality, path) VALUES ?";
+const update_movie_file_date = "UPDATE file SET date=CURRENT_TIMESTAMP WHERE movie_id=? AND quality=?";
+const delete_movie_file = "DELETE FROM file WHERE movie_id=? AND quality=?";
 const add_movie_subtitle = "INSERT INTO subtitle (movie_id, language, path) VALUES ?";
-const get_movie_file = "SELECT path FROM file WHERE movie_id=? AND quality=?";
+const get_movie_file = "SELECT path FROM file WHERE DATEDIFF(NOW(), last_view) > 30";
 const get_movie_subtitle = "SELECT * FROM subtitle WHERE movie_id=?";
 const get_all_genre = "SELECT genre FROM genre GROUP BY genre";
 const get_movie_status = "SELECT * FROM status WHERE movie_id=?";
@@ -155,6 +158,8 @@ module.exports = {
 	add_movie_torrent: add_movie_torrent,
 	check_movie_exists: check_movie_exists,
 	add_movie_file: add_movie_file,
+	update_movie_file_date: update_movie_file_date,
+	delete_movie_file: delete_movie_file,
 	add_movie_subtitle: add_movie_subtitle,
 	get_movie_file: get_movie_file,
 	get_movie_subtitle: get_movie_subtitle,
