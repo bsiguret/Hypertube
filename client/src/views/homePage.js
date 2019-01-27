@@ -22,7 +22,7 @@ class HomePage extends Component {
     this.setState({
       loading: true,
     });
-		let resp = await this.props.dispatch(
+		await this.props.dispatch(
 			movieActions.getMoreMovies(
 				this.props.filter.name,
 				this.props.filter.min_rating,
