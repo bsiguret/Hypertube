@@ -22,7 +22,7 @@ class HomePage extends Component {
     this.setState({
       loading: true,
     });
-		let resp = await this.props.dispatch(
+		await this.props.dispatch(
 			movieActions.getMoreMovies(
 				this.props.filter.name,
 				this.props.filter.min_rating,
@@ -38,7 +38,6 @@ class HomePage extends Component {
 			loading: false,
 			page: this.state.page + 1
     });
-		console.log(resp)
 	}
 
 	getAllGenre = async () => {
@@ -57,11 +56,27 @@ class HomePage extends Component {
 			message.error('Please log in, your session may have expired')
 		}
     return;
+	}
+	
+	resetFilter = () => {
+		this.props.dispatch(
+			movieActions.addFilter(
+				"",
+				0,
+				10,
+				0,
+				9999,
+				"",
+				"rating",
+				0
+			)
+		)
   }
 
 	componentWillMount = () => {
 		this.getAllGenre();
 		this.initMovies();
+		this.resetFilter();
 	}
 
   render() {

@@ -43,7 +43,6 @@ const signup = (user) => async dispatch => {
 	function request() { return { type: userConstants.SIGNUP_REQUEST} };
 	function success(user) { return { type: userConstants.SIGNUP_SUCCESS, user} };
 
-	console.log(user)
 	dispatch(request());
 	let res = await u.signup(user)
 		.then(

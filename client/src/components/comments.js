@@ -6,7 +6,6 @@ import { history } from '../assets/helpers/history'
 class Comments extends Component {
 
 	handleVisit(id) {
-		console.log(id)
 		history.push(`/user/${id}`)
 	}
 
@@ -31,7 +30,6 @@ class Comments extends Component {
 			</>
 		);
     return (
-			console.log(this.props.comments),
 			<List className='comments' itemLayout="vertical">
 				<Comments comments={this.props.comments}/>
 			</List>

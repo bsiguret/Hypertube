@@ -45,7 +45,6 @@ const initMovies = () => async dispatch => {
 const getMovies = (name, min_rating, max_rating, min_year, max_year, genres, order, nb) => async dispatch => {
 	function request() { return { type: userConstants.MOVIES_REQUEST} };
 	function success(movies) { return { type: userConstants.MOVIES_SUCCESS, movies} };
-	console.log(name, min_rating, max_rating, min_year, max_year, genres, order, nb)
 	dispatch(request());
 	let res = await m.getMovies(name, min_rating, max_rating, min_year, max_year, genres, order, nb)
 		.then(

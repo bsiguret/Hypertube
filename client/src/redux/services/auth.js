@@ -20,11 +20,9 @@ const oauth = async (name) => {
 		`/api/auth/${name}`,
 	)
 	.then ((response) => {
-		console.log(response)
 		return (response)
 	})
 	.catch((error) => {
-		console.log(error.response)
 		return (error.response);
 	})
 	return res;
@@ -35,11 +33,9 @@ const logout = async () => {
 		'/api/logout'
 	)
 	.then ((response) => {
-		console.log(response)
 		return (response)
 	})
 	.catch((error) => {
-		console.log(error.response)
 		return (error.response);
 	})
 	return res;

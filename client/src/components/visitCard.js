@@ -5,7 +5,6 @@ class VisitCard extends Component {
 
   render() {
 		const { user } = this.props
-		console.log(user)
     return (
 			<Card
 				hoverable

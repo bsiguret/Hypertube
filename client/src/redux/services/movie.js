@@ -29,7 +29,6 @@ const initMovies = async () => {
 }
 
 const getMovies = async (name, min_rating, max_rating, min_year, max_year, genres, order, nb) => {
-	console.log(name, min_rating, max_rating, min_year, max_year, genres, order, nb)
 	let res = await axios.post(`/api/get_data/all_movies/${nb}`, {
 		name,
 		min_rating,
@@ -63,7 +62,6 @@ const getMovieInfo = async (id) => {
 }
 
 const startMovieDownload = async (id, quality) => {
-	// console.log('startMovieDownload')
 	let res = await axios.get(
 		`/play/${id}/${quality}`
 		)
@@ -77,7 +75,6 @@ const startMovieDownload = async (id, quality) => {
 }
 
 const getMovieDownload = async (action, id, qualite) => {
-	// console.log('getMovieDownload')
 	let res = await axios.post(`/play`, {
 			action,
 			id,
@@ -105,7 +102,6 @@ const getComments = async (id) => {
 }
 
 const postComment = async (movie_id, comment) => {
-	console.log(movie_id, comment)
 	let res = await axios.post(`/api/comments/`, {
 		movie_id,
 		comment

@@ -15,15 +15,11 @@ class SignForm extends Component {
 	handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFields(async (err, values) => {
-			console.log(values)
       if (!err && this.props.photo) {
 				let res = await this.props.dispatch(userActions.signup({user: {photo: this.props.photo, ...values}}))
 				if (res.status !== 200) {
-					console.log(res)
 					if (res.status === 403) {
-						console.log(res.data)
 						this.setState({ err: res.data })
-						console.log(this.state.err)
 					}
 				}
 				else if (res.status === 200) {

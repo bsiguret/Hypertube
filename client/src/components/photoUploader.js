@@ -62,7 +62,6 @@ class PhotoUploader extends Component {
 
   render() {
 		const { previewVisible, previewImage, fileList } = this.state;
-		console.log(this.state)
     const uploadButton = (
       <div>
         <Icon type="plus" />

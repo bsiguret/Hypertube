@@ -8,9 +8,7 @@ import { history } from '../assets/helpers/history';
 class EmailValidationPage extends Component {
 
 	async componentDidMount() {
-		console.log(this.props.match.params, this.props)
 		let res = await this.props.dispatch(userActions.verifEmail(this.props.match.params.username, this.props.match.params.token))
-		console.log(res)
 		if (res.status === 200)
 			message.success(res.data)
 		else

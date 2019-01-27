@@ -11,7 +11,6 @@ class VisitPage extends Component {
 
 
 	async componentWillMount() {
-		console.log(this.props.match.params.id)
 		let res = await this.props.dispatch(userActions.getOtherUser(this.props.match.params.id))
 		if (res.status === 403) {
 			message.error('No user found with this id')
