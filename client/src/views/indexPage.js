@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Row, Col, Layout, Icon, Divider, Button, Avatar, message } from 'antd';
+import { Row, Col, Icon, Divider, Button, Avatar, message } from 'antd';
 
 import { connect } from 'react-redux';
 import Cookies from 'js-cookie';

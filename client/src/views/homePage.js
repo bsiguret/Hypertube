@@ -57,11 +57,27 @@ class HomePage extends Component {
 			message.error('Please log in, your session may have expired')
 		}
     return;
+	}
+	
+	resetFilter = () => {
+		this.props.dispatch(
+			movieActions.addFilter(
+				"",
+				0,
+				10,
+				0,
+				9999,
+				"",
+				"rating",
+				0
+			)
+		)
   }
 
 	componentWillMount = () => {
 		this.getAllGenre();
 		this.initMovies();
+		this.resetFilter();
 	}
 
   render() {
