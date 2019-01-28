@@ -27,28 +27,32 @@ class AccountForm extends Component {
 	handleSubmit = async (e) => {
 		e.preventDefault();
 		if (!this.props.photo) {
-			console.log('no photo')
 			let res = await this.props.dispatch(userActions.update(this.state.user, this.props.user.profile))
-			console.log(res)
 			if (res.status !== 200) {
 				if (res.status === 401) {
 					message.error('Please log in, your session may have expired')
 					this.props.dispatch(authActions.logout())
 				}
+				else if (res.status === 403) {
+					this.setState({ err: res.data})
+				}
 			}
-			else
+			else {
+				this.setState({ err: {}, user: {...this.state.user, npassword: '', cpassword: '', password: ''}})
 				message.success('Account successfully updated')
+			}
 		} else {
 			let res = await this.props.dispatch(userActions.update(this.state.user, this.props.photo))
-			console.log(res)
 			if (res.status !== 200) {
 				if (res.status === 401) {
 					message.error('Please log in, your session may have expired')
 					this.props.dispatch(authActions.logout())
 				}
 			}
-			else
+			else {
+				this.setState({ err: {}, user: {...this.state.user, npassword: '', cpassword: '', password: ''}})
 				message.success('Account successfully updated')
+			}
 		}
 	}
 	
@@ -95,14 +99,14 @@ class AccountForm extends Component {
 					validateStatus={err.npassword ? 'error' : 'success'}
 					help={err.npassword}
 				>
-					<Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} name='npassword' type="password" placeholder="New Password" onChange={this.handleChange.bind(this)}/>
+					<Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} name='npassword' value={user.npassword} type="password" placeholder="New Password" onChange={this.handleChange.bind(this)}/>
 				</Form.Item>}
 				{!this.props.user.oauth &&
 				<Form.Item
 					validateStatus={err.cpassword ? 'error' : 'success'}
 					help={err.cpassword}
 				>
-					<Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} name='cpassword' type="password" placeholder="Confirm Password" onChange={this.handleChange.bind(this)}/>
+					<Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} name='cpassword'value={user.cpassword}  type="password" placeholder="Confirm Password" onChange={this.handleChange.bind(this)}/>
 				</Form.Item>}
 				<Form.Item
 					validateStatus={err.language ? 'error' : 'success'}
@@ -118,7 +122,7 @@ class AccountForm extends Component {
 					validateStatus={err.password ? 'error' : 'success'}
 					help={err.password}
 				>
-					<Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} name='password' type="password" placeholder="Password" onChange={this.handleChange.bind(this)}/>
+					<Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} name='password' type="password" value={user.password} placeholder="Password" onChange={this.handleChange.bind(this)}/>
 				</Form.Item>}
 				<Form.Item>
 					<Button block type="primary" htmlType="submit" className="signFormButton">
