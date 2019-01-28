@@ -61,24 +61,31 @@ router.post('/settings', passport.authenticate('jwt', {session: false}), setting
             req.body.language,
             req.body.photo
         ];
-        if (!user.id42 && !user.googleid && !user.githubid) {
+        let oauth = 0;
+        if (user.id42 || user.githubid || user.googleid)
+            oauth = 1;
+        if (!oauth) {
             requete = sql.update_user_settings;
             data.push(req.body.npassword);
             data.push(req.body.email);
-            data.push(req.body.isVerified);
         }
         data.push(id);
         db.query(requete, data, (err, rows) => {
             if (err) {
                 res.status(403).json({msg: "Error update settings"});
-            } else if (!req.body.isVerified) {
-                sendMailTo(req.body.username, req.body.email, 2).then(success => {
-                    res.json({msg: "Update settings", msg_mail: success});
-                }).catch(err => {
-                    res.status(403).json({sendMail: err});
-                })
             } else {
-                res.json({msg: "Update settings"});
+                let info = {
+                    id: user.id,
+                    profile: req.body.photo,
+                    username: req.body.username,
+                    email: req.body.email,
+                    firstname: req.body.firstname,
+                    lastname: req.body.lastname,
+                    language: req.body.language,
+                    isVerified: user.isVerified,
+                    oauth: oauth
+                }
+                res.json({msg: "Update settings", user: info});
             }
         });
     });
