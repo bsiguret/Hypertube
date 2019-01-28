@@ -22,8 +22,9 @@ function deleteAll(path) {
     }
 }
 
-// Verifier tous les minutes
-module.exports = () => cron.schedule('* * * * *', () => {
+// Verifier tous les jours a minuit
+// s (optional) m h d m dayOfWeek
+module.exports = () => cron.schedule('0 0 * * *', () => {
 	db.query(sql.get_movie_file_by_time, (err, rows) => {
 		if (err) {
 			console.log("Error get movie file");

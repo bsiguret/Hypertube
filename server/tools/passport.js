@@ -129,8 +129,8 @@ passport.use(new GoogleStrategy({
     },
     function(accessToken, refreshToken, profile, cb) {
         let googleid = profile._json.id;
-        let lastname = profile._json.name.familyName;
-        let firstname = profile._json.name.givenName;
+        let lastname = profile._json.name.familyName ? profile._json.name.familyName : "Doe";
+        let firstname = profile._json.name.givenName ? profile._json.name.givenName : "Doe";
         let username = lastname ? lastname.toLowerCase() : firstname.toLowerCase();
         let email = profile._json.emails[0].value;
         let photo = profile._json.image.url.slice(0, -2) + "200";

@@ -15,9 +15,13 @@ const RPFilterEmail = (req, res, next) => {
                 res.status(403).json({error: err.code + ': ' + err.sqlMessage})
             } else {
                 if (user.length && user[0].username && user[0].email) {
-                    req.body.username = user[0].username
-                    req.body.email = user[0].email
-                    next()
+                    if (user[0].id42 || user[0].googleid || user[0].githubid) {
+                        res.status(403).json("User connect with Omniauth can't reset pass")
+                    } else {
+                        req.body.username = user[0].username
+                        req.body.email = user[0].email
+                        next()
+                    }
                 } else {
                     res.status(403).json("Email unavailable")
                 }

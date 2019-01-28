@@ -9,9 +9,11 @@ const cron = require('./tools/cron');
 
 require('dotenv').config();
 
+let port_front = process.env.NODE_ENV == 'dev' ? 3001 : 5000;
+
 app.use(
 	cors({
-		origin: 'http://localhost:3001',
+		origin: 'http://localhost:' + port_front,
 		credentials: true
 	})
 )
