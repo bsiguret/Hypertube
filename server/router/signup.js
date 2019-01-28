@@ -25,7 +25,7 @@ router.post('/', signupFilter, (req, res) => {
         }
         const dir = __dirname + '/../public/'
         const userStorage =  success.insertId + '/'
-        const filename = userStorage + 'profile.png'
+        const filename = userStorage + 'profile' + Math.floor(Math.random() * 1001) + '.png'
         const file = "http://localhost:" + process.env.PORT_BACK + "/api/photo/" + filename
         db.query(sql.update_profile, [file, success.insertId], (err1, rows) => {
             if (err) {

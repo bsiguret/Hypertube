@@ -34,25 +34,36 @@ router.get('/settings', passport.authenticate('jwt', {session: false}), (req, re
 });
 
 router.post('/settings', passport.authenticate('jwt', {session: false}), settingsFilter, (req, res) => {
-    let photo = req.body.photo;
     let id = jwt.decode(req.cookies.token).id;
 
-    if (req.body.photo_change) {
-        const dir = __dirname + '/../public/'
-        const userStorage =  id + '/'
-        const filename = userStorage + 'profile.png'
-        const file = "http://localhost:" + process.env.PORT_BACK + "/api/photo/" + filename
-        if (!fs.existsSync(dir)) {
-            fs.mkdirSync(dir)
-        }
-        if (!fs.existsSync(dir + userStorage)) {
-            fs.mkdirSync(dir + userStorage)
-        }
-        fs.writeFileSync(dir + filename, req.body.photo, {encoding: 'base64'});
-        req.body.photo = file;
-    }
-    
     userQuery.findOne({id: id}).then(user => {
+        if (req.body.photo_change) {
+            const dir = __dirname + '/../public/'
+            const userStorage =  id + '/'
+            let filename = userStorage + 'profile' + Math.floor(Math.random() * 1001) + '.png'
+            let file = "http://localhost:" + process.env.PORT_BACK + "/api/photo/" + filename
+            while (1) {
+                if (file == user.profile) {
+                    filename = userStorage + 'profile' + Math.floor(Math.random() * 1001) + '.png'
+                    file = "http://localhost:" + process.env.PORT_BACK + "/api/photo/" + filename
+                } else {
+                    break ;
+                }
+            }
+            if (!fs.existsSync(dir)) {
+                fs.mkdirSync(dir)
+            }
+            if (!fs.existsSync(dir + userStorage)) {
+                fs.mkdirSync(dir + userStorage)
+            }
+            fs.writeFileSync(dir + filename, req.body.photo, {encoding: 'base64'});
+            let temp = user.profile.split('/');
+            if (fs.existsSync(dir + userStorage + temp[temp.length - 1])) {
+                fs.unlinkSync(dir + userStorage + temp[temp.length - 1]);
+            }
+            req.body.photo = file;
+        }
+
         let requete = sql.update_oauth_settings;
         let data = [
             req.body.lastname,

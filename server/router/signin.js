@@ -24,6 +24,8 @@ router.post('/', (req, res) => {
                     res.json({user: data});
                 }
             }
+        }).catch(e => {
+            res.status(403).json({msg: "E-mail or password incorrect"});
         })
     }
 });
