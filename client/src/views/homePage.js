@@ -66,7 +66,7 @@ class HomePage extends Component {
 				10,
 				0,
 				9999,
-				"",
+				this.props.filter.genres,
 				"rating",
 				0
 			)
