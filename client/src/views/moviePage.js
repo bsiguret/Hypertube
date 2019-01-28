@@ -122,10 +122,8 @@ class MoviePage extends Component {
 
 
 	componentWillUnmount = async () => {
-		await clearInterval(this.get_movie);
-		if (this.state.loading) {
-			await this.setState({ loading: false })
-		}
+		clearInterval(this.get_movie);
+		this.setState({ loading: false })
 	}
 
   render() {
@@ -181,7 +179,11 @@ class MoviePage extends Component {
 				</Row>
 				<Row type='flex' justify='center' align='middle'>
 					<h2 style={{textAlign: 'center'}}>Synopsis</h2>
+				</Row>
+				<Row type='flex' justify='center' align='middle'>
 					<p style={{textAlign: 'center'}}>{movie.info[0].description}</p>
+				</Row>
+				<Row type='flex' justify='center' align='middle'>
 					<div className='movie-button'>
 						<Qualities qualities={movie.torrents}/>
 					</div>
