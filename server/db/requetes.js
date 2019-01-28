@@ -126,7 +126,7 @@ const get_user = "SELECT * FROM users WHERE id=? || username=? || email=?";
 const add_movie_view = "INSERT INTO viewed (uid, movie_id) VALUES (?)";
 const get_movie_view = "SELECT * FROM viewed WHERE uid=? AND movie_id=?";
 const update_reset_pass_time = "UPDATE users SET reset_pass_time=CURRENT_TIMESTAMP WHERE username=?";
-const update_user_settings = "UPDATE users SET lastname=?, firstname=?, username=?, language=?, profile=?, password=?, email=?, isVerified=? WHERE id=?";
+const update_user_settings = "UPDATE users SET lastname=?, firstname=?, username=?, language=?, profile=?, password=?, email=? WHERE id=?";
 const update_oauth_settings = "UPDATE users SET lastname=?, firstname=?, username=?, language=?, profile=? WHERE id=?";
 
 module.exports = {

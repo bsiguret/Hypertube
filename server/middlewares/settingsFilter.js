@@ -88,10 +88,6 @@ const settingsFilter = (req, res, next) => {
                                     req.body.error.email = "Not a valid email, example: stream@hypertube.com"
                                 } else {
                                     req.body.email = purifyString(req.body.email);
-                                    req.body.isVerified = 1;
-                                    if (req.body.email !== user.email) {
-                                        req.body.isVerified = 0;
-                                    }
                                 }
                             }
                         }
@@ -121,7 +117,7 @@ const settingsFilter = (req, res, next) => {
                                 req.body.error.npassword = "New password does not match with password confirmation"
                             }
                         } else {
-                            req.body.password = user.password;
+                            req.body.npassword = user.password;
                         }
 
                         if (!language || !isValidLang(purifyString(language))) {
