@@ -101,7 +101,7 @@ const resendMail = (email) => async dispatch => {
 
 const update = (user, photo) => async dispatch => {
 	function request() { return { type: userConstants.UPDATE_REQUEST} };
-	function success() { return { type: userConstants.UPDATE_SUCCESS, user} };
+	function success(user) { return { type: userConstants.UPDATE_SUCCESS, user} };
 
 	dispatch(request());
 	let res = await u.update(user, photo)
@@ -111,7 +111,7 @@ const update = (user, photo) => async dispatch => {
 					return res;
 				}
 				else {
-					dispatch(success());
+					dispatch(success(res.data.user));
 					return res;
 				}
 			}

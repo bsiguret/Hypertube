@@ -35,9 +35,9 @@ class MoviePage extends Component {
 		this.handleDownload = this.handleDownload.bind(this);
 	}
 
-	handleDownload = (quality) => {
+	handleDownload = async (quality) => {
 		clearInterval(this.get_movie); //
-		movieService.getMovieDownload('sigall', this.props.match.params.id, quality)
+		await movieService.getMovieDownload('sigall', this.props.match.params.id, quality)
 		.then((response) => {
 			if (response.status !== 200) {
 				this.props.dispatch(authActions.logout())
@@ -52,8 +52,8 @@ class MoviePage extends Component {
 		}, 1000)
 	}
 
-	getMovieDownload = (quality) => {
-		movieService.getMovieDownload('get_movie', this.props.match.params.id, quality)
+	getMovieDownload = async (quality) => {
+		await movieService.getMovieDownload('get_movie', this.props.match.params.id, quality)
 		.then(async (response) => {
 			if (response.data !== 'NO')
 			{
@@ -121,16 +121,11 @@ class MoviePage extends Component {
 	}
 
 
-	componentWillUnmount = () => {
-		movieService.getMovieDownload('sigall', this.props.match.params.id)
-		.then((response) => {
-			if (response.status !== 200) {
-				this.props.dispatch(authActions.logout())
-				message.error('Please log in, your session may have expired')
-			}
-		})
-		this.setState({ loading: false })
-		clearInterval(this.get_movie);
+	componentWillUnmount = async () => {
+		await clearInterval(this.get_movie);
+		if (this.state.loading) {
+			await this.setState({ loading: false })
+		}
 	}
 
   render() {
