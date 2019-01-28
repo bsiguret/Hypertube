@@ -61,7 +61,6 @@ class PhotoUploader extends Component {
   }
   
   handleRemove = async () => {
-    console.log('dasdsa')
     this.props.dispatch(userActions.deletePhoto())
   }
 
