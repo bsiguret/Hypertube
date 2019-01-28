@@ -3,11 +3,13 @@ const nodemailer = require('nodemailer');
 
 const db = require('../db/db').connection_db;
 
+let port_front = process.env.NODE_ENV == 'dev' ? 3001 : 5000;
+
 const sendMailTo = (username, email, action) => {
     username = encodeURIComponent(username)
     let verifyAccount = uuidv1()
     let subject = (action === 3) ? 'Hypertube reseting password' : 'Hypertube verifying account'
-    let url = (action === 3) ? 'http://localhost:3001/resetpassword/' + username + '/' + verifyAccount : 'http://localhost:3001/emailvalidation/' + username + '/' + verifyAccount
+    let url = (action === 3) ? 'http://localhost:' + port_front + '/resetpassword/' + username + '/' + verifyAccount : 'http://localhost:' + port_front + '/emailvalidation/' + username + '/' + verifyAccount
     let text = (action === 3) ? '<p>Click or copy/paste <a href="'+ url +'">'+ url +'</a> to reset your password</p>' : '<p>Click or copy/paste <a href="'+ url +'">'+ url +'</a> to confirm your account</p>'
 
     const transporter = nodemailer.createTransport({
