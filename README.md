@@ -68,7 +68,7 @@ curl http://localhost:3000/api/save_movies
 
 Create an account, and check your email on [mailtrap](https://mailtrap.io) to activate it.
 
-![hypertube](https://ibb.co/pjSvGsq)
+![hypertube](https://i.ibb.co/YBx7YKg/hypertube.png)
 
 ### Our stack
 
