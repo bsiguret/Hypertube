@@ -76,9 +76,9 @@ Create an account, and check your email on [mailtrap](https://mailtrap.io) to ac
 	* Node.js / Express
 	* JavaScript ES6+
 	* MYSQL
-  * Ant-Design
+	* Ant-Design
 	* SCSS
- 	* Passport
+	* Passport
 
 ### Resource
 [YTS](https://yts.am/api)
